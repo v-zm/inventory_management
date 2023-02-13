@@ -9,7 +9,12 @@ import androidx.lifecycle.Observer
 import com.vivek.inventorymanagement.data.MainActivityViewModel
 import com.vivek.inventorymanagement.databinding.ActivityMainBinding
 
-// TODO::
+// TODO:: Add UI elements for AppBar
+// TODO:: Add page view
+// TODO:: Add page UI for list item view
+// TODO:: Add page UI for grid item view
+// TODO:: implement API
+// TODO:: Add Search
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
