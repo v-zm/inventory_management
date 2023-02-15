@@ -1,7 +1,8 @@
-package com.vivek.inventorymanagement.data
+package com.vivek.inventorymanagement.viewData
 
 import android.os.Handler
 import android.os.Looper
+import com.vivek.inventorymanagement.features.inventory.viewModel.MainActivityViewModel
 import org.junit.Test
 
 internal class MainActivityViewModelTest {

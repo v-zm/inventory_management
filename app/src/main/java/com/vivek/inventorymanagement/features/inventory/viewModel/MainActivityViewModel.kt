@@ -1,9 +1,10 @@
-package com.vivek.inventorymanagement.data
+package com.vivek.inventorymanagement.features.inventory.viewModel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class MainActivityViewModel : ViewModel(){
+
     val currentGreetingText:MutableLiveData<String> by lazy {
         MutableLiveData<String>()
     }
@@ -17,8 +18,8 @@ class MainActivityViewModel : ViewModel(){
     fun updateButtonText(text:String){
         buttonText.value=text
     }
+
+    fun doNetworkCall(){
+
+    }
 }
-
-
-/// which of the following is not related to variable declaration
-/// A. dynamic B. var C. super d. final
