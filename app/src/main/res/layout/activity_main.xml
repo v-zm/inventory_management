@@ -19,6 +19,12 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/nav_graph" />
 
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/network_data"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:text="Get data" />
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/home_bottom_navigation_bar"
         android:layout_width="match_parent"

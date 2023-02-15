@@ -6,6 +6,7 @@ import android.view.MenuInflater
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.vivek.inventorymanagement.R
 import com.vivek.inventorymanagement.databinding.ActivityMainBinding
 import com.vivek.inventorymanagement.features.inventory.viewModel.MainActivityViewModel
@@ -19,10 +20,6 @@ import com.vivek.inventorymanagement.features.inventory.viewModel.MainActivityVi
 
 class MainActivity : AppCompatActivity() {
     private lateinit var mBinding: ActivityMainBinding
-
-    //    private val navController by lazy {
-//        findNavController(R.id.nav_host_fragment_container1)
-//    }
     private val mActivityViewModel: MainActivityViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,7 +33,8 @@ class MainActivity : AppCompatActivity() {
         val navController = navHostFragment.navController
 
 
-        navController.setGraph(R.navigation.nav_graph)
+
+        setupWithNavController(mBinding.homeBottomNavigationBar, navController = navController)
 //        val greetingTextObserver = Observer<String> { newGreeting ->
 //            mBinding.greetingText.text = newGreeting
 //        }
@@ -52,12 +50,19 @@ class MainActivity : AppCompatActivity() {
 //            mActivityViewModel.updateGreetingText("Good Morning")
 //            mActivityViewModel.updateButtonText("Click again!!")
 //        }
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+        mBinding.networkData.setOnClickListener {
+            mActivityViewModel.doNetworkCall()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater: MenuInflater = menuInflater
         inflater.inflate(R.menu.bottom_nav_bar_menu, menu)
-
         return super.onCreateOptionsMenu(menu)
     }
 }

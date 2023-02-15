@@ -3,14 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/grid_view_product_fragment">
+    app:startDestination="@id/product_list">
     <fragment
-        android:id="@+id/list_view_product_fragment"
+        android:id="@+id/product_list"
         android:name="com.vivek.inventorymanagement.features.inventory.view.fragments.InventoryProductListViewFragment"
         android:label="Inventory list"
         tools:layout="@layout/fragment_inventory_product_list_view" />
     <fragment
-        android:id="@+id/grid_view_product_fragment"
+        android:id="@+id/product_grid"
         android:name="com.vivek.inventorymanagement.features.inventory.view.fragments.InventoryProductGridViewFragment"
         android:label="Inventory Grid"
         tools:layout="@layout/fragment_inventory_product_grid_view" />
