@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
@@ -9,26 +11,30 @@
         android:id="@+id/product_item_image"
         android:layout_width="128dp"
         android:layout_height="128dp"
-        android:layout_marginStart="16dp"
+        android:scaleType="fitXY"
+        app:circularflow_defaultRadius="48dp"
+        app:layout_constraintBottom_toTopOf="@id/product_item_name"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_baseline_arrow_back_ios_24" />
+        app:srcCompat="@drawable/baseline_video_label_24" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/product_item_name1"
+        android:id="@+id/product_item_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Item1"
-        app:layout_constraintStart_toStartOf="@id/product_item_image"
-        app:layout_constraintTop_toBottomOf="@+id/product_item_image" />
+        android:text="dadadad"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/product_item_image" />
 
     <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/product_item_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:layout_marginTop="8dp"
-        android:text="100.0"
-        app:layout_constraintStart_toStartOf="@id/product_item_name1"
-        app:layout_constraintTop_toBottomOf="@id/product_item_name1" />
+        app:layout_constraintStart_toStartOf="@id/product_item_name"
+        app:layout_constraintTop_toBottomOf="@id/product_item_name" />
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+

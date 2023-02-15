@@ -11,11 +11,6 @@ data class InventoryItemListDto(
     @JsonProperty("error")
     val error: String?,
     @JsonProperty("data")
-    val data: Items
+    val data: ItemsDto
 ) : Parcelable
 
-@Parcelize
-data class Items(
-    @JsonProperty("items")
-    val items: List<InventoryItemDto>
-) : Parcelable

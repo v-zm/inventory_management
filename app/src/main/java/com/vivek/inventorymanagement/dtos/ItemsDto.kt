@@ -5,11 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class InventoryItemDto(
-    @JsonProperty("name")
-    val name: String,
-    @JsonProperty("price")
-    val price: String,
-    @JsonProperty("extra")
-    val extra: String?
+data class ItemsDto(
+    @JsonProperty("items")
+    val items: List<InventoryItemDto>
 ) : Parcelable
