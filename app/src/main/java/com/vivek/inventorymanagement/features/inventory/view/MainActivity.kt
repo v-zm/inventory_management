@@ -9,6 +9,7 @@ import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.vivek.inventorymanagement.R
 import com.vivek.inventorymanagement.databinding.ActivityMainBinding
 import com.vivek.inventorymanagement.features.inventory.viewModel.MainActivityViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
 // TODO:: Add UI elements for AppBar -> Done
 // TODO:: Add page view
@@ -18,10 +19,10 @@ import com.vivek.inventorymanagement.features.inventory.viewModel.MainActivityVi
 // TODO:: Add Search UI -> Done
 // TODO:: implement search functionality
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var mBinding: ActivityMainBinding
     private val mActivityViewModel: MainActivityViewModel by viewModels()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = ActivityMainBinding.inflate(layoutInflater)
@@ -30,7 +31,7 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment_container) as NavHostFragment
         val navController = navHostFragment.navController
         setupWithNavController(mBinding.homeBottomNavigationBar, navController = navController)
-        supportActionBar?.hide()
+
     }
 
     override fun onStart() {

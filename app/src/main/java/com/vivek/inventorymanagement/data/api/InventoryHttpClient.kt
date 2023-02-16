@@ -1,4 +1,4 @@
-package com.vivek.inventorymanagement.api
+package com.vivek.inventorymanagement.data.api
 
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory

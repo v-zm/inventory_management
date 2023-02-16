@@ -71,7 +71,7 @@ class InventoryProductAdapter(val viewTypeEnum: ProductViewTypeEnum, var items: 
                 viewHolder.binding.productItemName.text = item.name
                 viewHolder.binding.productItemPrice.text = item.price
                 viewHolder.binding.productExtraInfo.text = item.extra
-                viewHolder.binding.productItemImage.load(Uri.parse(item.image)) {
+                viewHolder.binding.productItemImage.load(Uri.parse(item.imageUrl)) {
                     placeholder(R.drawable.placeholder_broken_image)
                     error(R.drawable.placeholder_broken_image)
                 }
@@ -88,7 +88,7 @@ class InventoryProductAdapter(val viewTypeEnum: ProductViewTypeEnum, var items: 
                 val item: Item = items[position]
                 viewHolder.binding.productItemName.text = item.name
                 viewHolder.binding.productItemPrice.text = item.price
-                viewHolder.binding.productItemImage.load(Uri.parse(item.image)) {
+                viewHolder.binding.productItemImage.load(Uri.parse(item.imageUrl)) {
                     placeholder(R.drawable.placeholder_broken_image)
                     error(R.drawable.placeholder_broken_image)
                 }

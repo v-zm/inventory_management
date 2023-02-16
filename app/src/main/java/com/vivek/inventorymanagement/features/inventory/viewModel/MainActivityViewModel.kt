@@ -3,13 +3,16 @@ package com.vivek.inventorymanagement.features.inventory.viewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vivek.inventorymanagement.dtos.InventoryItemListDto
+import com.vivek.inventorymanagement.data.repository.InventoryRepository
 import com.vivek.inventorymanagement.features.inventory.model.Item
-import com.vivek.inventorymanagement.repository.InventoryRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MainActivityViewModel : ViewModel() {
+@HiltViewModel
+class MainActivityViewModel @Inject constructor(val inventoryRepository: InventoryRepository) :
+    ViewModel() {
 
     private val _inventoryItemList: MutableLiveData<List<Item>> by lazy {
         MutableLiveData<List<Item>>()
@@ -24,13 +27,14 @@ class MainActivityViewModel : ViewModel() {
 
     fun getData() {
         _isLoading.value = true
+
         viewModelScope.launch(Dispatchers.IO) {
-            val data: InventoryItemListDto? = InventoryRepository().getInventoryItems()
-            data?.let { tempData ->
+
+            val items: List<Item>? = inventoryRepository
+                .getInventoryItems()
+            items?.let { tempData ->
                 viewModelScope.launch(Dispatchers.Main) {
-                    inventoryItemList.value = tempData.data.items.map { each ->
-                        Item.getItemFromItemsDto(each)
-                    }
+                    inventoryItemList.value = tempData
                     _isLoading.value = false
                 }
             }

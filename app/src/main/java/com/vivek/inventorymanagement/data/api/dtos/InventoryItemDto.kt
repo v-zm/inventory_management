@@ -1,4 +1,4 @@
-package com.vivek.inventorymanagement.dtos
+package com.vivek.inventorymanagement.data.api.dtos
 
 import android.os.Parcelable
 import com.fasterxml.jackson.annotation.JsonProperty
@@ -13,5 +13,5 @@ data class InventoryItemDto(
     @JsonProperty("extra")
     val extra: String?,
     @JsonProperty("image")
-    val image: String
+    val imageUrl: String
 ) : Parcelable

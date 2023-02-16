@@ -1,7 +1,7 @@
-package com.vivek.inventorymanagement.api
+package com.vivek.inventorymanagement.data.api.services
 
-import com.vivek.inventorymanagement.dtos.InventoryItemDto
-import com.vivek.inventorymanagement.dtos.InventoryItemListDto
+import com.vivek.inventorymanagement.data.api.dtos.InventoryItemDto
+import com.vivek.inventorymanagement.data.api.dtos.InventoryItemListDto
 import retrofit2.Call
 import retrofit2.http.GET
 
