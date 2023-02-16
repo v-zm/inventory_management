@@ -63,9 +63,8 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:autofillHints="Search"
-            android:hint="Search"
-
             android:focusedByDefault="false"
+            android:hint="Search"
             android:inputType="textAutoComplete"
             android:textColorHint="@color/search_hint_color" />
 
