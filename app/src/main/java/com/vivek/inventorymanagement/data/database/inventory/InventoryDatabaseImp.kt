@@ -10,7 +10,7 @@ import javax.inject.Inject
 class InventoryDatabaseImp @Inject constructor(@ApplicationContext applicationContext: Context) {
     val _inventoryDB: InventoryDatabase =
         Room.databaseBuilder(applicationContext, InventoryDatabase::class.java, "inventory-db")
-            .addMigrations(InventoryDatabaseMigration.MIGRATION_1_2)
+//            .addMigrations(InventoryDatabaseMigration.MIGRATION_1_2)
             .build()
 
     fun getInventoryDatabase(): InventoryDatabase {
