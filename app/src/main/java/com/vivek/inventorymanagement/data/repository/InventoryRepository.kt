@@ -6,6 +6,7 @@ import com.vivek.inventorymanagement.data.api.dtos.InventoryItemListDto
 import com.vivek.inventorymanagement.data.api.services.InventoryApiService
 import com.vivek.inventorymanagement.data.database.inventory.InventoryDatabaseImp
 import com.vivek.inventorymanagement.data.database.inventory.entities.ItemEntity
+import com.vivek.inventorymanagement.features.inventory.enums.InventoryFilterOptionEnum
 import com.vivek.inventorymanagement.features.inventory.model.Item
 import retrofit2.Response
 import javax.inject.Inject
@@ -47,10 +48,18 @@ class InventoryRepository @Inject constructor(inventoryDb: InventoryDatabaseImp)
         return resultItems
     }
 
-    override suspend fun getInventorySearchItems(searchText: String): List<Item> {
+    override suspend fun getInventorySearchItems(
+        searchText: String,
+        searchType: InventoryFilterOptionEnum
+    ): List<Item> {
         var resultItems: List<Item> = ArrayList<Item>()
-        val itemEntites: List<ItemEntity> =
-            _inventoryDb.getInventoryDatabase().itemDao().getItemsByName(searchText)
+
+        val itemEntites: List<ItemEntity> = when (searchType) {
+            InventoryFilterOptionEnum.FILTER_BY_NAME -> _inventoryDb.getInventoryDatabase()
+                .itemDao().getItemsByName(searchText)
+            InventoryFilterOptionEnum.FILTER_BY_PRICE -> _inventoryDb.getInventoryDatabase()
+                .itemDao().getItemsByPrice(searchText)
+        }
 
         itemEntites.let { tempItemEntites ->
             resultItems = tempItemEntites.map { each ->

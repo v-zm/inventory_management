@@ -3,6 +3,8 @@ package com.vivek.inventorymanagement.features.inventory.view
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.MenuItem
+import android.widget.PopupMenu
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -41,6 +43,8 @@ class MainActivity : AppCompatActivity() {
         mActivityViewModel.getInventoryProducts()
         observeLoadingState()
         startSearchListener()
+        inflateFilterMenu()
+        observerSelectedFilterMenuOption()
     }
 
     private fun observeLoadingState() {
@@ -58,12 +62,35 @@ class MainActivity : AppCompatActivity() {
 
             override fun onTextChanged(text: CharSequence?, _p1: Int, _p2: Int, _p3: Int) {
                 text.let { tempText -> mActivityViewModel.onSearch(tempText.toString()) }
-
             }
 
             override fun afterTextChanged(p0: Editable?) {
             }
-
         })
+    }
+
+    private fun inflateFilterMenu() {
+        val menu = PopupMenu(this, mBinding.inventorySearchBar.filterText)
+        menu.inflate(R.menu.inventory_search_options)
+
+        mBinding.inventorySearchBar.selectedOption = menu.menu.getItem(0).title.toString()
+        mBinding.inventorySearchBar.filterText.setOnClickListener {
+            menu.show()
+        }
+        menu.setOnMenuItemClickListener { menuItem:MenuItem ->
+            mActivityViewModel.inventoryFilterSelectedOption.value = menuItem.title.toString()
+            true
+        }
+    }
+
+    private fun observerSelectedFilterMenuOption() {
+
+        val inventorySelectedOptionObserver = Observer<String> { selectedOption ->
+            mBinding.inventorySearchBar.selectedOption = selectedOption
+        }
+        mActivityViewModel.inventoryFilterSelectedOption.observe(
+            this,
+            inventorySelectedOptionObserver
+        )
     }
 }
