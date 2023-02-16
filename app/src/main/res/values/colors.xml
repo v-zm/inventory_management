@@ -10,4 +10,5 @@
     <color name="filter_text_color">#5DB075</color>
     <color name="inventory_header_bg">#E6E9F6</color>
     <color name="search_hint_color">#BDBDBD</color>
+    <color name="transparent">#00FFFFFF</color>
 </resources>

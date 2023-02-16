@@ -2,22 +2,24 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/product_list"
-        android:icon="@drawable/ic_launcher_background"
-        android:title="@string/bottom_nav_product_list" />
+        android:icon="@drawable/baseline_view_list_24"
+        android:title="@string/bottom_nav_product_list"
+        />
     <item
         android:id="@+id/product_grid"
-        android:icon="@drawable/ic_launcher_background"
+        android:icon="@drawable/baseline_grid_on_24"
         android:title="@string/bottom_nav_product_grid" />
     <item
         android:id="@+id/upcoming_1"
-        android:icon="@drawable/ic_launcher_background"
-        android:title="@string/bottom_nav_upcoming" />
+        android:icon="@drawable/coming_soon_icon"
+        android:title="@string/bottom_nav_upcoming"
+        />
     <item
         android:id="@+id/upcoming_2"
-        android:icon="@drawable/ic_launcher_background"
+        android:icon="@drawable/coming_soon_icon"
         android:title="@string/bottom_nav_upcoming" />
     <item
         android:id="@+id/upcoming_3"
-        android:icon="@drawable/ic_launcher_background"
+        android:icon="@drawable/coming_soon_icon"
         android:title="@string/bottom_nav_upcoming" />
 </menu>
