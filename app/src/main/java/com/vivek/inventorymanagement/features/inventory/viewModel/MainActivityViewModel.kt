@@ -25,18 +25,28 @@ class MainActivityViewModel @Inject constructor(val inventoryRepository: Invento
 
     val isLoading: MutableLiveData<Boolean> = _isLoading
 
-    fun getData() {
+    fun onSearch(searchText: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val items: List<Item> = inventoryRepository.getInventorySearchItems(searchText)
+            viewModelScope.launch(Dispatchers.Main) {
+                inventoryItemList.value = items
+                _isLoading.value = false
+            }
+        }
+
+    }
+
+    fun getInventoryProducts() {
         _isLoading.value = true
 
         viewModelScope.launch(Dispatchers.IO) {
 
-            val items: List<Item>? = inventoryRepository
-                .getInventoryItems()
-            items?.let { tempData ->
-                viewModelScope.launch(Dispatchers.Main) {
-                    inventoryItemList.value = tempData
-                    _isLoading.value = false
-                }
+            val items: List<Item> = inventoryRepository.getInventoryItems()
+
+            viewModelScope.launch(Dispatchers.Main) {
+                inventoryItemList.value = items
+                _isLoading.value = false
+
             }
         }
     }

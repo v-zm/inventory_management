@@ -16,4 +16,5 @@ class InventoryDatabaseImp @Inject constructor(@ApplicationContext applicationCo
     fun getInventoryDatabase(): InventoryDatabase {
         return _inventoryDB
     }
+
 }

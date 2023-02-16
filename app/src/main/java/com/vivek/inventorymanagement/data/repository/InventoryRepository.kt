@@ -14,11 +14,11 @@ class InventoryRepository @Inject constructor(inventoryDb: InventoryDatabaseImp)
     IInventoryRepository(inventory = InventoryHttpClient()) {
     val _inventoryDb = inventoryDb
 
-    override suspend fun getInventoryItems(): List<Item>? {
+    override suspend fun getInventoryItems(): List<Item> {
         var resultItems: List<Item> = ArrayList<Item>()
-        var itemEntites: List<ItemEntity> = _inventoryDb.getInventoryDatabase().itemDao().getAll()
-        if (itemEntites.isNotEmpty()) {
-            resultItems = itemEntites.map { each ->
+        val itemEntities: List<ItemEntity> = _inventoryDb.getInventoryDatabase().itemDao().getAll()
+        if (itemEntities.isNotEmpty()) {
+            resultItems = itemEntities.map { each ->
                 Item.getItemFromItemEntity(each)
             }
         } else {
@@ -46,4 +46,19 @@ class InventoryRepository @Inject constructor(inventoryDb: InventoryDatabaseImp)
 
         return resultItems
     }
+
+    override suspend fun getInventorySearchItems(searchText: String): List<Item> {
+        var resultItems: List<Item> = ArrayList<Item>()
+        val itemEntites: List<ItemEntity> =
+            _inventoryDb.getInventoryDatabase().itemDao().getItemsByName(searchText)
+
+        itemEntites.let { tempItemEntites ->
+            resultItems = tempItemEntites.map { each ->
+                Item.getItemFromItemEntity(each)
+            }
+        }
+        return resultItems
+    }
+
+
 }
