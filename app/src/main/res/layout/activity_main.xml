@@ -6,6 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".features.inventory.view.MainActivity">
 
+    <include
+        android:id="@+id/inventory_search_bar"
+        layout="@layout/inventory_search_bar"
+        android:layout_width="match_parent"
+        android:layout_height="140dp"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.fragment.app.FragmentContainerView
 
         android:id="@+id/nav_host_fragment_container"
@@ -16,7 +23,7 @@
         app:layout_constraintBottom_toTopOf="@id/home_bottom_navigation_bar"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/inventory_search_bar"
         app:navGraph="@navigation/nav_graph" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

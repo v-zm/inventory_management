@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment_container) as NavHostFragment
         val navController = navHostFragment.navController
         setupWithNavController(mBinding.homeBottomNavigationBar, navController = navController)
+        supportActionBar?.hide()
     }
 
     override fun onStart() {

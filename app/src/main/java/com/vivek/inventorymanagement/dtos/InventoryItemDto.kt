@@ -11,5 +11,7 @@ data class InventoryItemDto(
     @JsonProperty("price")
     val price: String,
     @JsonProperty("extra")
-    val extra: String?
+    val extra: String?,
+    @JsonProperty("image")
+    val image: String
 ) : Parcelable

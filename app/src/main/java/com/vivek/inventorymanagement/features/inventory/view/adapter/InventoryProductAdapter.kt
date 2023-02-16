@@ -1,12 +1,14 @@
 package com.vivek.inventorymanagement.features.inventory.view.adapter
 
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.divider.MaterialDivider
+import coil.load
 import com.vivek.inventorymanagement.R
+import com.vivek.inventorymanagement.databinding.GridItemInventoryBinding
+import com.vivek.inventorymanagement.databinding.ListItemInventoryBinding
 import com.vivek.inventorymanagement.features.inventory.enums.ProductViewTypeEnum
 import com.vivek.inventorymanagement.features.inventory.model.Item
 
@@ -14,22 +16,24 @@ class InventoryProductAdapter(val viewTypeEnum: ProductViewTypeEnum, var items: 
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     inner class ViewHolderListView(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-        val productName: AppCompatTextView =
-            itemView.findViewById<AppCompatTextView>(R.id.product_item_name)
-        val productPrice: AppCompatTextView =
-            itemView.findViewById<AppCompatTextView>(R.id.product_item_price)
-
-        val productExtraInfo: AppCompatTextView = itemView.findViewById(R.id.product_extra_info)
-        val divider: MaterialDivider = itemView.findViewById(R.id.item_divider)
+        val binding: ListItemInventoryBinding = ListItemInventoryBinding.bind(itemView)
+//        val productName: AppCompatTextView =
+//            itemView.findViewById<AppCompatTextView>(R.id.product_item_name)
+//        val productPrice: AppCompatTextView =
+//            itemView.findViewById<AppCompatTextView>(R.id.product_item_price)
+//
+//        val productExtraInfo: AppCompatTextView = itemView.findViewById(R.id.product_extra_info)
+//        val divider: MaterialDivider = itemView.findViewById(R.id.item_divider)
+//        val imageView:AppCompatImageView =  itemView.findViewById()
 
     }
 
     inner class ViewHolderGridView(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val productName: AppCompatTextView =
-            itemView.findViewById(R.id.product_item_name)
-        val productPrice: AppCompatTextView =
-            itemView.findViewById<AppCompatTextView>(R.id.product_item_price)
+        val binding: GridItemInventoryBinding = GridItemInventoryBinding.bind(itemView)
+//        val productName: AppCompatTextView =
+//            itemView.findViewById(R.id.product_item_name)
+//        val productPrice: AppCompatTextView =
+//            itemView.findViewById<AppCompatTextView>(R.id.product_item_price)
     }
 
 
@@ -63,20 +67,31 @@ class InventoryProductAdapter(val viewTypeEnum: ProductViewTypeEnum, var items: 
         when (viewTypeEnum) {
             ProductViewTypeEnum.LIST -> {
                 val viewHolder: ViewHolderListView = holder as ViewHolderListView
-                viewHolder.productName.text = items[position].name
-                viewHolder.productPrice.text = items[position].price
-                viewHolder.productExtraInfo.text = items[position].extra
-                if (position < items.size-1) {
-                    viewHolder.divider.visibility = View.VISIBLE
-                }else{
-                    viewHolder.divider.visibility = View.GONE
+                val item: Item = items[position]
+                viewHolder.binding.productItemName.text = item.name
+                viewHolder.binding.productItemPrice.text = item.price
+                viewHolder.binding.productExtraInfo.text = item.extra
+                viewHolder.binding.productItemImage.load(Uri.parse(item.image)) {
+                    placeholder(R.drawable.placeholder_broken_image)
+                    error(R.drawable.placeholder_broken_image)
                 }
+                if (position < items.size - 1) {
+                    viewHolder.binding.itemDivider.visibility = View.VISIBLE
+                } else {
+                    viewHolder.binding.itemDivider.visibility = View.GONE
+                }
+
             }
 
             ProductViewTypeEnum.GRID -> {
                 val viewHolder: ViewHolderGridView = holder as ViewHolderGridView
-                viewHolder.productName.text = items[position].name
-                viewHolder.productPrice.text = items[position].price
+                val item: Item = items[position]
+                viewHolder.binding.productItemName.text = item.name
+                viewHolder.binding.productItemPrice.text = item.price
+                viewHolder.binding.productItemImage.load(Uri.parse(item.image)) {
+                    placeholder(R.drawable.placeholder_broken_image)
+                    error(R.drawable.placeholder_broken_image)
+                }
             }
 
         }
