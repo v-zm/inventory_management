@@ -50,15 +50,22 @@ class InventoryRepository @Inject constructor(inventoryDb: InventoryDatabaseImp)
 
     override suspend fun getInventorySearchItems(
         searchText: String,
-        searchType: InventoryFilterOptionEnum
+        searchType: InventoryFilterOptionEnum,
+        searchOnlyWithImage: Boolean
     ): List<Item> {
         var resultItems: List<Item> = ArrayList<Item>()
 
         val itemEntites: List<ItemEntity> = when (searchType) {
-            InventoryFilterOptionEnum.FILTER_BY_NAME -> _inventoryDb.getInventoryDatabase()
-                .itemDao().getItemsByName(searchText)
-            InventoryFilterOptionEnum.FILTER_BY_PRICE -> _inventoryDb.getInventoryDatabase()
-                .itemDao().getItemsByPrice(searchText)
+            InventoryFilterOptionEnum.FILTER_BY_NAME -> if (searchOnlyWithImage) _inventoryDb.getInventoryDatabase()
+                .itemDao().getItemsByName(searchText) else _inventoryDb.getInventoryDatabase()
+                .itemDao().getItemsByNameAndImage(searchText)
+            InventoryFilterOptionEnum.FILTER_BY_PRICE -> if (searchOnlyWithImage) _inventoryDb.getInventoryDatabase()
+                .itemDao().getItemsByPrice(searchText) else _inventoryDb.getInventoryDatabase()
+                .itemDao().getItemsByPriceAndImage(searchText)
+            InventoryFilterOptionEnum.NO_FILTER -> if (searchOnlyWithImage) _inventoryDb.getInventoryDatabase()
+                .itemDao()
+                .getItemsByNameOrPrice(searchText) else _inventoryDb.getInventoryDatabase()
+                .itemDao().getItemsByNameOrPriceAndImage(searchText)
         }
 
         itemEntites.let { tempItemEntites ->

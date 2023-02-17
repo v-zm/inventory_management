@@ -77,9 +77,18 @@ class MainActivity : AppCompatActivity() {
         mBinding.inventorySearchBar.filterText.setOnClickListener {
             menu.show()
         }
-        menu.setOnMenuItemClickListener { menuItem:MenuItem ->
-            mActivityViewModel.inventoryFilterSelectedOption.value = menuItem.title.toString()
-            true
+        menu.setOnMenuItemClickListener { menuItem: MenuItem ->
+            if (menuItem.order == 2) {
+                menuItem.isChecked = !menuItem.isChecked
+                if (menuItem.itemId == R.id.search_include_image_selectable) {
+                    mActivityViewModel.searchOnlyWithImage = menuItem.isChecked
+                }
+                false
+            } else {
+                mActivityViewModel.inventoryFilterSelectedOption.value = menuItem.title.toString()
+                true
+            }
+
         }
     }
 

@@ -7,6 +7,7 @@ import com.vivek.inventorymanagement.features.inventory.model.Item
 abstract class IInventoryRepository(val inventory: InventoryHttpClient) {
     abstract suspend fun getInventoryItems(): List<Item>
     abstract suspend fun getInventorySearchItems(
-        searchText: String, searchType: InventoryFilterOptionEnum
+        searchText: String, searchType: InventoryFilterOptionEnum,
+        searchOnlyWithImage: Boolean = false
     ): List<Item>
 }

@@ -31,7 +31,7 @@ class MainActivityViewModel @Inject constructor(val inventoryRepository: Invento
         MutableLiveData<String>()
     }
     val inventoryFilterSelectedOption: MutableLiveData<String> = _inventoryFilterSelectedOption
-
+    var searchOnlyWithImage: Boolean = false
     fun onSearch(searchText: String) {
 
         val filterOption: InventoryFilterOptionEnum? =
@@ -44,7 +44,8 @@ class MainActivityViewModel @Inject constructor(val inventoryRepository: Invento
         viewModelScope.launch(Dispatchers.IO) {
             val items: List<Item> = inventoryRepository.getInventorySearchItems(
                 searchText,
-                filterOption ?: InventoryFilterOptionEnum.FILTER_BY_NAME
+                filterOption ?: InventoryFilterOptionEnum.FILTER_BY_NAME,
+                searchOnlyWithImage
             )
             viewModelScope.launch(Dispatchers.Main) {
                 inventoryItemList.value = items
