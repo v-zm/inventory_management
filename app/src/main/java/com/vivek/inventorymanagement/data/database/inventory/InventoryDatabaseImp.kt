@@ -2,17 +2,16 @@ package com.vivek.inventorymanagement.data.database.inventory
 
 import android.content.Context
 import androidx.room.Room
-import com.vivek.inventorymanagement.data.database.inventory.migrations.InventoryDatabaseMigration
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 
 class InventoryDatabaseImp @Inject constructor(@ApplicationContext applicationContext: Context) {
-    val _inventoryDB: InventoryDatabase =
-        Room.databaseBuilder(applicationContext, InventoryDatabase::class.java, "inventory-db")
+    val _inventoryDB: IInventoryDatabase =
+        Room.databaseBuilder(applicationContext, IInventoryDatabase::class.java, "inventory-db")
             .build()
 
-    fun getInventoryDatabase(): InventoryDatabase {
+    fun getInventoryDatabase(): IInventoryDatabase {
         return _inventoryDB
     }
 

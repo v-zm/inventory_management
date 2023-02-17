@@ -42,6 +42,11 @@ android {
 
 dependencies {
     def room_version = "2.5.0"
+    def mockitoVersion = "5.1.1"
+    def mockitoKotlinVersion = "4.1.0"
+    def coroutineKotlinxVersion = "1.4.0"
+    def instrumentedJUnitVersion = "1.1.1"
+    def jUnitExtensionVersion = "1.1.5"
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.6.0'
     implementation 'com.google.android.material:material:1.7.0'
@@ -76,6 +81,15 @@ dependencies {
     //Hilt for dependency injection
     implementation "com.google.dagger:hilt-android:2.44"
     kapt "com.google.dagger:hilt-compiler:2.44"
+
+    // Optional -- Mockito framework
+    testImplementation "org.mockito:mockito-core:$mockitoVersion"
+    // Optional -- mockito-kotlin
+    testImplementation "org.mockito.kotlin:mockito-kotlin:$mockitoKotlinVersion"
+    testImplementation 'androidx.arch.core:core-testing:2.1.0'
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutineKotlinxVersion"
+    androidTestImplementation "androidx.test.ext:junit:$instrumentedJUnitVersion"
+    testImplementation "androidx.test.ext:junit-ktx:$jUnitExtensionVersion"
 }
 kapt {
     correctErrorTypes true

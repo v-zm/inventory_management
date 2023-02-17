@@ -12,4 +12,5 @@
     <string name="filter_option_only_with_image_text">Only with image</string>
     <string name="label_inventory_list">Inventory list</string>
     <string name="label_inventory_grid">Inventory grid</string>
+    <string name="error_text">Something went wrong! Please try again</string>
 </resources>

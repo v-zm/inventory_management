@@ -7,7 +7,5 @@ class InventoryHttpClient {
     fun getBaseAdapter(): Retrofit {
         return Retrofit.Builder().baseUrl("https://run.mocky.io/")
             .addConverterFactory(JacksonConverterFactory.create()).build()
-
-
     }
 }

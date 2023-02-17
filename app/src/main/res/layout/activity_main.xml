@@ -10,6 +10,10 @@
             name="isInventoryLoading"
             type="Boolean" />
 
+        <variable
+            name="isError"
+            type="Boolean" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -37,12 +41,24 @@
 
             />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/error_text"
+            android:visibility="@{isError ? View.VISIBLE:View.GONE}"
+            app:layout_constraintBottom_toTopOf="@id/home_bottom_navigation_bar"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/inventory_search_bar"
+
+            />
+
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/nav_host_fragment_container"
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="@dimen/no_width"
             android:layout_height="@dimen/no_height"
-            android:visibility="@{isInventoryLoading ? View.GONE:View.VISIBLE}"
+            android:visibility="@{isInventoryLoading &amp;&amp; !isError ? View.GONE:View.VISIBLE}"
             app:defaultNavHost="true"
             app:layout_constraintBottom_toTopOf="@id/home_bottom_navigation_bar"
             app:layout_constraintLeft_toLeftOf="parent"

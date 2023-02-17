@@ -39,6 +39,7 @@ class MainActivity : AppCompatActivity() {
         startSearchListener()
         inflateFilterMenu()
         observerSelectedFilterMenuOption()
+        observeErrorState()
     }
 
     private fun observeLoadingState() {
@@ -46,6 +47,13 @@ class MainActivity : AppCompatActivity() {
             mBinding.isInventoryLoading = isLoading
         }
         mActivityViewModel.isLoading.observe(this, loadingObserver)
+    }
+
+    private fun observeErrorState() {
+        val errorObserver = Observer<Boolean> { isError ->
+            mBinding.isError = isError
+        }
+        mActivityViewModel.isError.observe(this, errorObserver)
     }
 
     private fun startSearchListener() {
