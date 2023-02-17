@@ -23,7 +23,7 @@
             android:id="@+id/inventory_search_bar"
             layout="@layout/inventory_search_bar"
             android:layout_width="match_parent"
-            android:layout_height="140dp"
+            android:layout_height="@dimen/homepage_top_bar_height"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ProgressBar
@@ -40,8 +40,8 @@
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/nav_host_fragment_container"
             android:name="androidx.navigation.fragment.NavHostFragment"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="@dimen/no_width"
+            android:layout_height="@dimen/no_height"
             android:visibility="@{isInventoryLoading ? View.GONE:View.VISIBLE}"
             app:defaultNavHost="true"
             app:layout_constraintBottom_toTopOf="@id/home_bottom_navigation_bar"
@@ -54,7 +54,9 @@
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/home_bottom_navigation_bar"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="@dimen/bottom_nav_height"
+            app:itemIconTint="@color/bottom_nav_bar_item_color"
+            app:itemTextColor="@color/bottom_nav_bar_item_color"
             app:layout_constraintBottom_toBottomOf="parent"
             app:menu="@menu/bottom_nav_bar_menu" />
 

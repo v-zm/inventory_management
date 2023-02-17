@@ -9,16 +9,14 @@
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/product_item_image"
-        android:layout_width="128dp"
-        android:layout_height="128dp"
-        android:scaleType="fitCenter"
+        android:layout_width="@dimen/grid_item_image_width"
+        android:layout_height="@dimen/grid_item_image_height"
         android:padding="12dp"
-        app:circularflow_defaultRadius="48dp"
+        android:scaleType="fitCenter"
         app:layout_constraintBottom_toTopOf="@id/product_item_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/baseline_video_label_24" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/product_item_name"

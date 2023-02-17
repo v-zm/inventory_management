@@ -15,13 +15,7 @@ import com.vivek.inventorymanagement.databinding.ActivityMainBinding
 import com.vivek.inventorymanagement.features.inventory.viewModel.MainActivityViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
-// TODO:: Add UI elements for AppBar -> Done
 // TODO:: Add page view
-// TODO:: Add page UI for list item view -> Done
-// TODO:: Add page UI for grid item view -> Done
-// TODO:: implement API -> Done
-// TODO:: Add Search UI -> Done
-// TODO:: implement search functionality
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {

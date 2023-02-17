@@ -3,6 +3,13 @@
     <string name="bottom_nav_product_list">Product List</string>
     <string name="bottom_nav_product_grid">Product Grid</string>
     <string name="bottom_nav_upcoming">Upcoming</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="explore_text">Explore</string>
+    <string name="filter_text">Filter</string>
+    <string name="mrp_text">MRP</string>
+    <string name="filter_option_name_text">Name</string>
+    <string name="filter_option_price_text">Price</string>
+    <string name="filter_option_no_filter_text">No Filter</string>
+    <string name="filter_option_only_with_image_text">Only with image</string>
+    <string name="label_inventory_list">Inventory list</string>
+    <string name="label_inventory_grid">Inventory grid</string>
 </resources>

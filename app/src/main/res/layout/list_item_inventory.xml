@@ -8,11 +8,11 @@
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/product_item_image"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="@dimen/list_item_image_width"
+        android:layout_height="@dimen/list_item_image_height"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/baseline_video_label_24" />
+        />
 
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -28,8 +28,8 @@
         android:id="@+id/mrp_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="MRP"
-        android:textColor="#1f000000"
+        android:text="@string/mrp_text"
+        android:textColor="@color/item_list_mrp_text"
         app:layout_constraintBottom_toBottomOf="@id/product_item_image"
         app:layout_constraintStart_toStartOf="@+id/product_item_name" />
 
@@ -39,7 +39,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:textColor="#ff000000"
+        android:textColor="@color/item_list_price_text"
         app:layout_constraintBottom_toBottomOf="@id/mrp_text"
         app:layout_constraintStart_toEndOf="@id/mrp_text" />
 

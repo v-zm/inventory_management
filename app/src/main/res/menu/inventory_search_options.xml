@@ -3,21 +3,21 @@
     <item
         android:id="@+id/search_by_name"
         android:orderInCategory="1"
-        android:title="Name" />
+        android:title="@string/filter_option_name_text" />
 
     <item
         android:id="@+id/search_by_price"
         android:orderInCategory="1"
-        android:title="Price" />
+        android:title="@string/filter_option_price_text" />
 
     <item
         android:id="@+id/search_by_no_filter"
         android:orderInCategory="1"
-        android:title="No Filter" />
+        android:title="@string/filter_option_no_filter_text" />
     <item
         android:id="@+id/search_include_image_selectable"
         android:orderInCategory="2"
-        android:title="Only with image"
+        android:title="@string/filter_option_only_with_image_text"
         android:checkable="true"
         />
 </menu>

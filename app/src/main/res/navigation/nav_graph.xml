@@ -7,11 +7,11 @@
     <fragment
         android:id="@+id/product_list"
         android:name="com.vivek.inventorymanagement.features.inventory.view.fragments.InventoryProductListViewFragment"
-        android:label="Inventory list"
+        android:label="@string/label_inventory_list"
         tools:layout="@layout/fragment_inventory_product_list_view" />
     <fragment
         android:id="@+id/product_grid"
         android:name="com.vivek.inventorymanagement.features.inventory.view.fragments.InventoryProductGridViewFragment"
-        android:label="Inventory Grid"
+        android:label="@string/label_inventory_grid"
         tools:layout="@layout/fragment_inventory_product_grid_view" />
 </navigation>
