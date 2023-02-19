@@ -12,8 +12,17 @@ import com.vivek.inventorymanagement.features.inventory.model.Item
 import com.vivek.inventorymanagement.features.inventory.view.viewHolder.ViewHolderGridView
 import com.vivek.inventorymanagement.features.inventory.view.viewHolder.ViewHolderListView
 
-class InventoryProductAdapter(val viewTypeEnum: ProductViewTypeEnum, var items: List<Item>) :
+class InventoryProductAdapter(
+    private val viewTypeEnum: ProductViewTypeEnum,
+    private var items: List<Item>
+) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    /** @updateInventoryItems is used to update items for adapter*/
+    fun updateInventoryItems(newItems: List<Item>) {
+        items = newItems
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val context = parent.context
@@ -44,34 +53,49 @@ class InventoryProductAdapter(val viewTypeEnum: ProductViewTypeEnum, var items: 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (viewTypeEnum) {
             ProductViewTypeEnum.LIST -> {
-                val viewHolder: ViewHolderListView = holder as ViewHolderListView
-                val item: Item = items[position]
-                viewHolder.binding.productItemName.text = item.name
-                viewHolder.binding.productItemPrice.text = item.price
-                viewHolder.binding.productExtraInfo.text = item.extra
-                viewHolder.binding.productItemImage.load(Uri.parse(item.imageUrl)) {
-                    placeholder(R.drawable.placeholder_broken_image)
-                    error(R.drawable.placeholder_broken_image)
-                }
-                if (position < items.size - 1) {
-                    viewHolder.binding.itemDivider.visibility = View.VISIBLE
-                } else {
-                    viewHolder.binding.itemDivider.visibility = View.GONE
-                }
+                bindViewForViewHolderListView(
+                    holder,
+                    item = items[position],
+                    isLastItem = position == items.size - 1
+                )
 
             }
 
             ProductViewTypeEnum.GRID -> {
-                val viewHolder: ViewHolderGridView = holder as ViewHolderGridView
-                val item: Item = items[position]
-                viewHolder.binding.productItemName.text = item.name
-                viewHolder.binding.productItemPrice.text = item.price
-                viewHolder.binding.productItemImage.load(Uri.parse(item.imageUrl)) {
-                    placeholder(R.drawable.placeholder_broken_image)
-                    error(R.drawable.placeholder_broken_image)
-                }
+                bindViewForViewHolderGridView(holder, item = items[position])
             }
 
+        }
+    }
+
+    private fun bindViewForViewHolderGridView(holder: RecyclerView.ViewHolder, item: Item) {
+        val viewHolder: ViewHolderGridView = holder as ViewHolderGridView
+        viewHolder.binding.productItemName.text = item.name
+        viewHolder.binding.productItemPrice.text = item.price
+        viewHolder.binding.productItemImage.load(Uri.parse(item.imageUrl)) {
+            placeholder(R.drawable.placeholder_broken_image)
+            error(R.drawable.placeholder_broken_image)
+        }
+    }
+
+    private fun bindViewForViewHolderListView(
+        holder: RecyclerView.ViewHolder,
+        item: Item,
+        isLastItem: Boolean
+    ) {
+        val viewHolder: ViewHolderListView = holder as ViewHolderListView
+
+        viewHolder.binding.productItemName.text = item.name
+        viewHolder.binding.productItemPrice.text = item.price
+        viewHolder.binding.productExtraInfo.text = item.extra
+        viewHolder.binding.productItemImage.load(Uri.parse(item.imageUrl)) {
+            placeholder(R.drawable.placeholder_broken_image)
+            error(R.drawable.placeholder_broken_image)
+        }
+        if (!isLastItem) {
+            viewHolder.binding.itemDivider.visibility = View.VISIBLE
+        } else {
+            viewHolder.binding.itemDivider.visibility = View.GONE
         }
     }
 }

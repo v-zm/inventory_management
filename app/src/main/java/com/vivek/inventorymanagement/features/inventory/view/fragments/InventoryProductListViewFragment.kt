@@ -35,8 +35,7 @@ class InventoryProductListViewFragment() : Fragment(R.layout.fragment_inventory_
 
     private fun listenForInventoryData() {
         val inventoryListObserver = Observer<List<Item>> { newItemList ->
-            mAdapter.items = newItemList
-            mAdapter.notifyDataSetChanged()
+            mAdapter.updateInventoryItems(newItemList)
         }
         mActivityViewModel.inventoryItemList.observe(viewLifecycleOwner, inventoryListObserver)
     }

@@ -19,7 +19,7 @@ class InventoryProductGridViewFragment() : Fragment(R.layout.fragment_inventory_
     private val mActivityViewModel: MainActivityViewModel by activityViewModels()
     private lateinit var mAdapter: InventoryProductAdapter
     companion object{
-        private val GRID_ITEM_COUNT:Int=3
+        private const val GRID_ITEM_COUNT:Int=3
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,7 +41,7 @@ class InventoryProductGridViewFragment() : Fragment(R.layout.fragment_inventory_
 
     private fun listenForInventoryData() {
         val inventoryListObserver = Observer<List<Item>> { newItemList ->
-            mAdapter.items = newItemList
+            mAdapter.updateInventoryItems(newItemList)
             mAdapter.notifyDataSetChanged()
         }
         mActivityViewModel.inventoryItemList.observe(viewLifecycleOwner, inventoryListObserver)
