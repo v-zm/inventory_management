@@ -18,17 +18,25 @@ class InventoryProductListViewFragment : Fragment(R.layout.fragment_inventory_pr
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val recyclerView: RecyclerView = view.findViewById<RecyclerView>(R.id.product_recycler_view)
-        mAdapter = InventoryProductAdapter(ProductViewTypeEnum.LIST, ArrayList<Item>())
-        recyclerView.adapter = mAdapter
+        inflateRecyclerView(view)
         listenForInventoryData()
     }
 
+    /** @inflateRecyclerView assigns [InventoryProductAdapter] to recyclerview with id @product_recycler_view */
+    private fun inflateRecyclerView(view: View) {
+        val recyclerView: RecyclerView = view.findViewById<RecyclerView>(R.id.product_recycler_view)
+        mAdapter = InventoryProductAdapter(ProductViewTypeEnum.LIST, ArrayList<Item>())
+        recyclerView.adapter = mAdapter
+    }
+
+    /**
+     * @listenForInventoryData observes on @inventoryItemList liveData from [MainActivityViewModel]
+     * And, calls @updateInventoryItems function in [InventoryProductAdapter] to update items
+     * */
     private fun listenForInventoryData() {
         val inventoryListObserver = Observer<List<Item>> { newItemList ->
             mAdapter.updateInventoryItems(newItemList)
         }
         mActivityViewModel.inventoryItemList.observe(viewLifecycleOwner, inventoryListObserver)
     }
-
 }
