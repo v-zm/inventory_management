@@ -12,6 +12,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.vivek.inventorymanagement.R
 import com.vivek.inventorymanagement.databinding.ActivityMainBinding
+import com.vivek.inventorymanagement.features.inventory.model.MenuInventorySearchOptionsOrderInCategory
 import com.vivek.inventorymanagement.features.inventory.viewModel.MainActivityViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -25,21 +26,28 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         mBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.nav_host_fragment_container) as NavHostFragment
-        val navController = navHostFragment.navController
-        setupWithNavController(mBinding.homeBottomNavigationBar, navController = navController)
-
+        setUpNavigation()
     }
 
     override fun onStart() {
         super.onStart()
-        mActivityViewModel.getInventoryProducts()
+        fetchInventoryProducts();
         observeLoadingState()
-        startSearchListener()
+        initiateSearchListener()
         inflateFilterMenu()
         observerSelectedFilterMenuOption()
         observeErrorState()
+    }
+
+    private fun setUpNavigation() {
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment_container) as NavHostFragment
+        val navController = navHostFragment.navController
+        setupWithNavController(mBinding.homeBottomNavigationBar, navController = navController)
+    }
+
+    private fun fetchInventoryProducts() {
+        mActivityViewModel.getInventoryProducts()
     }
 
     private fun observeLoadingState() {
@@ -56,17 +64,17 @@ class MainActivity : AppCompatActivity() {
         mActivityViewModel.isError.observe(this, errorObserver)
     }
 
-    private fun startSearchListener() {
+    private fun initiateSearchListener() {
         mBinding.inventorySearchBar.inventorySearchTextField.addTextChangedListener(object :
             TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            override fun beforeTextChanged(_p0: CharSequence?, _p1: Int, _p2: Int, _p3: Int) {
             }
 
             override fun onTextChanged(text: CharSequence?, _p1: Int, _p2: Int, _p3: Int) {
                 text.let { tempText -> mActivityViewModel.onSearch(tempText.toString()) }
             }
 
-            override fun afterTextChanged(p0: Editable?) {
+            override fun afterTextChanged(_p0: Editable?) {
             }
         })
     }
@@ -74,28 +82,29 @@ class MainActivity : AppCompatActivity() {
     private fun inflateFilterMenu() {
         val menu = PopupMenu(this, mBinding.inventorySearchBar.filterText)
         menu.inflate(R.menu.inventory_search_options)
-
         mBinding.inventorySearchBar.selectedOption = menu.menu.getItem(0).title.toString()
         mBinding.inventorySearchBar.filterText.setOnClickListener {
             menu.show()
         }
         menu.setOnMenuItemClickListener { menuItem: MenuItem ->
-            if (menuItem.order == 2) {
-                menuItem.isChecked = !menuItem.isChecked
-                if (menuItem.itemId == R.id.search_include_image_selectable) {
-                    mActivityViewModel.searchOnlyWithImage = menuItem.isChecked
-                }
-                false
-            } else {
-                mActivityViewModel.inventoryFilterSelectedOption.value = menuItem.title.toString()
-                true
-            }
-
+            return@setOnMenuItemClickListener onMenuSelection(menuItem)
         }
     }
 
-    private fun observerSelectedFilterMenuOption() {
+    private fun onMenuSelection(menuItem: MenuItem): Boolean {
+        return if (menuItem.order == MenuInventorySearchOptionsOrderInCategory.selectionCategory) {
+            menuItem.isChecked = !menuItem.isChecked
+            if (menuItem.itemId == R.id.search_include_image_selectable) {
+                mActivityViewModel.searchOnlyWithImage = menuItem.isChecked
+            }
+            false
+        } else if (menuItem.order == MenuInventorySearchOptionsOrderInCategory.filterCategory) {
+            mActivityViewModel.inventoryFilterSelectedOption.value = menuItem.title.toString()
+            true
+        } else true
+    }
 
+    private fun observerSelectedFilterMenuOption() {
         val inventorySelectedOptionObserver = Observer<String> { selectedOption ->
             mBinding.inventorySearchBar.selectedOption = selectedOption
         }
