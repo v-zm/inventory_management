@@ -16,6 +16,8 @@ import javax.inject.Singleton
 @Module
 abstract class AppModule {
     companion object {
+
+        /** [getDispatch] provides [CoroutineDispatcher] to overall module */
         @Provides
         @Singleton
         fun getDispatch(): CoroutineDispatcher {
@@ -23,6 +25,7 @@ abstract class AppModule {
         }
     }
 
+    /** [bindInventoryRepository] provides [InventoryRepository] to overall module */
     @Binds
     @Singleton
     abstract fun bindInventoryRepository(inventoryRepository: InventoryRepository): IInventoryRepository
