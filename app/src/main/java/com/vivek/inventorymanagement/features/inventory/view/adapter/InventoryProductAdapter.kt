@@ -7,35 +7,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.vivek.inventorymanagement.R
-import com.vivek.inventorymanagement.databinding.GridItemInventoryBinding
-import com.vivek.inventorymanagement.databinding.ListItemInventoryBinding
 import com.vivek.inventorymanagement.features.inventory.enums.ProductViewTypeEnum
 import com.vivek.inventorymanagement.features.inventory.model.Item
+import com.vivek.inventorymanagement.features.inventory.view.viewHolder.ViewHolderGridView
+import com.vivek.inventorymanagement.features.inventory.view.viewHolder.ViewHolderListView
 
 class InventoryProductAdapter(val viewTypeEnum: ProductViewTypeEnum, var items: List<Item>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
-    inner class ViewHolderListView(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val binding: ListItemInventoryBinding = ListItemInventoryBinding.bind(itemView)
-//        val productName: AppCompatTextView =
-//            itemView.findViewById<AppCompatTextView>(R.id.product_item_name)
-//        val productPrice: AppCompatTextView =
-//            itemView.findViewById<AppCompatTextView>(R.id.product_item_price)
-//
-//        val productExtraInfo: AppCompatTextView = itemView.findViewById(R.id.product_extra_info)
-//        val divider: MaterialDivider = itemView.findViewById(R.id.item_divider)
-//        val imageView:AppCompatImageView =  itemView.findViewById()
-
-    }
-
-    inner class ViewHolderGridView(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val binding: GridItemInventoryBinding = GridItemInventoryBinding.bind(itemView)
-//        val productName: AppCompatTextView =
-//            itemView.findViewById(R.id.product_item_name)
-//        val productPrice: AppCompatTextView =
-//            itemView.findViewById<AppCompatTextView>(R.id.product_item_price)
-    }
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val context = parent.context
