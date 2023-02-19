@@ -6,7 +6,7 @@ import com.vivek.inventorymanagement.features.inventory.model.Item
 import javax.inject.Inject
 
 class ItemSearchHelper @Inject constructor(
-    val inventoryRepository: IInventoryRepository,
+    private val inventoryRepository: IInventoryRepository,
 ) {
 
     suspend fun search(
@@ -20,8 +20,7 @@ class ItemSearchHelper @Inject constructor(
                 tempFilter
             )
         }
-        val items: List<Item> = performDBSearch(searchText, filterOption, searchOnlyWithImage)
-        return items
+        return performDBSearch(searchText, filterOption, searchOnlyWithImage)
     }
 
     suspend fun performDBSearch(
