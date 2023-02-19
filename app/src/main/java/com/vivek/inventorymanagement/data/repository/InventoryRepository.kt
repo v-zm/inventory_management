@@ -4,6 +4,7 @@ import com.vivek.inventorymanagement.data.api.InventoryHttpClient
 import com.vivek.inventorymanagement.data.api.dtos.InventoryItemDto
 import com.vivek.inventorymanagement.data.api.dtos.InventoryItemListDto
 import com.vivek.inventorymanagement.data.api.services.InventoryApiService
+import com.vivek.inventorymanagement.data.database.inventory.IInventoryDatabase
 import com.vivek.inventorymanagement.data.database.inventory.InventoryDatabaseImp
 import com.vivek.inventorymanagement.data.database.inventory.entities.ItemEntity
 import com.vivek.inventorymanagement.features.inventory.enums.InventoryFilterOptionEnum
@@ -14,14 +15,18 @@ import retrofit2.Response
 import javax.inject.Inject
 
 class InventoryRepository @Inject constructor(
-    private val inventoryDb: InventoryDatabaseImp, val coroutineDispatcher: CoroutineDispatcher
+    private val mInventoryDb: InventoryDatabaseImp,
+    private val mCoroutineDispatcher: CoroutineDispatcher
 ) : IInventoryRepository(inventory = InventoryHttpClient()) {
 
+    /**
+     * [getInventoryItems] checks data in [IInventoryDatabase]
+     * */
     override suspend fun getInventoryItems(): List<Item>? {
-        return withContext(coroutineDispatcher) {
+        return withContext(mCoroutineDispatcher) {
             var resultItems: List<Item>? = null
             val itemEntities: List<ItemEntity> =
-                inventoryDb.getInventoryDatabase().itemDao().getAll()
+                mInventoryDb.getInventoryDatabase().itemDao().getAll()
             if (itemEntities.isNotEmpty()) {
                 resultItems = itemEntities.map { each ->
                     Item.getItemFromItemEntity(each)
@@ -44,7 +49,7 @@ class InventoryRepository @Inject constructor(
                             val resultItemEntities: List<ItemEntity> = tempResultItems.map { each ->
                                 ItemEntity.getItemEntity(each)
                             }
-                            inventoryDb.getInventoryDatabase().itemDao()
+                            mInventoryDb.getInventoryDatabase().itemDao()
                                 .insertAll(resultItemEntities)
 
                         }
@@ -59,19 +64,19 @@ class InventoryRepository @Inject constructor(
     override suspend fun getInventorySearchItems(
         searchText: String, searchType: InventoryFilterOptionEnum, searchOnlyWithImage: Boolean
     ): List<Item> {
-        return withContext(coroutineDispatcher) {
+        return withContext(mCoroutineDispatcher) {
             var resultItems: List<Item> = ArrayList<Item>()
 
             val itemEntites: List<ItemEntity> = when (searchType) {
-                InventoryFilterOptionEnum.FILTER_BY_NAME -> if (searchOnlyWithImage) inventoryDb.getInventoryDatabase()
-                    .itemDao().getItemsByName(searchText) else inventoryDb.getInventoryDatabase()
+                InventoryFilterOptionEnum.FILTER_BY_NAME -> if (searchOnlyWithImage) mInventoryDb.getInventoryDatabase()
+                    .itemDao().getItemsByName(searchText) else mInventoryDb.getInventoryDatabase()
                     .itemDao().getItemsByNameAndImage(searchText)
-                InventoryFilterOptionEnum.FILTER_BY_PRICE -> if (searchOnlyWithImage) inventoryDb.getInventoryDatabase()
-                    .itemDao().getItemsByPrice(searchText) else inventoryDb.getInventoryDatabase()
+                InventoryFilterOptionEnum.FILTER_BY_PRICE -> if (searchOnlyWithImage) mInventoryDb.getInventoryDatabase()
+                    .itemDao().getItemsByPrice(searchText) else mInventoryDb.getInventoryDatabase()
                     .itemDao().getItemsByPriceAndImage(searchText)
-                InventoryFilterOptionEnum.NO_FILTER -> if (searchOnlyWithImage) inventoryDb.getInventoryDatabase()
+                InventoryFilterOptionEnum.NO_FILTER -> if (searchOnlyWithImage) mInventoryDb.getInventoryDatabase()
                     .itemDao()
-                    .getItemsByNameOrPrice(searchText) else inventoryDb.getInventoryDatabase()
+                    .getItemsByNameOrPrice(searchText) else mInventoryDb.getInventoryDatabase()
                     .itemDao().getItemsByNameOrPriceAndImage(searchText)
             }
 
