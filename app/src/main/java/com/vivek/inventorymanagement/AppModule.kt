@@ -1,5 +1,7 @@
 package com.vivek.inventorymanagement
 
+import com.vivek.inventorymanagement.data.api.clients.IHttpClient
+import com.vivek.inventorymanagement.data.api.clients.InventoryHttpClient
 import com.vivek.inventorymanagement.data.repository.IInventoryRepository
 import com.vivek.inventorymanagement.data.repository.InventoryRepository
 import dagger.Binds
@@ -29,6 +31,11 @@ abstract class AppModule {
     @Binds
     @Singleton
     abstract fun bindInventoryRepository(inventoryRepository: InventoryRepository): IInventoryRepository
+
+    /** [bindInventoryHttpClient] provides [InventoryHttpClient] to overall module */
+    @Binds
+    @Singleton
+    abstract fun bindInventoryHttpClient(inventoryHttpClient: InventoryHttpClient): IHttpClient
 
 
 }

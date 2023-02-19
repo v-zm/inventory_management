@@ -62,7 +62,7 @@
             android:id="@+id/inventory_search_text_field"
             android:layout_width="0dp"
             android:layout_height="48dp"
-            android:layout_marginStart="16dp"
+
             android:layout_marginTop="16dp"
             android:autofillHints="Search"
             android:background="@drawable/rounded_corner_shape_max_radius"

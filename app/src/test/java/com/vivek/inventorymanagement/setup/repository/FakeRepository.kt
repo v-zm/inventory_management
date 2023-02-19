@@ -1,13 +1,12 @@
 package com.vivek.inventorymanagement.setup.repository
 
-import com.vivek.inventorymanagement.data.api.InventoryHttpClient
 import com.vivek.inventorymanagement.data.repository.IInventoryRepository
 import com.vivek.inventorymanagement.features.inventory.enums.InventoryFilterOptionEnum
 import com.vivek.inventorymanagement.features.inventory.model.Item
 
-class FakeRepository : IInventoryRepository(InventoryHttpClient()) {
+class FakeRepository : IInventoryRepository() {
 
-//    var failEnabled: Boolean = false
+    //    var failEnabled: Boolean = false
     override suspend fun getInventoryItems(): List<Item>? {
 //        return null
         val list: ArrayList<Item> = ArrayList()

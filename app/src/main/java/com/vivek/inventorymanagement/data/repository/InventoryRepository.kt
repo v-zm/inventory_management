@@ -1,6 +1,7 @@
 package com.vivek.inventorymanagement.data.repository
 
-import com.vivek.inventorymanagement.data.api.InventoryHttpClient
+
+import com.vivek.inventorymanagement.data.api.clients.IHttpClient
 import com.vivek.inventorymanagement.data.api.dtos.InventoryItemDto
 import com.vivek.inventorymanagement.data.api.dtos.InventoryItemListDto
 import com.vivek.inventorymanagement.data.api.services.InventoryApiService
@@ -16,8 +17,9 @@ import javax.inject.Inject
 
 class InventoryRepository @Inject constructor(
     private val mInventoryDb: InventoryDatabaseImp,
-    private val mCoroutineDispatcher: CoroutineDispatcher
-) : IInventoryRepository(inventory = InventoryHttpClient()) {
+    private val mCoroutineDispatcher: CoroutineDispatcher,
+    private val iHttpClient: IHttpClient
+) : IInventoryRepository() {
 
     /**
      * [getInventoryItems] checks data in [IInventoryDatabase]
@@ -33,7 +35,7 @@ class InventoryRepository @Inject constructor(
                 }
             } else {
                 val service: InventoryApiService =
-                    inventory.getBaseAdapter().create(InventoryApiService::class.java)
+                    iHttpClient.getBaseAdapter().create(InventoryApiService::class.java)
                 val data: Response<InventoryItemListDto>? = service.getInventoryList().execute()
 
                 if (data?.isSuccessful == true) {
