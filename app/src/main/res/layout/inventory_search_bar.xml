@@ -57,28 +57,24 @@
             app:layout_constraintEnd_toEndOf="@id/end_vertical_guide"
             app:layout_constraintTop_toTopOf="@id/top_horizontal_guide" />
 
-        <LinearLayout
-            android:layout_width="@dimen/no_width"
-            android:layout_height="wrap_content"
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/inventory_search_text_field"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
+            android:autofillHints="Search"
             android:background="@drawable/rounded_corner_shape_max_radius"
+            android:focusedByDefault="false"
+            android:hint="@{selectedOption.empty || selectedOption == null ? `Search`: `Search by `+selectedOption.toLowerCase()}"
+            android:inputType="textAutoComplete"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:textColorHint="@color/search_hint_color"
             app:layout_constraintEnd_toStartOf="@id/end_vertical_guide"
-            app:layout_constraintStart_toStartOf="@id/start_vertical_guide"
-            app:layout_constraintTop_toBottomOf="@id/explore_text">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/inventory_search_text_field"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:autofillHints="Search"
-                android:focusedByDefault="false"
-                android:hint="@{selectedOption.empty ? `Search`: `Search by `+selectedOption.toLowerCase()}"
-                android:inputType="textAutoComplete"
-                android:textColorHint="@color/search_hint_color" />
-
-        </LinearLayout>
+            app:layout_constraintStart_toEndOf="@id/start_vertical_guide"
+            app:layout_constraintTop_toBottomOf="@id/explore_text" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
