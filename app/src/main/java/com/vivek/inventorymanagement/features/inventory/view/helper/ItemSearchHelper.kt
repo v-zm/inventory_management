@@ -23,7 +23,7 @@ class ItemSearchHelper @Inject constructor(
         return performDBSearch(searchText, filterOption, searchOnlyWithImage)
     }
 
-    suspend fun performDBSearch(
+    private suspend fun performDBSearch(
         searchText: String,
         filterOption: InventoryFilterOptionEnum?,
         searchOnlyWithImage: Boolean,

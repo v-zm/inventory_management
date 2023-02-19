@@ -16,8 +16,7 @@
         android:title="@string/filter_option_no_filter_text" />
     <item
         android:id="@+id/search_include_image_selectable"
-        android:orderInCategory="2"
-        android:title="@string/filter_option_only_with_image_text"
         android:checkable="true"
-        />
+        android:orderInCategory="2"
+        android:title="@string/filter_option_only_with_image_text" />
 </menu>
