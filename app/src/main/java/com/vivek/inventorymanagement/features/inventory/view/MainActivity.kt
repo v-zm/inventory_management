@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mBinding: ActivityMainBinding
     private val mActivityViewModel: MainActivityViewModel by viewModels()
 
-    /** @onCreate is used to initiate MainActivity and UI setup including Navigation setup */
+    /** [onCreate] is used to initiate [MainActivity] and UI setup including Navigation setup */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = ActivityMainBinding.inflate(layoutInflater)
@@ -31,10 +31,10 @@ class MainActivity : AppCompatActivity() {
         setUpNavigation()
     }
 
-    /** @OnStart is used to initiate functions that work with data */
+    /** [onStart] is used to initiate functions that work with data */
     override fun onStart() {
         super.onStart()
-        fetchInventoryProducts();
+        fetchInventoryProducts()
         observeLoadingState()
         initiateSearchListener()
         inflateFilterMenu()
@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
         observeErrorState()
     }
 
-    /** @setUpNavigation is used to setup Navigation for Activity using Navigation Graph*/
+    /** [setUpNavigation] is used to setup Navigation for [MainActivity] using Navigation Graph*/
     private fun setUpNavigation() {
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment_container) as NavHostFragment
@@ -50,12 +50,12 @@ class MainActivity : AppCompatActivity() {
         setupWithNavController(mBinding.homeBottomNavigationBar, navController = navController)
     }
 
-    /** @fetchInventoryProducts is used to get inventory item products from [MainActivityViewModel]*/
+    /** [fetchInventoryProducts] is used to get inventory item products from [MainActivityViewModel]*/
     private fun fetchInventoryProducts() {
         mActivityViewModel.getInventoryProducts()
     }
 
-    /** @observeLoadingState is used to start observing @isLoading object from [MainActivityViewModel]*/
+    /** [observeLoadingState] is used to start observing @isLoading object from [MainActivityViewModel]*/
     private fun observeLoadingState() {
         val loadingObserver = Observer<Boolean> { isLoading ->
             mBinding.isInventoryLoading = isLoading
@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity() {
         mActivityViewModel.isLoading.observe(this, loadingObserver)
     }
 
-    /**  observeErrorState is used to start observing @isError object from [MainActivityViewModel]*/
+    /** [observeErrorState] is used to start observing @isError object from [MainActivityViewModel]*/
     private fun observeErrorState() {
         val errorObserver = Observer<Boolean> { isError ->
             mBinding.isError = isError
@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity() {
         mActivityViewModel.isError.observe(this, errorObserver)
     }
 
-    /**  initiateSearchListener is used to start observing @inventorySearchTextField for search text from @inventorySearchBar */
+    /** [initiateSearchListener] is used to start observing @inventorySearchTextField for search text from @inventorySearchBar */
     private fun initiateSearchListener() {
         mBinding.inventorySearchBar.inventorySearchTextField.addTextChangedListener(object :
             TextWatcher {
@@ -88,8 +88,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * @inflateFilterMenu is used to inflate PopupMenu on filterText from @inventorySearchBar
-     * Also, it is used to set initial value as first item from R.menu.inventory_search_options
+     * [inflateFilterMenu] is used to inflate PopupMenu on filterText from @inventorySearchBar
+     * Also, it is used to set initial value as first item from [R.menu.inventory_search_options]
      * Also, it is used to observe item click listener on menu widget
      * */
     private fun inflateFilterMenu() {
@@ -104,7 +104,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /** @onMenuSelection is invoked when user selects a menu item from filterText of  @inventorySearchBar */
+    /** [onMenuSelection] is invoked when user selects a menu item from filterText of  @inventorySearchBar */
     private fun onMenuSelection(menuItem: MenuItem): Boolean {
         return if (menuItem.order == MenuInventorySearchOptionsOrderInCategory.selectionCategory) {
             menuItem.isChecked = !menuItem.isChecked
@@ -119,8 +119,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * observerSelectedFilterMenuOption is used to start observing @inventoryFilterSelectedOption object from [MainActivityViewModel]
-     * And bind result with @selectedOption object form main_activity.xml
+     * [observerSelectedFilterMenuOption] is used to start observing @inventoryFilterSelectedOption object from [MainActivityViewModel]
+     * And bind result with @selectedOption object from [R.layout.inventory_search_bar]
      * */
     private fun observerSelectedFilterMenuOption() {
         val inventorySelectedOptionObserver = Observer<String> { selectedOption ->

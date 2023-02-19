@@ -10,6 +10,7 @@ class Item(
     val imageUrl: String
 ) {
     companion object {
+        /** @getItemFromItemDto creates [Item] object from [InventoryItemDto]*/
         fun getItemFromItemDto(item: InventoryItemDto): Item {
             return Item(
                 name = item.name,
@@ -19,6 +20,7 @@ class Item(
             )
         }
 
+        /** [getItemFromItemEntity] creates [Item] object from [ItemEntity]*/
         fun getItemFromItemEntity(item: ItemEntity): Item {
             return Item(
                 name = item.name,

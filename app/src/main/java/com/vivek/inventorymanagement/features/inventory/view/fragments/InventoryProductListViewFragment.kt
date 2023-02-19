@@ -22,7 +22,7 @@ class InventoryProductListViewFragment : Fragment(R.layout.fragment_inventory_pr
         listenForInventoryData()
     }
 
-    /** @inflateRecyclerView assigns [InventoryProductAdapter] to recyclerview with id @product_recycler_view */
+    /** [inflateRecyclerView] assigns [InventoryProductAdapter] to recyclerview with id [R.id.product_recycler_view] */
     private fun inflateRecyclerView(view: View) {
         val recyclerView: RecyclerView = view.findViewById<RecyclerView>(R.id.product_recycler_view)
         mAdapter = InventoryProductAdapter(ProductViewTypeEnum.LIST, ArrayList<Item>())
@@ -30,7 +30,7 @@ class InventoryProductListViewFragment : Fragment(R.layout.fragment_inventory_pr
     }
 
     /**
-     * @listenForInventoryData observes on @inventoryItemList liveData from [MainActivityViewModel]
+     * [listenForInventoryData] observes on @inventoryItemList liveData from [MainActivityViewModel]
      * And, calls @updateInventoryItems function in [InventoryProductAdapter] to update items
      * */
     private fun listenForInventoryData() {

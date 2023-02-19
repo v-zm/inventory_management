@@ -18,7 +18,7 @@ class InventoryProductAdapter(
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    /** @updateInventoryItems is used to update items for adapter*/
+    /** [updateInventoryItems] is used to update [items] for adapter*/
     fun updateInventoryItems(newItems: List<Item>) {
         items = newItems
         notifyDataSetChanged()
