@@ -106,16 +106,20 @@ class MainActivity : AppCompatActivity() {
 
     /** [onMenuSelection] is invoked when user selects a menu item from filterText of  @inventorySearchBar */
     private fun onMenuSelection(menuItem: MenuItem): Boolean {
-        return if (menuItem.order == MenuInventorySearchOptionsOrderInCategory.selectionCategory) {
-            menuItem.isChecked = !menuItem.isChecked
-            if (menuItem.itemId == R.id.search_include_image_selectable) {
-                mActivityViewModel.searchOnlyWithImage = menuItem.isChecked
+        return when (menuItem.order) {
+            MenuInventorySearchOptionsOrderInCategory.selectionCategory -> {
+                menuItem.isChecked = !menuItem.isChecked
+                if (menuItem.itemId == R.id.search_include_image_selectable) {
+                    mActivityViewModel.searchOnlyWithImage = menuItem.isChecked
+                }
+                false
             }
-            false
-        } else if (menuItem.order == MenuInventorySearchOptionsOrderInCategory.filterCategory) {
-            mActivityViewModel.inventoryFilterSelectedOption.value = menuItem.title.toString()
-            true
-        } else true
+            MenuInventorySearchOptionsOrderInCategory.filterCategory -> {
+                mActivityViewModel.inventoryFilterSelectedOption.value = menuItem.title.toString()
+                true
+            }
+            else -> true
+        }
     }
 
     /**
