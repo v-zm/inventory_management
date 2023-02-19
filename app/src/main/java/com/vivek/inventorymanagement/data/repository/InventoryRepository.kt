@@ -18,7 +18,6 @@ class InventoryRepository @Inject constructor(
 ) : IInventoryRepository(inventory = InventoryHttpClient()) {
 
     override suspend fun getInventoryItems(): List<Item>? {
-        return  null
         return withContext(coroutineDispatcher) {
             var resultItems: List<Item>? = null
             val itemEntities: List<ItemEntity> =
