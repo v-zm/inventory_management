@@ -2,12 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/product_list"
-        android:icon="@drawable/baseline_view_list_24"
+        android:icon="@drawable/baseline_format_list_bulleted_24"
         android:title="@string/bottom_nav_product_list"
         />
     <item
         android:id="@+id/product_grid"
-        android:icon="@drawable/baseline_grid_on_24"
+        android:icon="@drawable/baseline_grid_view_24"
         android:title="@string/bottom_nav_product_grid" />
     <item
         android:id="@+id/upcoming_1"
