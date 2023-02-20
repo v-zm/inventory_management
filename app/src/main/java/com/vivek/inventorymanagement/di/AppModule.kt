@@ -1,5 +1,6 @@
 package com.vivek.inventorymanagement.di
 
+import com.vivek.inventorymanagement.data.api.ConnectivityAwareClient
 import com.vivek.inventorymanagement.data.api.clients.IHttpClient
 import com.vivek.inventorymanagement.data.api.clients.InventoryHttpClient
 import com.vivek.inventorymanagement.data.repository.IInventoryRepository
@@ -11,6 +12,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import okhttp3.OkHttpClient
 import javax.inject.Singleton
 
 
@@ -36,4 +38,9 @@ abstract class AppModule {
     @Binds
     @Singleton
     abstract fun bindInventoryHttpClient(inventoryHttpClient: InventoryHttpClient): IHttpClient
+
+    /** [bindInventoryHttpClient] provides [InventoryHttpClient] to overall module */
+    @Binds
+    @Singleton
+    abstract fun bindConnectivityAwareClient(connectivityAwareClient: ConnectivityAwareClient): OkHttpClient
 }

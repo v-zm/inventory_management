@@ -5,11 +5,11 @@ import android.content.Context
 import com.vivek.inventorymanagement.data.api.clients.IHttpClient
 import com.vivek.inventorymanagement.data.api.dtos.InventoryItemDto
 import com.vivek.inventorymanagement.data.api.dtos.InventoryItemListDto
+import com.vivek.inventorymanagement.data.api.exception.NetworkException
 import com.vivek.inventorymanagement.data.api.services.InventoryApiService
 import com.vivek.inventorymanagement.data.database.inventory.IInventoryDatabase
 import com.vivek.inventorymanagement.data.database.inventory.InventoryDatabaseImp
 import com.vivek.inventorymanagement.data.database.inventory.entities.ItemEntity
-import com.vivek.inventorymanagement.data.util.ApiUtility
 import com.vivek.inventorymanagement.features.inventory.enums.InventoryFilterOptionEnum
 import com.vivek.inventorymanagement.features.inventory.model.Item
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -38,33 +38,39 @@ class InventoryRepository @Inject constructor(
                     Item.getItemFromItemEntity(each)
                 }
             } else {
-                if (!ApiUtility.isInternetConnected(mApplicationContext)) {
-                    return@withContext null
-                }
-                val service: InventoryApiService =
-                    mHttpClient.getHttpClient().create(InventoryApiService::class.java)
-                val data: Response<InventoryItemListDto>? = service.getInventoryList().execute()
+                try {
+                    val service: InventoryApiService =
+                        mHttpClient.getHttpClient().create(InventoryApiService::class.java)
+                    val data: Response<InventoryItemListDto>? = service.getInventoryList().execute()
 
-                if (data?.isSuccessful == true) {
-                    val itemList: List<InventoryItemDto>? = data.body()?.data?.items
+                    if (data?.isSuccessful == true) {
+                        val itemList: List<InventoryItemDto>? = data.body()?.data?.items
 
-                    itemList?.let { tempItemList ->
-                        resultItems = tempItemList.map { each ->
-                            Item.getItemFromItemDto(each)
-                        }
-
-                        resultItems?.let { tempResultItems ->
-
-                            val resultItemEntities: List<ItemEntity> = tempResultItems.map { each ->
-                                ItemEntity.getItemEntity(each)
+                        itemList?.let { tempItemList ->
+                            resultItems = tempItemList.map { each ->
+                                Item.getItemFromItemDto(each)
                             }
-                            mInventoryDb.getInventoryDatabase().itemDao()
-                                .insertAll(resultItemEntities)
+
+                            resultItems?.let { tempResultItems ->
+
+                                val resultItemEntities: List<ItemEntity> =
+                                    tempResultItems.map { each ->
+                                        ItemEntity.getItemEntity(each)
+                                    }
+                                mInventoryDb.getInventoryDatabase().itemDao()
+                                    .insertAll(resultItemEntities)
+                            }
                         }
                     }
+                } catch (e: NetworkException) {
+                    /*
+                    Handle Network exception
+                     */
+                    return@withContext null
+                } catch (e: java.lang.Exception) {
+                    return@withContext null
                 }
             }
-
             resultItems
         }
     }
