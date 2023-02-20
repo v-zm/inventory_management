@@ -64,7 +64,6 @@
             android:layout_marginTop="16dp"
             android:autofillHints="Search"
             android:background="@drawable/rounded_corner_shape_max_radius"
-            android:focusedByDefault="false"
             android:hint="@{selectedOption.empty || selectedOption == null ? `Search`: `Search by `+selectedOption.toLowerCase()}"
             android:inputType="textAutoComplete"
             android:paddingStart="16dp"
