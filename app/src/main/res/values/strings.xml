@@ -5,7 +5,7 @@
     <string name="bottom_nav_upcoming">Upcoming</string>
     <string name="explore_text">Explore</string>
     <string name="filter_text">Filter</string>
-    <string name="mrp_text">MRP</string>
+    <string name="mrp_text">MRP:</string>
     <string name="filter_option_name_text">Name</string>
     <string name="filter_option_price_text">Price</string>
     <string name="filter_option_no_filter_text">No Filter</string>

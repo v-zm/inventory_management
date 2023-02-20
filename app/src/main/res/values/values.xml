@@ -4,7 +4,7 @@
     <dimen name="bottom_nav_height">56dp</dimen>
     <dimen name="no_height">0dp</dimen>
     <dimen name="no_width">0dp</dimen>
-    <dimen name="homepage_top_bar_height">140dp</dimen>
+    <dimen name="homepage_top_bar_height">148dp</dimen>
     <dimen name="grid_item_image_height">96dp</dimen>
     <dimen name="grid_item_image_width">96dp</dimen>
 

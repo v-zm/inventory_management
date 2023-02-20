@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="16dp">
+    android:paddingVertical="16dp">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/product_item_image"
@@ -19,6 +19,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:textColor="@color/item_list_text_color"
+        android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@id/product_item_image"
         app:layout_constraintTop_toTopOf="@id/product_item_image" />
 
@@ -28,33 +31,42 @@
         android:layout_height="wrap_content"
         android:text="@string/mrp_text"
         android:textColor="@color/item_list_mrp_text"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@id/product_item_image"
         app:layout_constraintStart_toStartOf="@+id/product_item_name" />
 
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/product_item_price"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="4dp"
+        android:textAlignment="viewStart"
         android:textColor="@color/item_list_price_text"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@id/mrp_text"
+        app:layout_constraintEnd_toEndOf="@id/guideline_between_price_and_extra"
         app:layout_constraintStart_toEndOf="@id/mrp_text" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/product_extra_info"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-
+        android:textAlignment="viewStart"
+        android:textColor="@color/item_list_extra_text"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@id/product_item_price"
-        app:layout_constraintEnd_toEndOf="@id/vertical_end_guideline" />
+        app:layout_constraintEnd_toEndOf="@id/vertical_end_guideline"
+        app:layout_constraintStart_toEndOf="@id/guideline_between_price_and_extra" />
 
     <com.google.android.material.divider.MaterialDivider
         android:id="@+id/item_divider"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginTop="12dp"
         android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="@id/vertical_end_guideline"
+        app:layout_constraintStart_toStartOf="@id/mrp_text"
         app:layout_constraintTop_toBottomOf="@id/product_item_price" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -62,9 +74,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintGuide_percent="0.9"
+        app:layout_constraintGuide_percent="1"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_between_price_and_extra"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.56"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
