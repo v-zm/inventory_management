@@ -7,7 +7,7 @@ class Item(
     val name: String,
     val price: String,
     val extra: String?,
-    val imageUrl: String
+    val imageUrl: String?
 ) {
     companion object {
         /** @getItemFromItemDto creates [Item] object from [InventoryItemDto]*/

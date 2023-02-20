@@ -11,7 +11,7 @@ data class ItemEntity(
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "price") val price: String,
     @ColumnInfo(name = "extra") val extra: String?,
-    @ColumnInfo(name = "image") val imageUrl: String
+    @ColumnInfo(name = "image") val imageUrl: String?
 ) {
     companion object {
         fun getItemEntity(item: Item): ItemEntity {

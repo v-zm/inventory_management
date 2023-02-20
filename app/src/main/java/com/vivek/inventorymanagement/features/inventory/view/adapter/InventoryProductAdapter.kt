@@ -71,9 +71,13 @@ class InventoryProductAdapter(
         val viewHolder: ViewHolderGridView = holder as ViewHolderGridView
         viewHolder.binding.productItemName.text = item.name
         viewHolder.binding.productItemPrice.text = item.price
-        viewHolder.binding.productItemImage.load(Uri.parse(item.imageUrl)) {
-            placeholder(R.drawable.placeholder_broken_image)
-            error(R.drawable.placeholder_broken_image)
+        viewHolder.binding.productItemImage.clipToOutline = true
+        item.imageUrl?.let {
+            viewHolder.binding.productItemImage.load(Uri.parse(item.imageUrl)) {
+                placeholder(R.drawable.placeholder_broken_image)
+                error(R.drawable.placeholder_broken_image)
+            }
+            viewHolder.binding.productItemImage.setBackgroundResource(R.drawable.bg_colored_rounded_corner_shape_grid_item)
         }
     }
 
@@ -87,10 +91,15 @@ class InventoryProductAdapter(
         viewHolder.binding.productItemName.text = item.name
         viewHolder.binding.productItemPrice.text = item.price
         viewHolder.binding.productExtraInfo.text = item.extra
-        viewHolder.binding.productItemImage.load(Uri.parse(item.imageUrl)) {
-            placeholder(R.drawable.placeholder_broken_image)
-            error(R.drawable.placeholder_broken_image)
+
+        item.imageUrl?.let {
+            viewHolder.binding.productItemImage.load(Uri.parse(item.imageUrl)) {
+                placeholder(R.drawable.placeholder_broken_image)
+                error(R.drawable.placeholder_broken_image)
+            }
+            viewHolder.binding.productItemImage.setBackgroundResource(R.drawable.bg_colored_rounded_corner_shape_grid_item)
         }
+
         if (!isLastItem) {
             viewHolder.binding.itemDivider.visibility = View.VISIBLE
         } else {

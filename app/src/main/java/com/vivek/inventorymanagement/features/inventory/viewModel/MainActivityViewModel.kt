@@ -12,13 +12,15 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
-    private val mInventoryRepository: IInventoryRepository, private val mItemSearchHelper: ItemSearchHelper
+    private val mInventoryRepository: IInventoryRepository,
+    private val mItemSearchHelper: ItemSearchHelper
 ) : ViewModel() {
 
     /** [_inventoryItemList] is LiveData to hold list of [Item] */
     private val _inventoryItemList: MutableLiveData<List<Item>> by lazy {
         MutableLiveData<List<Item>>()
     }
+
     /** [inventoryItemList] is used to observe value of [_inventoryItemList] */
     val inventoryItemList: MutableLiveData<List<Item>> = _inventoryItemList
 
@@ -26,6 +28,7 @@ class MainActivityViewModel @Inject constructor(
     private val _isLoading: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>()
     }
+
     /** [isLoading] is used to observe value of [_isLoading] */
     val isLoading: MutableLiveData<Boolean> = _isLoading
 
@@ -33,6 +36,7 @@ class MainActivityViewModel @Inject constructor(
     private val _isError: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>(false)
     }
+
     /** [isError] is used to observe value of [_isError] */
     val isError: MutableLiveData<Boolean> = _isError
 
