@@ -5,8 +5,8 @@
     <dimen name="no_height">0dp</dimen>
     <dimen name="no_width">0dp</dimen>
     <dimen name="homepage_top_bar_height">140dp</dimen>
-    <dimen name="grid_item_image_height">128dp</dimen>
-    <dimen name="grid_item_image_width">128dp</dimen>
+    <dimen name="grid_item_image_height">96dp</dimen>
+    <dimen name="grid_item_image_width">96dp</dimen>
 
     <dimen name="list_item_image_height">48dp</dimen>
     <dimen name="list_item_image_width">48dp</dimen>
