@@ -11,9 +11,7 @@
         android:layout_width="@dimen/list_item_image_width"
         android:layout_height="@dimen/list_item_image_height"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
-
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/product_item_name"
@@ -22,7 +20,6 @@
         android:layout_marginStart="16dp"
         app:layout_constraintStart_toEndOf="@id/product_item_image"
         app:layout_constraintTop_toTopOf="@id/product_item_image" />
-
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/mrp_text"

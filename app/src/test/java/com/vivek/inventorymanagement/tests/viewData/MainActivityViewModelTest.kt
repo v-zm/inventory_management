@@ -2,27 +2,25 @@ package com.vivek.inventorymanagement.tests.viewData
 
 import android.os.Looper
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.vivek.inventorymanagement.data.repository.IInventoryRepository
 import com.vivek.inventorymanagement.features.inventory.view.helper.ItemSearchHelper
 import com.vivek.inventorymanagement.features.inventory.viewModel.MainActivityViewModel
 import com.vivek.inventorymanagement.setup.MainCoroutineRule
-import com.vivek.inventorymanagement.setup.repository.FakeRepository
-import com.vivek.inventorymanagement.setup.util.getOrAwaitValue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.runBlockingTest
-import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 
-@RunWith(AndroidJUnit4::class)
+
+@OptIn(ExperimentalCoroutinesApi::class)
+//@RunWith(AndroidJUnit4::class)
 internal class MainActivityViewModelTest {
 
     @get:Rule
@@ -33,12 +31,12 @@ internal class MainActivityViewModelTest {
     val coroutineScope = MainCoroutineRule()
 
     @Mock
-    lateinit var fakeRepository: FakeRepository
+    lateinit var testRepository: IInventoryRepository
 
     @Mock
     lateinit var itemSearchHelper: ItemSearchHelper
 
-    lateinit var model: MainActivityViewModel
+    lateinit var activityViewModel: MainActivityViewModel
 
     @Mock
     lateinit var looper: Looper
@@ -50,44 +48,41 @@ internal class MainActivityViewModelTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Before
     fun setup() {
-        // todo initiate vm
         MockitoAnnotations.openMocks(this)
         Dispatchers.setMain(testDispatcher)
-        model = MainActivityViewModel(fakeRepository, itemSearchHelper)
+        activityViewModel = MainActivityViewModel(testRepository, itemSearchHelper)
 
     }
 
     @After
     fun tearDown() {
-        // null vm
+//        activityViewModel=null
 
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
+
     @Test
-    fun mainActivityViewModel_Get_InventoryProductsApiFailed_ErrrorSetTrueAndLiveDataSetNull()=
-        runTest {
-        model.getInventoryProducts()
+    fun mainActivityViewModel_Get_InventoryProductsApiFailed_ErrrorSetTrueAndLiveDataSetNull(): Unit =
+        runBlocking {
+            activityViewModel.getInventoryProducts()
 
-//        model.inventoryItemList.value?.let { assert(it.isEmpty()) }
-        assert(model.isError.getOrAwaitValue() == true)
-    }
+            activityViewModel.inventoryItemList.value?.let { assert(it.isEmpty()) }
+            assert(activityViewModel.isError.value == true)
+        }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun mainActivityViewModel_Get_InventoryProductsApiFailed_ErrrorSetTrueAndLiveDataSetNull1(){
+    fun mainActivityViewModel_Get_InventoryProductsApiFailed_ErrrorSetTrueAndLiveDataSetNull1() {
 
-            assert(1==2)
-//        fakeRepository.failEnabled = true
-        model.getInventoryProducts()
 
-        assert(model.inventoryItemList.getOrAwaitValue()?.isEmpty() == false)
+        activityViewModel.getInventoryProducts()
+
+        assert(activityViewModel.inventoryItemList.value?.isEmpty() == false)
 
     }
 
-    fun Test1(){
-        val a=1
-        val b=2
+    fun Test1() {
+        val a = 1
+        val b = 2
         assert(a == b)
     }
 }

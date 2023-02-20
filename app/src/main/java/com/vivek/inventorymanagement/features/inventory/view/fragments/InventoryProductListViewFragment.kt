@@ -7,6 +7,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.vivek.inventorymanagement.R
+import com.vivek.inventorymanagement.databinding.FragmentInventoryProductListViewBinding
 import com.vivek.inventorymanagement.features.inventory.enums.ProductViewTypeEnum
 import com.vivek.inventorymanagement.features.inventory.model.Item
 import com.vivek.inventorymanagement.features.inventory.view.adapter.InventoryProductAdapter
@@ -24,7 +25,9 @@ class InventoryProductListViewFragment : Fragment(R.layout.fragment_inventory_pr
 
     /** [inflateRecyclerView] assigns [InventoryProductAdapter] to recyclerview with id [R.id.product_recycler_view] */
     private fun inflateRecyclerView(view: View) {
-        val recyclerView: RecyclerView = view.findViewById<RecyclerView>(R.id.product_recycler_view)
+        val binding: FragmentInventoryProductListViewBinding =
+            FragmentInventoryProductListViewBinding.bind(view)
+        val recyclerView: RecyclerView = binding.productRecyclerView
         mAdapter = InventoryProductAdapter(ProductViewTypeEnum.LIST, ArrayList<Item>())
         recyclerView.adapter = mAdapter
     }

@@ -1,6 +1,7 @@
 package com.vivek.inventorymanagement.data.repository
 
 
+import android.content.Context
 import com.vivek.inventorymanagement.data.api.clients.IHttpClient
 import com.vivek.inventorymanagement.data.api.dtos.InventoryItemDto
 import com.vivek.inventorymanagement.data.api.dtos.InventoryItemListDto
@@ -8,8 +9,10 @@ import com.vivek.inventorymanagement.data.api.services.InventoryApiService
 import com.vivek.inventorymanagement.data.database.inventory.IInventoryDatabase
 import com.vivek.inventorymanagement.data.database.inventory.InventoryDatabaseImp
 import com.vivek.inventorymanagement.data.database.inventory.entities.ItemEntity
+import com.vivek.inventorymanagement.data.util.ApiUtility
 import com.vivek.inventorymanagement.features.inventory.enums.InventoryFilterOptionEnum
 import com.vivek.inventorymanagement.features.inventory.model.Item
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import retrofit2.Response
@@ -18,7 +21,8 @@ import javax.inject.Inject
 class InventoryRepository @Inject constructor(
     private val mInventoryDb: InventoryDatabaseImp,
     private val mCoroutineDispatcher: CoroutineDispatcher,
-    private val iHttpClient: IHttpClient
+    private val mHttpClient: IHttpClient,
+    @ApplicationContext private val mApplicationContext: Context
 ) : IInventoryRepository() {
 
     /**
@@ -34,8 +38,11 @@ class InventoryRepository @Inject constructor(
                     Item.getItemFromItemEntity(each)
                 }
             } else {
+                if (!ApiUtility.isInternetConnected(mApplicationContext)) {
+                    return@withContext null
+                }
                 val service: InventoryApiService =
-                    iHttpClient.getBaseAdapter().create(InventoryApiService::class.java)
+                    mHttpClient.getHttpClient().create(InventoryApiService::class.java)
                 val data: Response<InventoryItemListDto>? = service.getInventoryList().execute()
 
                 if (data?.isSuccessful == true) {
@@ -53,7 +60,6 @@ class InventoryRepository @Inject constructor(
                             }
                             mInventoryDb.getInventoryDatabase().itemDao()
                                 .insertAll(resultItemEntities)
-
                         }
                     }
                 }

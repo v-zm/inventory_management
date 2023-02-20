@@ -1,4 +1,4 @@
-package com.vivek.inventorymanagement
+package com.vivek.inventorymanagement.di
 
 import com.vivek.inventorymanagement.data.api.clients.IHttpClient
 import com.vivek.inventorymanagement.data.api.clients.InventoryHttpClient
@@ -36,6 +36,4 @@ abstract class AppModule {
     @Binds
     @Singleton
     abstract fun bindInventoryHttpClient(inventoryHttpClient: InventoryHttpClient): IHttpClient
-
-
 }

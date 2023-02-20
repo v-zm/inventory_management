@@ -6,13 +6,13 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 
-class InventoryDatabaseImp @Inject constructor(@ApplicationContext applicationContext: Context) {
-    val _inventoryDB: IInventoryDatabase =
-        Room.databaseBuilder(applicationContext, IInventoryDatabase::class.java, "inventory-db")
+class InventoryDatabaseImp @Inject constructor(@ApplicationContext mApplicationContext: Context) {
+    private val mInventoryDB: IInventoryDatabase =
+        Room.databaseBuilder(mApplicationContext, IInventoryDatabase::class.java, "inventory-db")
             .build()
 
     fun getInventoryDatabase(): IInventoryDatabase {
-        return _inventoryDB
+        return mInventoryDB
     }
 
 }

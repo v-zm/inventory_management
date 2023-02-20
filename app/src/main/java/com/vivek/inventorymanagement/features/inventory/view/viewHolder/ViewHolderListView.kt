@@ -4,6 +4,6 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.vivek.inventorymanagement.databinding.ListItemInventoryBinding
 
-class ViewHolderListView(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    val binding: ListItemInventoryBinding = ListItemInventoryBinding.bind(itemView)
+class ViewHolderListView(mItemView: View) : RecyclerView.ViewHolder(mItemView) {
+    val binding: ListItemInventoryBinding = ListItemInventoryBinding.bind(mItemView)
 }

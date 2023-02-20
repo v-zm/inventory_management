@@ -17,7 +17,6 @@ import com.vivek.inventorymanagement.features.inventory.viewModel.MainActivityVi
 import dagger.hilt.android.AndroidEntryPoint
 
 // TODO:: Add page view
-
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var mBinding: ActivityMainBinding

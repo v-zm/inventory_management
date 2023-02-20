@@ -13,14 +13,14 @@ import com.vivek.inventorymanagement.features.inventory.view.viewHolder.ViewHold
 import com.vivek.inventorymanagement.features.inventory.view.viewHolder.ViewHolderListView
 
 class InventoryProductAdapter(
-    private val viewTypeEnum: ProductViewTypeEnum,
-    private var items: List<Item>
+    private val mViewTypeEnum: ProductViewTypeEnum,
+    private var mItems: List<Item>
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    /** [updateInventoryItems] is used to update [items] for adapter*/
+    /** [updateInventoryItems] is used to update [mItems] for adapter*/
     fun updateInventoryItems(newItems: List<Item>) {
-        items = newItems
+        mItems = newItems
         notifyDataSetChanged()
     }
 
@@ -28,7 +28,7 @@ class InventoryProductAdapter(
         val context = parent.context
         val inflater = LayoutInflater.from(context)
 
-        return when (viewTypeEnum) {
+        return when (mViewTypeEnum) {
             ProductViewTypeEnum.LIST -> ViewHolderListView(
                 inflater.inflate(
                     R.layout.list_item_inventory, parent, false
@@ -43,26 +43,25 @@ class InventoryProductAdapter(
     }
 
     override fun getItemCount(): Int {
-        return items.size
+        return mItems.size
     }
 
     override fun getItemViewType(position: Int): Int {
-        return viewTypeEnum.type
+        return mViewTypeEnum.type
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when (viewTypeEnum) {
+        when (mViewTypeEnum) {
             ProductViewTypeEnum.LIST -> {
                 bindViewForViewHolderListView(
                     holder,
-                    item = items[position],
-                    isLastItem = position == items.size - 1
+                    item = mItems[position],
+                    isLastItem = position == mItems.size - 1
                 )
-
             }
 
             ProductViewTypeEnum.GRID -> {
-                bindViewForViewHolderGridView(holder, item = items[position])
+                bindViewForViewHolderGridView(holder, item = mItems[position])
             }
 
         }

@@ -13,7 +13,6 @@ import com.vivek.inventorymanagement.data.database.inventory.entities.ItemEntity
     exportSchema = false,
 )
 abstract class IInventoryDatabase : RoomDatabase() {
-    class MyAutoMigration : AutoMigrationSpec
 
     abstract fun itemDao(): ItemDao
 }

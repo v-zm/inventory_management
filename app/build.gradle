@@ -47,6 +47,7 @@ dependencies {
     def coroutineKotlinxVersion = "1.4.0"
     def instrumentedJUnitVersion = "1.1.1"
     def jUnitExtensionVersion = "1.1.5"
+
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.6.0'
     implementation 'com.google.android.material:material:1.7.0'
@@ -63,28 +64,25 @@ dependencies {
     // ViewModel
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
     implementation 'androidx.activity:activity-ktx:1.6.1'
-// is to add the dependency on Fragment
+    // is to add the dependency on Fragment
     implementation 'androidx.fragment:fragment-ktx:1.2.5'
-// is to add the dependency on Activity
+    // is to add the dependency on Activity
     implementation 'androidx.activity:activity-ktx:1.1.0'
     // to display images
     implementation "io.coil-kt:coil:1.1.1"
-    // Room DB
+    // to implement Room DB
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
 
     // To use Kotlin annotation processing tool (kapt)
     kapt "androidx.room:room-compiler:$room_version"
-    // To use Kotlin Symbol Processing (KSP)
-//    ksp "androidx.room:room-compiler:$room_version"
 
     //Hilt for dependency injection
     implementation "com.google.dagger:hilt-android:2.44"
     kapt "com.google.dagger:hilt-compiler:2.44"
 
-    // Optional -- Mockito framework
+    // Test dependencies
     testImplementation "org.mockito:mockito-core:$mockitoVersion"
-    // Optional -- mockito-kotlin
     testImplementation "org.mockito.kotlin:mockito-kotlin:$mockitoKotlinVersion"
     testImplementation 'androidx.arch.core:core-testing:2.1.0'
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutineKotlinxVersion"

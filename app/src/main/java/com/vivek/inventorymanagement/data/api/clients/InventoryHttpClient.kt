@@ -5,7 +5,7 @@ import retrofit2.converter.jackson.JacksonConverterFactory
 import javax.inject.Inject
 
 class InventoryHttpClient @Inject constructor() : IHttpClient() {
-    override fun getBaseAdapter(): Retrofit {
+    override fun getHttpClient(): Retrofit {
         return Retrofit.Builder().baseUrl("https://run.mocky.io/")
             .addConverterFactory(JacksonConverterFactory.create()).build()
     }

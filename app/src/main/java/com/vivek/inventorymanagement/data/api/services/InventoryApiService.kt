@@ -5,7 +5,7 @@ import com.vivek.inventorymanagement.data.api.dtos.InventoryItemListDto
 import retrofit2.Call
 import retrofit2.http.GET
 
-public interface InventoryApiService {
+interface InventoryApiService {
     @GET(InventoryApiConfig.GET_INVENTORY_ITEMS_URL)
     fun getInventoryList(): Call<InventoryItemListDto>
 }
