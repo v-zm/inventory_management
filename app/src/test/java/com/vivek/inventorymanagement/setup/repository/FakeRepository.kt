@@ -7,7 +7,7 @@ import com.vivek.inventorymanagement.features.inventory.model.Item
 class FakeRepository : IInventoryRepository() {
 
     var failEnabled: Boolean = false
-    override suspend fun getInventoryItems(): List<Item>? {
+    override suspend fun getInventoryItems(): List<Item> {
 //        if (failEnabled)
 //            return null
 
