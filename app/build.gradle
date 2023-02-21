@@ -38,6 +38,11 @@ android {
         viewBinding = true
         dataBinding = true
     }
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
 }
 
 dependencies {
@@ -47,6 +52,14 @@ dependencies {
     def coroutineKotlinxVersion = "1.4.0"
     def instrumentedJUnitVersion = "1.1.1"
     def jUnitExtensionVersion = "1.1.5"
+    def jUnitVersion = "4.13.2"
+    def expressoCoreVersion = "3.5.1"
+    def archCoreTestVersion = "2.1.0"
+    def androidXtestVersion = "1.5.0"
+    def mockkVersion = "1.13.4"
+    def androidXTestExtKotlinRunnerVersion = "1.1.5"
+    def androidXTestCoreVersion = "1.5.0"
+    def androidXRoboElectricVersion = "4.9"
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.6.0'
@@ -80,13 +93,18 @@ dependencies {
     // Test dependencies
     testImplementation "org.mockito:mockito-core:$mockitoVersion"
     testImplementation "org.mockito.kotlin:mockito-kotlin:$mockitoKotlinVersion"
-    testImplementation 'androidx.arch.core:core-testing:2.1.0'
+    testImplementation "androidx.arch.core:core-testing:$archCoreTestVersion"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutineKotlinxVersion"
     androidTestImplementation "androidx.test.ext:junit:$instrumentedJUnitVersion"
     testImplementation "androidx.test.ext:junit-ktx:$jUnitExtensionVersion"
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    testImplementation "junit:junit:$jUnitVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$expressoCoreVersion"
+    testImplementation "androidx.test:core:$androidXtestVersion"
+    testImplementation "io.mockk:mockk:$mockkVersion"
+    testImplementation "org.robolectric:robolectric:$androidXRoboElectricVersion"
+    testImplementation "androidx.test.ext:junit-ktx:$androidXTestExtKotlinRunnerVersion"
+    testImplementation "androidx.test:core-ktx:$androidXTestCoreVersion"
+
 }
 kapt {
     correctErrorTypes true

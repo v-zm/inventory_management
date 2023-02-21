@@ -1,21 +1,24 @@
 package com.vivek.inventorymanagement.tests.viewData
 
-import android.os.Looper
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.vivek.inventorymanagement.data.repository.IInventoryRepository
 import com.vivek.inventorymanagement.features.inventory.view.helper.ItemSearchHelper
 import com.vivek.inventorymanagement.features.inventory.viewModel.MainActivityViewModel
 import com.vivek.inventorymanagement.setup.MainCoroutineRule
+import com.vivek.inventorymanagement.setup.repository.FakeRepository
+import com.vivek.inventorymanagement.setup.util.getOrAwaitValue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
+import org.hamcrest.CoreMatchers.*
+import org.hamcrest.MatcherAssert
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 
 
@@ -30,59 +33,55 @@ internal class MainActivityViewModelTest {
     @get:Rule
     val coroutineScope = MainCoroutineRule()
 
-    @Mock
-    lateinit var testRepository: IInventoryRepository
+    private val testRepository: IInventoryRepository = FakeRepository()
 
-    @Mock
-    lateinit var itemSearchHelper: ItemSearchHelper
 
-    lateinit var activityViewModel: MainActivityViewModel
-
-    @Mock
-    lateinit var looper: Looper
+    private lateinit var activityViewModel: MainActivityViewModel
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val testDispatcher = StandardTestDispatcher()
 
+
+    lateinit var mItemSearchHelper: ItemSearchHelper
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Before
     fun setup() {
         MockitoAnnotations.openMocks(this)
         Dispatchers.setMain(testDispatcher)
-        activityViewModel = MainActivityViewModel(testRepository, itemSearchHelper)
-
+        mItemSearchHelper = ItemSearchHelper(testRepository)
+        activityViewModel = MainActivityViewModel(testRepository, mItemSearchHelper)
     }
 
     @After
     fun tearDown() {
-//        activityViewModel=null
 
     }
 
 
     @Test
     fun mainActivityViewModel_Get_InventoryProductsApiFailed_ErrrorSetTrueAndLiveDataSetNull(): Unit =
-        runBlocking {
-            activityViewModel.getInventoryProducts()
+        runTest {
+            activityViewModel.isError.value = true
 
-            activityViewModel.inventoryItemList.value?.let { assert(it.isEmpty()) }
-            assert(activityViewModel.isError.value == true)
+
+            assert(activityViewModel.isError.getOrAwaitValue() == true)
         }
 
     @Test
-    fun mainActivityViewModel_Get_InventoryProductsApiFailed_ErrrorSetTrueAndLiveDataSetNull1() {
+    fun mainActivityViewModel_Get_InventoryProductsApiFailed_ErrrorSetTrueAndLiveDataSetNull1() =
+        runTest {
+            val items = testRepository.getInventoryItems()
+            assert(items?.isNotEmpty() ?: false)
+            assert((items?.size ?: 0) >= 10)
+        }
 
+    @Test
+    fun `onSearch(), Passing searchText= Item1, Get Items with name of Item1`() = runTest {
+        activityViewModel.onSearch("Item1")
+        advanceUntilIdle()
+        val value = activityViewModel.inventoryItemList.getOrAwaitValue()
+        MatcherAssert.assertThat(value, (not(nullValue())))
 
-        activityViewModel.getInventoryProducts()
-
-        assert(activityViewModel.inventoryItemList.value?.isEmpty() == false)
-
-    }
-
-    fun Test1() {
-        val a = 1
-        val b = 2
-        assert(a == b)
     }
 }
