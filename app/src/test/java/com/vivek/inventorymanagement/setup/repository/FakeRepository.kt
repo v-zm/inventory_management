@@ -5,47 +5,51 @@ import com.vivek.inventorymanagement.features.inventory.enums.InventoryFilterOpt
 import com.vivek.inventorymanagement.features.inventory.model.Item
 
 class FakeRepository : IInventoryRepository() {
-
-    var failEnabled: Boolean = false
-    override suspend fun getInventoryItems(): List<Item> {
-//        if (failEnabled)
-//            return null
-
-
-        return listOf(
-            Item(
-                "Item 1",
-                "100",
-                "Same day shipping",
-                "https://imgstatic.phonepe.com/images/dark/app-icons-ia-1/transfers/80/80/ic_check_balance.png"
-            )
+    val items: List<Item> = List(100) { index ->
+        Item(
+            name = "Item1",
+            price = "${(index % 10) * 1000}",
+            extra = if (index % 2 == 0) "Shipping is available" else "Shipping not availale",
+            imageUrl = if (index % 3 == 0) "https://hamcrest.org/images/logo.jpg" else ""
         )
+    }
+
+    override suspend fun getInventoryItems(): List<Item> {
+        return items
     }
 
     override suspend fun getInventorySearchItems(
         searchText: String, searchType: InventoryFilterOptionEnum, searchOnlyWithImage: Boolean
     ): List<Item> {
-        TODO("Not yet implemented")
-    }
+        return when (searchType) {
+            InventoryFilterOptionEnum.FILTER_BY_NAME -> {
+                items.filter { each ->
+                    each.name.contains(searchText) && (if (searchOnlyWithImage) (each.imageUrl?.isNotEmpty()
+                        ?: false) else {
+                        true
+                    })
 
-    fun getStaticListOfItem(): List<Item> {
-        return listOf(
-            Item(
-                "Item 1",
-                "100",
-                "Same day shipping",
-                "https://imgstatic.phonepe.com/images/dark/app-icons-ia-1/transfers/80/80/ic_check_balance.png"
-            )
-        )
-    }
+                }
+            }
+            InventoryFilterOptionEnum.FILTER_BY_PRICE -> {
+                items.filter { each ->
+                    each.price.contains(searchText) && (if (searchOnlyWithImage) (each.imageUrl?.isNotEmpty()
+                        ?: false) else {
+                        true
+                    })
+                }
 
-    fun getOneItem(): Item {
-        return Item(
-            "Item 1",
-            "100",
-            "Same day shipping",
-            "https://imgstatic.phonepe.com/images/dark/app-icons-ia-1/transfers/80/80/ic_check_balance.png"
-        )
+            }
+            InventoryFilterOptionEnum.NO_FILTER -> {
+                items.filter { each ->
+                    (each.name.contains(searchText) || each.price.contains(searchText)) && (if (searchOnlyWithImage) (each.imageUrl?.isNotEmpty()
+                        ?: false) else {
+                        true
+                    })
+                }
+            }
+        }
+
 
     }
 }
