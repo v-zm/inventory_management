@@ -5,6 +5,7 @@ import androidx.lifecycle.Lifecycle.State
 import androidx.test.core.app.launchActivity
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.BoundedMatcher
 import androidx.test.espresso.matcher.RootMatchers
@@ -131,10 +132,25 @@ class MainActivityTest {
     }
 
     @Test
-    fun inventorySearchField_changeText_checkForRecyclerViewDataInListFragment() {
+    fun inventorySearchField_changeTextToItem_checkForRecyclerViewDataInListFragment() {
+        Espresso.onView(ViewMatchers.withId(R.id.inventory_search_text_field))
+            .perform(replaceText("Item"))
+        Espresso.onView(ViewMatchers.withId(R.id.product_recycler_view))
+            .check(matches(ViewMatchers.hasMinimumChildCount(1)))
 
+    }
 
+    @Test
+    fun inventorySearchField_changeTextTo100_checkForRecyclerViewDataInListFragment() {
+        filterText_onClick_OpenPopupMenu()
 
+        Espresso.onView(ViewMatchers.withText(R.string.filter_option_price_text))
+            .inRoot(RootMatchers.isPlatformPopup()).perform(click())
+
+        Espresso.onView(ViewMatchers.withId(R.id.inventory_search_text_field))
+            .perform(replaceText("100"))
+        Espresso.onView(ViewMatchers.withId(R.id.product_recycler_view))
+            .check(matches(ViewMatchers.hasMinimumChildCount(1)))
     }
 
 
