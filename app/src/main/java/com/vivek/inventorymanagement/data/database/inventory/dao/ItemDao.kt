@@ -24,7 +24,7 @@ interface ItemDao {
 
     @Query("SELECT * FROM item where name LIKE '%' || :searchText || '%' OR  price LIKE '%' || :searchText || '%'")
     fun getItemsByNameOrPrice(searchText: String): List<ItemEntity>
-    @Query("SELECT * FROM item where name LIKE '%' || :searchText || '%' OR  price LIKE '%' || :searchText || '%' AND image IS NOT NULL")
+    @Query("SELECT * FROM item where (name LIKE '%' || :searchText || '%' OR  price LIKE '%' || :searchText || '%') AND image IS NOT NULL")
     fun getItemsByNameOrPriceAndImage(searchText: String): List<ItemEntity>
 
     @Insert
