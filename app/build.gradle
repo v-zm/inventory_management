@@ -3,8 +3,8 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id("kotlin-parcelize")
     id 'kotlin-kapt'
-
     id 'com.google.dagger.hilt.android'
+    id 'com.google.devtools.ksp'
 
 }
 
@@ -19,6 +19,19 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        kapt {
+            arguments {
+                arg("room.schemaLocation", "$projectDir/schemas")
+            }
+        }
+//        javaCompileOptions{
+//            annotationProcessorOptions{
+//                compileArgumentProviders(
+//                       new RoomSchemaArgProvider(new File(projectDir,"schemas"))
+//                )
+//            }
+//        }
+
     }
 
     buildTypes {
@@ -43,9 +56,20 @@ android {
             includeAndroidResources = true
         }
     }
+    sourceSets {
+        androidTest.assets.srcDirs+=files("$projectDir/schemas")
+    }
+    ksp {
+        arg("writeComment", "true")
+        arg("defaultComment", "It is the default comment!")
+    }
 }
 
 dependencies {
+
+//    implementation project(path: ':annotations')
+//    ksp project(path: ':processor')
+
     def room_version = "2.5.0"
     def mockitoVersion = "5.1.1"
     def mockitoKotlinVersion = "4.1.0"
@@ -89,6 +113,7 @@ dependencies {
     //Hilt for dependency injection
     implementation "com.google.dagger:hilt-android:2.44"
     kapt "com.google.dagger:hilt-compiler:2.44"
+    implementation 'com.google.devtools.ksp:symbol-processing-api:1.8.0-1.0.8'
 
     // Test dependencies
     testImplementation "org.mockito:mockito-core:$mockitoVersion"
@@ -103,6 +128,8 @@ dependencies {
     testImplementation "org.robolectric:robolectric:$androidXRoboElectricVersion"
     testImplementation "androidx.test.ext:junit-ktx:$androidXTestExtKotlinRunnerVersion"
     testImplementation "androidx.test:core-ktx:$androidXTestCoreVersion"
+    testImplementation "androidx.room:room-testing:$room_version"
+
 
     androidTestImplementation "androidx.test.ext:junit:$instrumentedJUnitVersion"
     androidTestImplementation "androidx.test:core:$androidXtestVersion"
@@ -114,7 +141,29 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-core:3.5.1"
     androidTestImplementation "androidx.fragment:fragment-testing:1.5.0"
 
+
 }
 kapt {
     correctErrorTypes true
+}
+ksp{
+    arg(new RoomSchemaArgProvider(new File(projectDir,"schemas")))
+}
+
+class RoomSchemaArgProvider implements CommandLineArgumentProvider {
+
+    @InputDirectory
+    @PathSensitive(PathSensitivity.RELATIVE)
+    File schemaDir
+
+    RoomSchemaArgProvider(File schemaDir) {
+        this.schemaDir = schemaDir
+    }
+
+    @Override
+    Iterable<String> asArguments() {
+        // Note: If you're using KSP, you should change the line below to return
+        // ["room.schemaLocation=${schemaDir.path}"]
+        return ["-Aroom.schemaLocation=${schemaDir.path}"]
+    }
 }
