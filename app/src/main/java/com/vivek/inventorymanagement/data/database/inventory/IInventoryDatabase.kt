@@ -7,6 +7,7 @@ import com.vivek.inventorymanagement.data.database.inventory.dao.ItemDao
 import com.vivek.inventorymanagement.data.database.inventory.entities.ItemEntity
 
 
+
 @Database(
     version = 1,
     entities = [ItemEntity::class],
