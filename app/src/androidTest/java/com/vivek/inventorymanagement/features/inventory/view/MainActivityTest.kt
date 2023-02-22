@@ -1,6 +1,5 @@
 package com.vivek.inventorymanagement.features.inventory.view
 
-import android.view.MenuItem
 import android.view.View
 import androidx.lifecycle.Lifecycle.State
 import androidx.test.core.app.launchActivity
@@ -32,6 +31,7 @@ class MainActivityTest {
 
     @Before
     fun setUp() {
+
     }
 
     @After
@@ -59,32 +59,83 @@ class MainActivityTest {
     @Test
     fun mainActivity_launch_InitialStatePass() {
         launchActivity<MainActivity>().use { scenario ->
-            scenario.moveToState(State.STARTED)
+            scenario.moveToState(State.RESUMED)
             Espresso.onView(ViewMatchers.withId(R.id.inventory_search_bar))
                 .check(matches(ViewMatchers.isDisplayed()))
             Espresso.onView(ViewMatchers.withId(R.id.inventory_search_text_field))
                 .check(matches(ViewMatchers.isDisplayed()))
+            Espresso.onView(ViewMatchers.withId(R.id.inventory_search_text_field))
+                .check(matches(ViewMatchers.withHint("Search by name")))
+
             Espresso.onView(ViewMatchers.withId(R.id.filter_text))
                 .check(matches(ViewMatchers.isDisplayed()))
             Espresso.onView(ViewMatchers.withId(R.id.explore_text))
                 .check(matches(ViewMatchers.isDisplayed()))
             Espresso.onView(ViewMatchers.withId(R.id.home_bottom_navigation_bar))
                 .check(matches(ViewMatchers.isDisplayed()))
+
+
         }
     }
 
 
     @Test
-    fun filterText_onClick_OpenPopupMenu(){
+    fun filterText_onClick_OpenPopupMenu() {
         Espresso.onView(ViewMatchers.withId(R.id.filter_text))
             .check(matches(ViewMatchers.isDisplayed()))
         // Perform click on filter text
         Espresso.onView(ViewMatchers.withId(R.id.filter_text)).perform(click())
         // Check if popup menu is rendered and it have 4 items
         Espresso.onView(isMenuDropDownListView()).check(matches(ViewMatchers.hasChildCount(4)))
+
     }
 
+    @Test
+    fun filterText_performClick_MenuItemsShouldExist() {
+        launchActivity<MainActivity>().use { scenario ->
+            scenario.moveToState(State.RESUMED)
+            Espresso.onView(ViewMatchers.withId(R.id.filter_text)).perform(click())
+            Espresso.onView(ViewMatchers.withText(R.string.filter_option_price_text))
+                .inRoot(RootMatchers.isPlatformPopup())
+                .check(
+                    matches(ViewMatchers.isDisplayed())
+                )
+            Espresso.onView(ViewMatchers.withText(R.string.filter_option_name_text))
+                .inRoot(RootMatchers.isPlatformPopup())
+                .check(
+                    matches(ViewMatchers.isDisplayed())
+                )
+            Espresso.onView(ViewMatchers.withText(R.string.filter_option_no_filter_text))
+                .inRoot(RootMatchers.isPlatformPopup())
+                .check(
+                    matches(ViewMatchers.isDisplayed())
+                )
+            Espresso.onView(ViewMatchers.withText(R.string.filter_option_only_with_image_text))
+                .inRoot(RootMatchers.isPlatformPopup())
+                .check(
+                    matches(ViewMatchers.isDisplayed())
+                )
+        }
+    }
 
+    @Test
+    fun priceFilterOption_performClick_searchTextFieldHintChange() {
+        Espresso.onView(ViewMatchers.withId(R.id.inventory_search_text_field))
+            .check(matches(ViewMatchers.withHint("Search by name")))
+        filterText_onClick_OpenPopupMenu()
+
+        Espresso.onView(ViewMatchers.withText(R.string.filter_option_price_text))
+            .inRoot(RootMatchers.isPlatformPopup()).perform(click())
+        Espresso.onView(ViewMatchers.withId(R.id.inventory_search_text_field))
+            .check(matches(ViewMatchers.withHint("Search by price")))
+    }
+
+    @Test
+    fun inventorySearchField_changeText_checkForRecyclerViewDataInListFragment() {
+
+
+
+    }
 
 
     /**
@@ -93,52 +144,33 @@ class MainActivityTest {
      *
      * */
 
-    @Test
-    fun filterText_click_openPopUpMenu() {
-        launchActivity<MainActivity>().use { scenario ->
-            // Perform click on filter text
-            Espresso.onView(ViewMatchers.withId(R.id.filter_text)).perform(click())
-            // Check if popup menu is rendered and it have 4 items
-            Espresso.onView(isMenuDropDownListView()).check(matches(ViewMatchers.hasChildCount(4)))
-//            Espresso.onData(Matchers.anything()).inRoot(RootMatchers.isPlatformPopup()).atPosition(1).check(
-//                matches(ViewMatchers.hasChildCount(2))
+//    @Test
+//    fun filterText_click_openPopUpMenu() {
+//        launchActivity<MainActivity>().use { scenario ->
+//            // Perform click on filter text
+//            Espresso.onView(ViewMatchers.withId(R.id.filter_text)).perform(click())
+//            // Check if popup menu is rendered and it have 4 items
+//            Espresso.onView(isMenuDropDownListView()).check(matches(ViewMatchers.hasChildCount(4)))
+////            Espresso.onData(Matchers.anything()).inRoot(RootMatchers.isPlatformPopup()).atPosition(1).check(
+////                matches(ViewMatchers.hasChildCount(2))
+////            )
+//
+//            Espresso.onData(Matchers.`is`(Matchers.instanceOf(MenuItem::class.java))).atPosition(0)
+//                .check(
+//                    matches(ViewMatchers.withText("Name"))
+//                )
+//
+//
+//            Espresso.onView(ViewMatchers.withText("Price")).perform(click())
+//            val textFieldInteraction =
+//                Espresso.onView(ViewMatchers.withId(R.id.inventory_search_text_field))
+//            val viewAssertion = matches(
+//                ViewMatchers.withHint("Search by price")
 //            )
+//            textFieldInteraction.check(viewAssertion)
+//        }
+//    }
 
-            Espresso.onData(Matchers.`is`(Matchers.instanceOf(MenuItem::class.java))).atPosition(0)
-                .check(
-                    matches(ViewMatchers.withText("Name"))
-                )
-
-
-            Espresso.onView(ViewMatchers.withText("Price")).perform(click())
-            val textFieldInteraction =
-                Espresso.onView(ViewMatchers.withId(R.id.inventory_search_text_field))
-            val viewAssertion = matches(
-                ViewMatchers.withHint("Search by price")
-            )
-            textFieldInteraction.check(viewAssertion)
-        }
-    }
-
-    @Test
-    fun popUpMenu_check() {
-        launchActivity<MainActivity>().use { scenario ->
-            Espresso.onView(ViewMatchers.withId(R.id.filter_text)).perform(click())
-            Espresso.onView(ViewMatchers.withText("Price")).inRoot(RootMatchers.isPlatformPopup())
-                .perform(
-                    click()
-                )
-        }
-    }
-
-    @Test
-    fun checkForPopUpMenu() {
-        launchActivity<MainActivity>().use { scenario ->
-            Espresso.onView(ViewMatchers.withId(R.id.filter_text)).perform(click())
-            Espresso.onView(isMenuDropDownListView()).check(matches(ViewMatchers.hasChildCount(4)))
-
-        }
-    }
 
     fun withPositionInMenuDropDownListView(position: Int): Matcher<View> {
         return Matchers.allOf(
