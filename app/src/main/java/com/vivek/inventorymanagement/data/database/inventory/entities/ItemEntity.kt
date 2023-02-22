@@ -5,13 +5,15 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.vivek.inventorymanagement.features.inventory.model.Item
 
+
 @Entity(tableName = "item")
 data class ItemEntity(
     @PrimaryKey(autoGenerate = true) val uid: Int = 0,
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "price") val price: String,
     @ColumnInfo(name = "extra") val extra: String?,
-    @ColumnInfo(name = "image") val imageUrl: String?
+    @ColumnInfo(name = "image") val imageUrl: String?,
+    @ColumnInfo(name = "createdAt", defaultValue ="0") val createdAt: Long
 ) {
     companion object {
         fun getItemEntity(item: Item): ItemEntity {
@@ -19,7 +21,8 @@ data class ItemEntity(
                 name = item.name,
                 price = item.price,
                 extra = item.extra,
-                imageUrl = item.imageUrl
+                imageUrl = item.imageUrl,
+                createdAt = System.currentTimeMillis()
             )
         }
     }
