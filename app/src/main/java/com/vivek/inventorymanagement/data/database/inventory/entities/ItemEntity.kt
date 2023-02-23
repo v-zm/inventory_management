@@ -3,6 +3,7 @@ package com.vivek.inventorymanagement.data.database.inventory.entities
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.vivek.inventorymanagement.data.util.DateTimeUtility
 import com.vivek.inventorymanagement.features.inventory.model.Item
 
 
@@ -22,7 +23,7 @@ data class ItemEntity(
                 price = item.price,
                 extra = item.extra,
                 imageUrl = item.imageUrl,
-                createdAt = System.currentTimeMillis()
+                createdAt = DateTimeUtility.getCurrentTimeInMilliseconds()
             )
         }
     }
