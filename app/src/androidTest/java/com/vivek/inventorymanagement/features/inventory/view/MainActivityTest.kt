@@ -30,15 +30,6 @@ class MainActivityTest {
     var activityScenarioRule = activityScenarioRule<MainActivity>()
 
 
-    @Before
-    fun setUp() {
-
-    }
-
-    @After
-    fun tearDown() {
-    }
-
     /**
      * move to different states of MainActivity
      * */

@@ -22,7 +22,7 @@ class DateTimeUtilityTest {
     fun isOneDayPassed_Pass_1Hour_diff_milis_get_False() {
         assertEquals(
             false,
-            DateTimeUtility.isOneDayPassed(System.currentTimeMillis() - ONE_HOUR_IN_MILLIS)
+            DateTimeUtility.hasOneDayPassed(System.currentTimeMillis() - ONE_HOUR_IN_MILLIS)
         )
     }
 
@@ -30,7 +30,7 @@ class DateTimeUtilityTest {
     fun isOneDayPassed_Pass_12Hours_diff_milis_get_False() {
         assertEquals(
             false,
-            DateTimeUtility.isOneDayPassed(System.currentTimeMillis() - TWELVE_HOUR_IN_MILLIS)
+            DateTimeUtility.hasOneDayPassed(System.currentTimeMillis() - TWELVE_HOUR_IN_MILLIS)
         )
     }
 
@@ -38,7 +38,7 @@ class DateTimeUtilityTest {
     fun isOneDayPassed_Pass_2Day_diff_milis_get_True() {
         assertEquals(
             true,
-            DateTimeUtility.isOneDayPassed(System.currentTimeMillis() - TWO_DAYS_IN_MILLIS)
+            DateTimeUtility.hasOneDayPassed(System.currentTimeMillis() - TWO_DAYS_IN_MILLIS)
         )
     }
 
@@ -46,7 +46,7 @@ class DateTimeUtilityTest {
     fun isOneDayPassed_Pass_25Hours_diff_milis_get_True() {
         assertEquals(
             true,
-            DateTimeUtility.isOneDayPassed(System.currentTimeMillis() - TWENTY_FIVE_HOURS_IN_MILLIS)
+            DateTimeUtility.hasOneDayPassed(System.currentTimeMillis() - TWENTY_FIVE_HOURS_IN_MILLIS)
         )
     }
 

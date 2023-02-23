@@ -53,11 +53,6 @@ internal class MainActivityViewModelTest {
         activityViewModel = MainActivityViewModel(testRepository, mItemSearchHelper)
     }
 
-    @After
-    fun tearDown() {
-
-    }
-
 
     @Test
     fun mainActivityViewModel_Get_InventoryProductsApiFailed_ErrrorSetTrueAndLiveDataSetNull(): Unit =

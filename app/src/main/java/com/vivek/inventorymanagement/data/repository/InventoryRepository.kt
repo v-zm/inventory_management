@@ -1,7 +1,6 @@
 package com.vivek.inventorymanagement.data.repository
 
 
-import android.content.Context
 import com.vivek.inventorymanagement.data.api.clients.IHttpClient
 import com.vivek.inventorymanagement.data.api.dtos.InventoryItemDto
 import com.vivek.inventorymanagement.data.api.dtos.InventoryItemListDto
@@ -13,7 +12,6 @@ import com.vivek.inventorymanagement.data.database.inventory.entities.ItemEntity
 import com.vivek.inventorymanagement.data.util.DateTimeUtility
 import com.vivek.inventorymanagement.features.inventory.enums.InventoryFilterOptionEnum
 import com.vivek.inventorymanagement.features.inventory.model.Item
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import retrofit2.Response
@@ -23,7 +21,6 @@ class InventoryRepository @Inject constructor(
     private val mInventoryDb: InventoryDatabaseImp,
     private val mCoroutineDispatcher: CoroutineDispatcher,
     private val mHttpClient: IHttpClient,
-    @ApplicationContext private val mApplicationContext: Context
 ) : IInventoryRepository() {
 
     /**
@@ -53,7 +50,7 @@ class InventoryRepository @Inject constructor(
             val itemEntities: List<ItemEntity> =
                 mInventoryDb.getInventoryDatabase().itemDao().getAll()
 
-            if (itemEntities.isNotEmpty() && !DateTimeUtility.isOneDayPassed(itemEntities.first().createdAt)) {
+            if (itemEntities.isNotEmpty() && !DateTimeUtility.hasOneDayPassed(itemEntities.first().createdAt)) {
                 resultItems = itemEntities.map { each ->
                     Item.getItemFromItemEntity(each)
                 }
@@ -112,7 +109,7 @@ class InventoryRepository @Inject constructor(
         return withContext(mCoroutineDispatcher) {
             var resultItems: List<Item> = ArrayList<Item>()
 
-            val itemEntites: List<ItemEntity> = when (searchType) {
+            val itemEntities: List<ItemEntity> = when (searchType) {
                 InventoryFilterOptionEnum.FILTER_BY_NAME -> if (searchOnlyWithImage) mInventoryDb.getInventoryDatabase()
                     .itemDao().getItemsByName(searchText) else mInventoryDb.getInventoryDatabase()
                     .itemDao().getItemsByNameAndImage(searchText)
@@ -125,8 +122,8 @@ class InventoryRepository @Inject constructor(
                     .itemDao().getItemsByNameOrPriceAndImage(searchText)
             }
 
-            itemEntites.let { tempItemEntites ->
-                resultItems = tempItemEntites.map { each ->
+            itemEntities.let { tempItemEntities ->
+                resultItems = tempItemEntities.map { each ->
                     Item.getItemFromItemEntity(each)
                 }
             }

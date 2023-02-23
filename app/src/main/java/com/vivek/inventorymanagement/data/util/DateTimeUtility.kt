@@ -7,7 +7,7 @@ object DateTimeUtility {
         return System.currentTimeMillis()
     }
 
-    fun isOneDayPassed(timeInMilliseconds: Long): Boolean {
+    fun hasOneDayPassed(timeInMilliseconds: Long): Boolean {
         return (System.currentTimeMillis() - timeInMilliseconds) > ONE_DAY_IN_MILLISECONDS
     }
 }

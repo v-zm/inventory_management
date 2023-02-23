@@ -10,19 +10,19 @@ object ApiUtility {
         val connectivityManager: ConnectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
-        connectivityManager.let { tempConnectivityManager ->
+        val isConnected: Boolean? = connectivityManager.let { tempConnectivityManager ->
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 val networkCapabilities =
                     tempConnectivityManager.getNetworkCapabilities(tempConnectivityManager.activeNetwork)
-                return networkCapabilities != null
+                networkCapabilities != null
             } else {
                 val networkInfo: NetworkInfo? = connectivityManager.activeNetworkInfo
                 networkInfo?.let { tempNetworkInfo ->
-                    return tempNetworkInfo.isConnected
+                    tempNetworkInfo.isConnected
                 }
             }
         }
-        return false
+        return isConnected ?: false
 
     }
 }
