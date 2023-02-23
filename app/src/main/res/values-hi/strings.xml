@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">सूची प्रबंधन</string>
+    <string name="bottom_nav_product_list">उत्पादों की सूची</string>
+    <string name="bottom_nav_product_grid">उत्पाद ग्रिड</string>
+    <string name="bottom_nav_upcoming">आगामी</string>
+    <string name="explore_text">अन्वेषण करना</string>
+    <string name="filter_text">फ़िल्टर</string>
+    <string name="mrp_text">एम आर पी:</string>
+    <string name="filter_option_name_text">नाम</string>
+    <string name="filter_option_price_text">कीमत</string>
+    <string name="filter_option_no_filter_text">कोई फिल्टर नहीं</string>
+    <string name="filter_option_only_with_image_text">केवल छवि के साथ</string>
+    <string name="label_inventory_list">वस्तुसूची की फेहरिस्त</string>
+    <string name="label_inventory_grid">इन्वेंटरी ग्रिड</string>
+    <string name="error_text">कुछ गलत हो गया! कृपया पुन: प्रयास करें</string>
+</resources>
