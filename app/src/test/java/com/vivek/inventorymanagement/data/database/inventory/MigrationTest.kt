@@ -2,7 +2,6 @@ package com.vivek.inventorymanagement.data.database.inventory
 
 import androidx.room.Room
 import androidx.room.testing.MigrationTestHelper
-import androidx.sqlite.db.framework.FrameworkSQLiteOpenHelperFactory
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.vivek.inventorymanagement.data.database.inventory.migrations.ItemDaoMigration
@@ -18,16 +17,15 @@ class MigrationTest {
     @get:Rule
     val helper: MigrationTestHelper = MigrationTestHelper(
         InstrumentationRegistry.getInstrumentation(),
-        InventoryDatabaseImp::class.java.canonicalName,
-        FrameworkSQLiteOpenHelperFactory()
+        IInventoryDatabase::class.java
     )
 
     @Test
     @Throws(IOException::class)
     fun migrate1To2() {
-       var db= helper.createDatabase(TEST_DB, 1).apply { close() }
+        var db = helper.createDatabase(TEST_DB, 1).apply { close() }
 
-      val inventoryDb:IInventoryDatabase=  Room.databaseBuilder(
+        val inventoryDb: IInventoryDatabase = Room.databaseBuilder(
             InstrumentationRegistry.getInstrumentation().targetContext,
             IInventoryDatabase::class.java,
             TEST_DB
@@ -35,6 +33,6 @@ class MigrationTest {
             .addMigrations(ItemDaoMigration.MIGRATION_1_2).build().apply {
                 openHelper.writableDatabase.close()
             }
-     helper.runMigrationsAndValidate(TEST_DB,2,true, ItemDaoMigration.MIGRATION_1_2)
+        helper.runMigrationsAndValidate(TEST_DB, 2, true, ItemDaoMigration.MIGRATION_1_2)
     }
 }
