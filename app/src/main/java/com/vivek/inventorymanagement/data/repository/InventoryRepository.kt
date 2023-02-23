@@ -10,6 +10,7 @@ import com.vivek.inventorymanagement.data.api.services.InventoryApiService
 import com.vivek.inventorymanagement.data.database.inventory.IInventoryDatabase
 import com.vivek.inventorymanagement.data.database.inventory.InventoryDatabaseImp
 import com.vivek.inventorymanagement.data.database.inventory.entities.ItemEntity
+import com.vivek.inventorymanagement.data.util.DateTimeUtility
 import com.vivek.inventorymanagement.features.inventory.enums.InventoryFilterOptionEnum
 import com.vivek.inventorymanagement.features.inventory.model.Item
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -31,12 +32,23 @@ class InventoryRepository @Inject constructor(
     override suspend fun getInventoryItems(): List<Item>? {
         return withContext(mCoroutineDispatcher) {
             var resultItems: List<Item>? = null
-            val itemEntities: List<ItemEntity> =
-                mInventoryDb.getInventoryDatabase().itemDao().getAll()
-            if (itemEntities.isNotEmpty()) {
-                resultItems = itemEntities.map { each ->
-                    Item.getItemFromItemEntity(each)
+
+            try {
+                val itemEntities: List<ItemEntity> =
+                    mInventoryDb.getInventoryDatabase().itemDao().getAll()
+
+
+                if (itemEntities.isNotEmpty() && !DateTimeUtility.isOneDayPassed(itemEntities.first().createdAt)) {
+                    resultItems = itemEntities.map { each ->
+                        Item.getItemFromItemEntity(each)
+                    }
                 }
+            } catch (_: Exception) {
+                // Download new data
+            }
+
+            if (resultItems != null && resultItems.isEmpty()) {
+                return@withContext resultItems
             } else {
                 try {
                     val service: InventoryApiService =
@@ -57,6 +69,7 @@ class InventoryRepository @Inject constructor(
                                     tempResultItems.map { each ->
                                         ItemEntity.getItemEntity(each)
                                     }
+                                mInventoryDb.getInventoryDatabase().itemDao().deleteAll()
                                 mInventoryDb.getInventoryDatabase().itemDao()
                                     .insertAll(resultItemEntities)
                             }
@@ -75,6 +88,7 @@ class InventoryRepository @Inject constructor(
         }
     }
 
+
     override suspend fun getInventorySearchItems(
         searchText: String, searchType: InventoryFilterOptionEnum, searchOnlyWithImage: Boolean
     ): List<Item> {
@@ -83,10 +97,12 @@ class InventoryRepository @Inject constructor(
 
             val itemEntites: List<ItemEntity> = when (searchType) {
                 InventoryFilterOptionEnum.FILTER_BY_NAME -> if (searchOnlyWithImage) mInventoryDb.getInventoryDatabase()
-                    .itemDao().getItemsByName(searchText) else mInventoryDb.getInventoryDatabase()
+                    .itemDao()
+                    .getItemsByName(searchText) else mInventoryDb.getInventoryDatabase()
                     .itemDao().getItemsByNameAndImage(searchText)
                 InventoryFilterOptionEnum.FILTER_BY_PRICE -> if (searchOnlyWithImage) mInventoryDb.getInventoryDatabase()
-                    .itemDao().getItemsByPrice(searchText) else mInventoryDb.getInventoryDatabase()
+                    .itemDao()
+                    .getItemsByPrice(searchText) else mInventoryDb.getInventoryDatabase()
                     .itemDao().getItemsByPriceAndImage(searchText)
                 InventoryFilterOptionEnum.NO_FILTER -> if (searchOnlyWithImage) mInventoryDb.getInventoryDatabase()
                     .itemDao()

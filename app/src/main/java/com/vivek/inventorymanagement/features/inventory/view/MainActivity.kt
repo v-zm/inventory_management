@@ -18,7 +18,8 @@ import dagger.hilt.android.AndroidEntryPoint
 
 // TODO:: Add page view
 // TODO:: Add accessibilty
-// TODO:: Add localization
+// TODO:: Add localization\
+// TODO:: Add pagination / refresh strategy
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var mBinding: ActivityMainBinding
