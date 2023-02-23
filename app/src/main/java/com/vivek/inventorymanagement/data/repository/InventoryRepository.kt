@@ -31,61 +31,78 @@ class InventoryRepository @Inject constructor(
      * */
     override suspend fun getInventoryItems(): List<Item>? {
         return withContext(mCoroutineDispatcher) {
-            var resultItems: List<Item>? = null
-
-            try {
-                val itemEntities: List<ItemEntity> =
-                    mInventoryDb.getInventoryDatabase().itemDao().getAll()
-
-
-                if (itemEntities.isNotEmpty() && !DateTimeUtility.isOneDayPassed(itemEntities.first().createdAt)) {
-                    resultItems = itemEntities.map { each ->
-                        Item.getItemFromItemEntity(each)
-                    }
-                }
-            } catch (_: Exception) {
-                // Download new data
-            }
+            var resultItems: List<Item>? = getItemsFromDBInsertedInLastOneDay()
 
             if (resultItems != null && resultItems.isEmpty()) {
                 return@withContext resultItems
             } else {
-                try {
-                    val service: InventoryApiService =
-                        mHttpClient.getHttpClient().create(InventoryApiService::class.java)
-                    val data: Response<InventoryItemListDto>? = service.getInventoryList().execute()
-
-                    if (data?.isSuccessful == true) {
-                        val itemList: List<InventoryItemDto>? = data.body()?.data?.items
-
-                        itemList?.let { tempItemList ->
-                            resultItems = tempItemList.map { each ->
-                                Item.getItemFromItemDto(each)
-                            }
-
-                            resultItems?.let { tempResultItems ->
-
-                                val resultItemEntities: List<ItemEntity> =
-                                    tempResultItems.map { each ->
-                                        ItemEntity.getItemEntity(each)
-                                    }
-                                mInventoryDb.getInventoryDatabase().itemDao().deleteAll()
-                                mInventoryDb.getInventoryDatabase().itemDao()
-                                    .insertAll(resultItemEntities)
-                            }
-                        }
-                    }
-                } catch (e: NetworkException) {
-                    /*
-                    Handle Network exception
-                     */
-                    return@withContext null
-                } catch (e: java.lang.Exception) {
-                    return@withContext null
-                }
+                resultItems = getItemsFromApi()
             }
             resultItems
         }
+    }
+
+    /**
+     * Get Items from DB
+     * then check if they are not older than one day
+     * If they are older than one day then discard result and return null
+     * */
+    private fun getItemsFromDBInsertedInLastOneDay(): List<Item>? {
+        var resultItems: List<Item>? = null
+        try {
+            val itemEntities: List<ItemEntity> =
+                mInventoryDb.getInventoryDatabase().itemDao().getAll()
+
+            if (itemEntities.isNotEmpty() && !DateTimeUtility.isOneDayPassed(itemEntities.first().createdAt)) {
+                resultItems = itemEntities.map { each ->
+                    Item.getItemFromItemEntity(each)
+                }
+            }
+        } catch (_: Exception) {
+            // Download new data
+        }
+        return resultItems
+    }
+
+    /**
+     * Get Items from API
+     * then insert Items in DB
+     * then return items
+     * */
+    private fun getItemsFromApi(): List<Item>? {
+        var resultItems: List<Item>? = null
+        try {
+            val service: InventoryApiService =
+                mHttpClient.getHttpClient().create(InventoryApiService::class.java)
+            val data: Response<InventoryItemListDto>? = service.getInventoryList().execute()
+
+            if (data?.isSuccessful == true) {
+                val itemList: List<InventoryItemDto>? = data.body()?.data?.items
+
+                itemList?.let { tempItemList ->
+                    resultItems = tempItemList.map { each ->
+                        Item.getItemFromItemDto(each)
+                    }
+
+                    resultItems?.let { tempResultItems ->
+                        val resultItemEntities: List<ItemEntity> = tempResultItems.map { each ->
+                            ItemEntity.getItemEntity(each)
+                        }
+                        mInventoryDb.getInventoryDatabase().itemDao().deleteAll()
+                        mInventoryDb.getInventoryDatabase().itemDao().insertAll(resultItemEntities)
+                    }
+                }
+            }
+        } catch (e: NetworkException) {
+            /*
+            Handle Network exception
+             */
+        } catch (e: java.lang.Exception) {
+            /*
+           Handle Unknown exception
+            */
+        }
+        return resultItems
     }
 
 
@@ -97,12 +114,10 @@ class InventoryRepository @Inject constructor(
 
             val itemEntites: List<ItemEntity> = when (searchType) {
                 InventoryFilterOptionEnum.FILTER_BY_NAME -> if (searchOnlyWithImage) mInventoryDb.getInventoryDatabase()
-                    .itemDao()
-                    .getItemsByName(searchText) else mInventoryDb.getInventoryDatabase()
+                    .itemDao().getItemsByName(searchText) else mInventoryDb.getInventoryDatabase()
                     .itemDao().getItemsByNameAndImage(searchText)
                 InventoryFilterOptionEnum.FILTER_BY_PRICE -> if (searchOnlyWithImage) mInventoryDb.getInventoryDatabase()
-                    .itemDao()
-                    .getItemsByPrice(searchText) else mInventoryDb.getInventoryDatabase()
+                    .itemDao().getItemsByPrice(searchText) else mInventoryDb.getInventoryDatabase()
                     .itemDao().getItemsByPriceAndImage(searchText)
                 InventoryFilterOptionEnum.NO_FILTER -> if (searchOnlyWithImage) mInventoryDb.getInventoryDatabase()
                     .itemDao()
