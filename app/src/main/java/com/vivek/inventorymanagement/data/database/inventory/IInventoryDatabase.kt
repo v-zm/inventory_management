@@ -9,7 +9,7 @@ import com.vivek.inventorymanagement.data.database.inventory.entities.ItemEntity
 @Database(
     version = 2,
     entities = [ItemEntity::class],
-    exportSchema = false,
+    exportSchema = true,
 )
 abstract class IInventoryDatabase : RoomDatabase() {
     abstract fun itemDao(): ItemDao
