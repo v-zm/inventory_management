@@ -12,14 +12,14 @@ class DateTimeUtilityTest {
     }
 
     @Test
-    fun getCurrentTimeInMilliseconds_execute_getCurrentDateAndTime() {
+    fun `getCurrentTimeInMilliseconds()  execute and get currentDateAndTime in millis`() {
         val a = DateTimeUtility.getCurrentTimeInMilliseconds()
         val b = System.currentTimeMillis()
         assertEquals(a, b)
     }
 
     @Test
-    fun isOneDayPassed_Pass_1Hour_diff_milis_get_False() {
+    fun `hasOneDayPassed() pass 1Hour diff milis and get False`() {
         assertEquals(
             false,
             DateTimeUtility.hasOneDayPassed(System.currentTimeMillis() - ONE_HOUR_IN_MILLIS)
@@ -27,7 +27,7 @@ class DateTimeUtilityTest {
     }
 
     @Test
-    fun isOneDayPassed_Pass_12Hours_diff_milis_get_False() {
+    fun `hasOneDayPassed() pass 12Hours diff milis and get False`() {
         assertEquals(
             false,
             DateTimeUtility.hasOneDayPassed(System.currentTimeMillis() - TWELVE_HOUR_IN_MILLIS)
@@ -35,7 +35,7 @@ class DateTimeUtilityTest {
     }
 
     @Test
-    fun isOneDayPassed_Pass_2Day_diff_milis_get_True() {
+    fun `hasOneDayPassed() pass 2Day diff milis and get True`() {
         assertEquals(
             true,
             DateTimeUtility.hasOneDayPassed(System.currentTimeMillis() - TWO_DAYS_IN_MILLIS)
@@ -43,7 +43,7 @@ class DateTimeUtilityTest {
     }
 
     @Test
-    fun isOneDayPassed_Pass_25Hours_diff_milis_get_True() {
+    fun `hasOneDayPassed() pass 25Hours diff milis and get True`() {
         assertEquals(
             true,
             DateTimeUtility.hasOneDayPassed(System.currentTimeMillis() - TWENTY_FIVE_HOURS_IN_MILLIS)
