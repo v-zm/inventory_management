@@ -18,7 +18,8 @@ import dagger.hilt.android.AndroidEntryPoint
 
 // TODO:: Add page view
 // TODO:: Add accessibilty
-// TODO:: Add localization
+// TODO:: Add localization\
+// TODO:: Add pagination / refresh strategy
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var mBinding: ActivityMainBinding
@@ -76,15 +77,13 @@ class MainActivity : AppCompatActivity() {
     private fun initiateSearchListener() {
         mBinding.inventorySearchBar.inventorySearchTextField.addTextChangedListener(object :
             TextWatcher {
-            override fun beforeTextChanged(_p0: CharSequence?, _p1: Int, _p2: Int, _p3: Int) {
-            }
+            override fun beforeTextChanged(_p0: CharSequence?, _p1: Int, _p2: Int, _p3: Int) = Unit
 
             override fun onTextChanged(text: CharSequence?, _p1: Int, _p2: Int, _p3: Int) {
                 text.let { tempText -> mActivityViewModel.onSearch(tempText.toString()) }
             }
 
-            override fun afterTextChanged(_p0: Editable?) {
-            }
+            override fun afterTextChanged(_p0: Editable?) = Unit
         })
     }
 

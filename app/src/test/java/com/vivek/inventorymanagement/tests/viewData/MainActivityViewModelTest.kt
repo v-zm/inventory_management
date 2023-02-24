@@ -33,7 +33,7 @@ internal class MainActivityViewModelTest {
     @get:Rule
     val coroutineScope = MainCoroutineRule()
 
-    private val testRepository: IInventoryRepository = FakeRepository()
+    private val testRepository: IInventoryRepository = FakeRepository(10)
 
 
     private lateinit var activityViewModel: MainActivityViewModel
@@ -51,11 +51,6 @@ internal class MainActivityViewModelTest {
         Dispatchers.setMain(testDispatcher)
         mItemSearchHelper = ItemSearchHelper(testRepository)
         activityViewModel = MainActivityViewModel(testRepository, mItemSearchHelper)
-    }
-
-    @After
-    fun tearDown() {
-
     }
 
 

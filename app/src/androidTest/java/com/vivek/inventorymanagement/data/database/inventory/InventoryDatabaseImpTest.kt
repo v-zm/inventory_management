@@ -10,7 +10,6 @@ import com.vivek.inventorymanagement.features.inventory.model.Item
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
-
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.IOException
@@ -362,6 +361,28 @@ class InventoryDatabaseImpTest {
                 assert(image.isNotEmpty())
             }
         }
+    }
+
+    @Test
+    fun delete_Pass_one_Item_And_it_should_be_deleted() {
+        emptyDb_insert10Items_Pass()
+        var items: List<ItemEntity> = itemDao.getAll()
+        val itemToDelete: ItemEntity = items.first()
+        itemDao.delete(itemToDelete)
+        items = itemDao.getAll()
+
+        items.forEach { each ->
+            assertNotEquals(each.uid, itemToDelete.uid)
+        }
+    }
+
+    @Test
+    fun deleteAll_Pass_every_Item_And_DB_should_be_empty() {
+        emptyDb_insert10Items_Pass()
+        var items: List<ItemEntity> = itemDao.getAll()
+        itemDao.deleteAll()
+        items = itemDao.getAll()
+        assertEquals(0, items.size)
     }
 
 
