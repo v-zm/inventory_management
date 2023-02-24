@@ -10,6 +10,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * TODO:: Use Kotlin Flow for items
+ * Suggestions from Piyush
+ * */
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
     private val mInventoryRepository: IInventoryRepository,
