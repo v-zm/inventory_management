@@ -30,7 +30,7 @@ class InventoryRepository @Inject constructor(
         return withContext(mCoroutineDispatcher) {
             var resultItems: List<Item>? = getItemsFromDBInsertedInLastOneDay()
 
-            if (resultItems != null && resultItems.isEmpty()) {
+            if (resultItems != null && resultItems.isNotEmpty()) {
                 return@withContext resultItems
             } else {
                 resultItems = getItemsFromApi()
