@@ -1,28 +1,25 @@
 package com.vivek.inventorymanagement.data.repository
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.vivek.inventorymanagement.data.database.inventory.InventoryDatabaseImp
+import com.vivek.inventorymanagement.data.database.FakeInventoryDb
+import com.vivek.inventorymanagement.data.database.inventory.entities.ItemEntity
+import com.vivek.inventorymanagement.features.inventory.enums.InventoryFilterOptionEnum
 import com.vivek.inventorymanagement.features.inventory.model.Item
 import com.vivek.inventorymanagement.setup.MainCoroutineRule
 import com.vivek.inventorymanagement.setup.api.client.FakeApiClient
-import com.vivek.inventorymanagement.setup.repository.FakeRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.TestCoroutineScheduler
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
+import org.junit.*
 import org.junit.runner.RunWith
+import java.io.IOException
 
 @RunWith(AndroidJUnit4::class)
 class InventoryRepositoryTest {
 
-    private val testRepository: IInventoryRepository = FakeRepository(10)
     private val fakeApiClient: FakeApiClient = FakeApiClient()
     lateinit var inventoryRepository: InventoryRepository
 
@@ -36,7 +33,7 @@ class InventoryRepositoryTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val testDispatcher = StandardTestDispatcher()
-
+    val db = FakeInventoryDb()
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Before
@@ -44,17 +41,53 @@ class InventoryRepositoryTest {
         inventoryRepository = InventoryRepository(
             mCoroutineDispatcher = testDispatcher,
             mHttpClient = fakeApiClient,
-            mInventoryDb = InventoryDatabaseImp(ApplicationProvider.getApplicationContext())
+            mInventoryDb = db
         )
         Dispatchers.setMain(testDispatcher)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getInventoryItems_call_getItemList() = runTest {
+    fun `getInventoryItems execute and return item list`() = runTest {
         val items: List<Item>? = inventoryRepository.getInventoryItems()
 
         assert((items?.size ?: 0) > 0)
     }
 
+    @Test
+    fun emptyDb_insert10Items_Pass() {
+        val items: List<Item> = List(10) { index ->
+            Item(
+                extra = "Extra $index",
+                imageUrl = if (index % 3 == 0) "https://hamcrest.org/images/logo.jpg" else null,
+                price = "${(index % 10) * 1000 + 1000}",
+                name = "Item$index"
+            )
+        }
+        val itemEntities = items.map { each ->
+            ItemEntity.getItemEntity(each)
+        }
+        db.getInventoryDatabase().itemDao().insertAll(itemEntities)
+        Assert.assertEquals(10, db.getInventoryDatabase().itemDao().getAll().size)
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `getInventorySearchItems() pass searchText, searchType, searchOnlyWithImage and returns item list`() =
+        runTest {
+            emptyDb_insert10Items_Pass()
+            val items: List<Item> = inventoryRepository.getInventorySearchItems(
+                "Item1",
+                InventoryFilterOptionEnum.NO_FILTER,
+                false
+            )
+
+            assert(items.isEmpty())
+        }
+
+    @After
+    @Throws(IOException::class)
+    fun closeDb() {
+        db.getInventoryDatabase().close()
+    }
 }
