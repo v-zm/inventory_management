@@ -26,7 +26,7 @@ class MainActivityViewModel @Inject constructor(
 
     // [_isLoading] is LiveData that is true when activity is waiting for inventory's item list data
     private val _isLoading: MutableLiveData<Boolean> by lazy {
-        MutableLiveData<Boolean>()
+        MutableLiveData<Boolean>(true)
     }
 
     /** [isLoading] is used to observe value of [_isLoading] */
