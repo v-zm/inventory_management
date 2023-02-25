@@ -66,9 +66,6 @@ android {
 
 dependencies {
 
-//    implementation project(path: ':annotations')
-//    ksp project(path: ':processor')
-
     def room_version = "2.5.0"
     def mockitoVersion = "5.1.1"
     def mockitoKotlinVersion = "4.1.0"
@@ -83,7 +80,7 @@ dependencies {
     def androidXTestExtKotlinRunnerVersion = "1.1.5"
     def androidXTestCoreVersion = "1.5.0"
     def androidXRoboElectricVersion = "4.9"
-
+    def lottieVersion = "3.4.0"
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.6.0'
     implementation 'com.google.android.material:material:1.7.0'
@@ -116,6 +113,7 @@ dependencies {
 
     // Test dependencies
     testImplementation "org.mockito:mockito-core:$mockitoVersion"
+    androidTestImplementation "org.mockito:mockito-android:$mockitoVersion"
     testImplementation "org.mockito.kotlin:mockito-kotlin:$mockitoKotlinVersion"
     testImplementation "androidx.arch.core:core-testing:$archCoreTestVersion"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutineKotlinxVersion"
@@ -140,6 +138,7 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-core:3.5.1"
     androidTestImplementation "androidx.fragment:fragment-testing:1.5.0"
 
+    implementation "com.airbnb.android:lottie:$lottieVersion"
 
 }
 kapt {

@@ -21,7 +21,7 @@ class InventoryRepository @Inject constructor(
     private val mInventoryDb: InventoryDatabaseImp,
     private val mCoroutineDispatcher: CoroutineDispatcher,
     private val mHttpClient: IHttpClient,
-) : IInventoryRepository() {
+) : IInventoryRepository {
 
     /**
      * [getInventoryItems] checks data in [IInventoryDatabase]

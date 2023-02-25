@@ -7,7 +7,7 @@ import retrofit2.converter.jackson.JacksonConverterFactory
 import javax.inject.Inject
 
 class InventoryHttpClient @Inject constructor(private val mConnectivityAwareClient: ConnectivityAwareClient) :
-    IHttpClient() {
+    IHttpClient {
     override fun getHttpClient(): Retrofit {
         return Retrofit.Builder().client(mConnectivityAwareClient)
             .baseUrl(InventoryApiConfig.GET_BASE_URL)

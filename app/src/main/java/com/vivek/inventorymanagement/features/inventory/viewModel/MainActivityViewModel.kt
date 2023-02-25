@@ -26,19 +26,19 @@ class MainActivityViewModel @Inject constructor(
 
     // [_isLoading] is LiveData that is true when activity is waiting for inventory's item list data
     private val _isLoading: MutableLiveData<Boolean> by lazy {
-        MutableLiveData<Boolean>()
+        MutableLiveData<Boolean>(true)
     }
 
     /** [isLoading] is used to observe value of [_isLoading] */
     val isLoading: MutableLiveData<Boolean> = _isLoading
 
     /** [_isError] is LiveData that is true when there is error in fetching inventory's list item data */
-    private val _isError: MutableLiveData<Boolean> by lazy {
-        MutableLiveData<Boolean>(false)
+    private val _isError: MutableLiveData<Unit> by lazy {
+        MutableLiveData<Unit>()
     }
 
     /** [isError] is used to observe value of [_isError] */
-    val isError: MutableLiveData<Boolean> = _isError
+    val isError: MutableLiveData<Unit> = _isError
 
     /** [_inventoryFilterSelectedOption] is LiveData that hold value of user's selected filter option */
     private val _inventoryFilterSelectedOption: MutableLiveData<String> by lazy {
@@ -74,9 +74,9 @@ class MainActivityViewModel @Inject constructor(
             val items: List<Item>? = mInventoryRepository.getInventoryItems()
             if (items != null) {
                 _inventoryItemList.value = items
-                _isError.value = false
+                _isError.value = null
             } else {
-                _isError.value = true
+                _isError.value = Unit
             }
             _isLoading.value = false
         }

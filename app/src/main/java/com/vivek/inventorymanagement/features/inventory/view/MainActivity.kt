@@ -67,8 +67,8 @@ class MainActivity : AppCompatActivity() {
 
     /** [observeErrorState] is used to start observing @isError object from [MainActivityViewModel]*/
     private fun observeErrorState() {
-        val errorObserver = Observer<Boolean> { isError ->
-            mBinding.isError = isError
+        val errorObserver = Observer<Unit> { value ->
+            mBinding.setIsError(value)
         }
         mActivityViewModel.isError.observe(this, errorObserver)
     }
@@ -131,8 +131,7 @@ class MainActivity : AppCompatActivity() {
             mBinding.inventorySearchBar.selectedOption = selectedOption
         }
         mActivityViewModel.inventoryFilterSelectedOption.observe(
-            this,
-            inventorySelectedOptionObserver
+            this, inventorySelectedOptionObserver
         )
     }
 }
