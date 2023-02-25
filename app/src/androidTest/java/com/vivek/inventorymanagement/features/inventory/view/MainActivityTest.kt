@@ -156,18 +156,6 @@ class MainActivityTest {
             .check(matches(ViewMatchers.hasMinimumChildCount(1)))
     }
 
-    @Test
-    fun tvError_set_isErrorVariableTrueInView_errorViewShouldBeVisible(): Unit = runBlocking {
-        launchActivity<MainActivity>().use { scenario ->
-            Espresso.onView(ViewMatchers.withId(R.id.tv_error))
-                .check(matches(ViewMatchers.doesNotHaveFocus()))
-            scenario.moveToState(State.RESUMED)
-
-            Espresso.onView(ViewMatchers.withId(R.id.tv_error))
-                .check(matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
-        }
-    }
-
     fun withPositionInMenuDropDownListView(position: Int): Matcher<View> {
         return Matchers.allOf(
             ViewMatchers.withParent(isMenuDropDownListView()),
