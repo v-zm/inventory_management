@@ -1,6 +1,7 @@
 package com.vivek.inventorymanagement.features.inventory.view
 
 import android.view.View
+import androidx.arch.core.executor.*
 import androidx.lifecycle.Lifecycle.State
 import androidx.test.core.app.launchActivity
 import androidx.test.espresso.Espresso
@@ -13,27 +14,45 @@ import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.vivek.inventorymanagement.R
+import com.vivek.inventorymanagement.data.repository.IInventoryRepository
+import com.vivek.inventorymanagement.features.inventory.view.helper.ItemSearchHelper
+import com.vivek.inventorymanagement.features.inventory.viewModel.MainActivityViewModel
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.*
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers
-import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-
+import org.mockito.Mock
+import org.mockito.Mockito.mock
 
 @RunWith(AndroidJUnit4::class)
 class MainActivityTest {
 
     @get:Rule
     var activityScenarioRule = activityScenarioRule<MainActivity>()
+    private lateinit var activityViewModel: MainActivityViewModel
 
+
+    @Mock
+    private val fakeRepository: IInventoryRepository = mock(IInventoryRepository::class.java)
+
+
+    lateinit var mItemSearchHelper: ItemSearchHelper
+
+
+    @Before
+    fun setup() {
+        mItemSearchHelper = ItemSearchHelper(fakeRepository)
+        activityViewModel = MainActivityViewModel(fakeRepository, mItemSearchHelper)
+    }
 
     /**
      * move to different states of MainActivity
      * */
-
     @Test
     fun mainActivity_openAppAndGoToEachStateAndCloseApp_AppShouldCloseWithoutError() {
         launchActivity<MainActivity>().use { scenario ->
@@ -47,7 +66,6 @@ class MainActivityTest {
     /**
      * check for progress bar
      * */
-
     @Test
     fun mainActivity_launch_InitialStatePass() {
         launchActivity<MainActivity>().use { scenario ->
@@ -65,8 +83,6 @@ class MainActivityTest {
                 .check(matches(ViewMatchers.isDisplayed()))
             Espresso.onView(ViewMatchers.withId(R.id.home_bottom_navigation_bar))
                 .check(matches(ViewMatchers.isDisplayed()))
-
-
         }
     }
 
@@ -88,23 +104,19 @@ class MainActivityTest {
             scenario.moveToState(State.RESUMED)
             Espresso.onView(ViewMatchers.withId(R.id.filter_text)).perform(click())
             Espresso.onView(ViewMatchers.withText(R.string.filter_option_price_text))
-                .inRoot(RootMatchers.isPlatformPopup())
-                .check(
+                .inRoot(RootMatchers.isPlatformPopup()).check(
                     matches(ViewMatchers.isDisplayed())
                 )
             Espresso.onView(ViewMatchers.withText(R.string.filter_option_name_text))
-                .inRoot(RootMatchers.isPlatformPopup())
-                .check(
+                .inRoot(RootMatchers.isPlatformPopup()).check(
                     matches(ViewMatchers.isDisplayed())
                 )
             Espresso.onView(ViewMatchers.withText(R.string.filter_option_no_filter_text))
-                .inRoot(RootMatchers.isPlatformPopup())
-                .check(
+                .inRoot(RootMatchers.isPlatformPopup()).check(
                     matches(ViewMatchers.isDisplayed())
                 )
             Espresso.onView(ViewMatchers.withText(R.string.filter_option_only_with_image_text))
-                .inRoot(RootMatchers.isPlatformPopup())
-                .check(
+                .inRoot(RootMatchers.isPlatformPopup()).check(
                     matches(ViewMatchers.isDisplayed())
                 )
         }
@@ -144,40 +156,17 @@ class MainActivityTest {
             .check(matches(ViewMatchers.hasMinimumChildCount(1)))
     }
 
+    @Test
+    fun tvError_set_isErrorVariableTrueInView_errorViewShouldBeVisible(): Unit = runBlocking {
+        launchActivity<MainActivity>().use { scenario ->
+            Espresso.onView(ViewMatchers.withId(R.id.tv_error))
+                .check(matches(ViewMatchers.doesNotHaveFocus()))
+            scenario.moveToState(State.RESUMED)
 
-    /**
-     * Clicks on Filter text with Id(R.id.filter_text) and it should open Popup menu
-     * Check if popup menu is there with 4 child count
-     *
-     * */
-
-//    @Test
-//    fun filterText_click_openPopUpMenu() {
-//        launchActivity<MainActivity>().use { scenario ->
-//            // Perform click on filter text
-//            Espresso.onView(ViewMatchers.withId(R.id.filter_text)).perform(click())
-//            // Check if popup menu is rendered and it have 4 items
-//            Espresso.onView(isMenuDropDownListView()).check(matches(ViewMatchers.hasChildCount(4)))
-////            Espresso.onData(Matchers.anything()).inRoot(RootMatchers.isPlatformPopup()).atPosition(1).check(
-////                matches(ViewMatchers.hasChildCount(2))
-////            )
-//
-//            Espresso.onData(Matchers.`is`(Matchers.instanceOf(MenuItem::class.java))).atPosition(0)
-//                .check(
-//                    matches(ViewMatchers.withText("Name"))
-//                )
-//
-//
-//            Espresso.onView(ViewMatchers.withText("Price")).perform(click())
-//            val textFieldInteraction =
-//                Espresso.onView(ViewMatchers.withId(R.id.inventory_search_text_field))
-//            val viewAssertion = matches(
-//                ViewMatchers.withHint("Search by price")
-//            )
-//            textFieldInteraction.check(viewAssertion)
-//        }
-//    }
-
+            Espresso.onView(ViewMatchers.withId(R.id.tv_error))
+                .check(matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
+        }
+    }
 
     fun withPositionInMenuDropDownListView(position: Int): Matcher<View> {
         return Matchers.allOf(
@@ -211,5 +200,6 @@ class MainActivityTest {
             }
         }
     }
+
 
 }
