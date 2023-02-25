@@ -4,7 +4,7 @@ import com.vivek.inventorymanagement.data.repository.IInventoryRepository
 import com.vivek.inventorymanagement.features.inventory.enums.InventoryFilterOptionEnum
 import com.vivek.inventorymanagement.features.inventory.model.Item
 
-class FakeRepository(val itemCount: Int) : IInventoryRepository() {
+class FakeRepository(val itemCount: Int) : IInventoryRepository {
     /**
      * Item(name=Item0, price=0, extra=Shipping is available, imageUrl=https://hamcrest.org/images/logo.jpg)
     Item(name=Item1, price=1000, extra=Shipping not available, imageUrl=)

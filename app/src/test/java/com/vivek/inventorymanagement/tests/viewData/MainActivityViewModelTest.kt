@@ -57,10 +57,10 @@ internal class MainActivityViewModelTest {
     @Test
     fun mainActivityViewModel_Get_InventoryProductsApiFailed_ErrrorSetTrueAndLiveDataSetNull(): Unit =
         runTest {
-            activityViewModel.isError.value = true
+            activityViewModel.isError.value = Unit
 
 
-            assert(activityViewModel.isError.getOrAwaitValue() == true)
+            assert(activityViewModel.isError.getOrAwaitValue() == Unit)
         }
 
     @Test
@@ -77,6 +77,5 @@ internal class MainActivityViewModelTest {
         advanceUntilIdle()
         val value = activityViewModel.inventoryItemList.getOrAwaitValue()
         MatcherAssert.assertThat(value, (not(nullValue())))
-
     }
 }
