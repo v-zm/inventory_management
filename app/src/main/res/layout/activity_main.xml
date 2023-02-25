@@ -6,13 +6,15 @@
 
         <import type="android.view.View" />
 
+        <import type="kotlin.Unit" />
+
         <variable
             name="isInventoryLoading"
             type="Boolean" />
 
         <variable
             name="isError"
-            type="Boolean" />
+            type="kotlin.Unit" />
 
     </data>
 
@@ -41,10 +43,11 @@
             app:layout_constraintTop_toBottomOf="@id/inventory_search_bar" />
 
         <TextView
+            android:id="@+id/tv_error"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/error_text"
-            android:visibility="@{isError ? View.VISIBLE:View.GONE}"
+            android:visibility="@{isError == null ? View.GONE: View.VISIBLE }"
             app:layout_constraintBottom_toTopOf="@id/home_bottom_navigation_bar"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -56,7 +59,7 @@
             android:layout_width="@dimen/no_width"
             android:layout_height="@dimen/no_height"
             android:layout_marginHorizontal="32dp"
-            android:visibility="@{isInventoryLoading &amp;&amp; !isError ? View.GONE:View.VISIBLE}"
+            android:visibility="@{isInventoryLoading &amp;&amp; (isError!=null) ? View.GONE:View.VISIBLE}"
             app:defaultNavHost="true"
             app:layout_constraintBottom_toTopOf="@id/home_bottom_navigation_bar"
             app:layout_constraintLeft_toLeftOf="parent"
