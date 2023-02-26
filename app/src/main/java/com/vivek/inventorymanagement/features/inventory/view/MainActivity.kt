@@ -60,7 +60,8 @@ class MainActivity : AppCompatActivity() {
 
     /** [fetchInventoryProducts] is used to get inventory item products from [MainActivityViewModel]*/
     private fun fetchInventoryProducts() {
-        mActivityViewModel.getInventoryProducts()
+//        mActivityViewModel.getInventoryProducts()
+        mActivityViewModel.initViewModel()
     }
 
     /** [observeLoadingState] is used to start observing @isLoading object from [MainActivityViewModel]*/
@@ -78,10 +79,14 @@ class MainActivity : AppCompatActivity() {
 
     /** [observeErrorState] is used to start observing @isError object from [MainActivityViewModel]*/
     private fun observeErrorState() {
-        val errorObserver = Observer<Unit> { value ->
-            mBinding.setIsError(value)
+//        val errorObserver = Observer<Unit> { value ->
+//            mBinding.setIsError(value)
+//        }
+//        mActivityViewModel.isError.observe(this, errorObserver)
+
+        mActivityViewModel.error.map {
+            mBinding.setIsError(it)
         }
-        mActivityViewModel.isError.observe(this, errorObserver)
     }
 
     /** [initiateSearchListener] is used to start observing @inventorySearchTextField for search text from @inventorySearchBar */

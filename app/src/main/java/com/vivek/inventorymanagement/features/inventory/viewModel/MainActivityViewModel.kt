@@ -7,7 +7,6 @@ import com.vivek.inventorymanagement.data.repository.IInventoryRepository
 import com.vivek.inventorymanagement.data.repository.InventoryRepository
 import com.vivek.inventorymanagement.features.inventory.enums.InventoryFilterOptionEnum
 import com.vivek.inventorymanagement.features.inventory.model.Item
-import com.vivek.inventorymanagement.features.inventory.view.helper.ItemSearchHelper
 import com.vivek.inventorymanagement.features.inventory.viewstate.InventoryEvent
 import com.vivek.inventorymanagement.features.inventory.viewstate.InventoryViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,7 +22,6 @@ import javax.inject.Inject
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
     private val mInventoryRepository: InventoryRepository,
-    private val mItemSearchHelper: ItemSearchHelper
 ) : ViewModel() {
 
     /** [_inventoryItemList] is LiveData to hold list of [Item] */
@@ -81,32 +79,38 @@ class MainActivityViewModel @Inject constructor(
     }.stateIn(viewModelScope, SharingStarted.Eagerly, InventoryViewState.Loading(false))
 
     val loading = repo.map {
-        _isError.value = null
+//        _isError.value = null
         if (it.isLoading) {
             return@map (it as InventoryViewState.Loading)
         }
         false
     }
 
-    val error = repo.map {
+    val error: Flow<Unit> = repo.map {
         if (it.isError) {
             _isError.value = Unit
         }
     }
 
     val success: Flow<List<Item>> = repo.map {
-        _isError.value = null
+//        _isError.value = null
         if (it.isSuccess) {
             return@map (it as InventoryViewState.Success).items
         }
         listOf()
     }
 
+    fun initViewModel() {
+        onSearch()
+
+
+    }
+
     /**
      * [onSearch] function is used to facilitate search functionality
      * It takes searchText as input and updates the @inventoryItemList when it gets data
      * */
-    fun onSearch(searchText: String) {
+    fun onSearch(searchText: String = "") {
         viewModelScope.launch {
             val filterOption: InventoryFilterOptionEnum = inventoryFilterSelectedOption.value?.let {
                 InventoryFilterOptionEnum.getInvInventoryFilterOptionEnumByName(
@@ -135,23 +139,23 @@ class MainActivityViewModel @Inject constructor(
     }
 
     /** [getInventoryProducts] is function which gets all available items from [IInventoryRepository] */
-    fun getInventoryProducts() {
-        onSearch(searchText = "")
-
-        viewModelScope.launch {
-//            loadEvent.emit(InventoryEvent.LoadItems())
-            _isLoading.value = true
-            val items: List<Item>? = mInventoryRepository.getInventoryItems()
-            if (items != null) {
-                _inventoryItemList.value = items
-                _inventoryItems.value = items
-                _isError.value = null
-            } else {
-                _isError.value = Unit
-            }
-            _isLoading.value = false
-        }
-    }
+//    fun getInventoryProducts() {
+//        onSearch(searchText = "")
+//
+//        viewModelScope.launch {
+////            loadEvent.emit(InventoryEvent.LoadItems())
+//            _isLoading.value = true
+//            val items: List<Item>? = mInventoryRepository.getInventoryItems()
+//            if (items != null) {
+//                _inventoryItemList.value = items
+//                _inventoryItems.value = items
+//                _isError.value = null
+//            } else {
+//                _isError.value = Unit
+//            }
+//            _isLoading.value = false
+//        }
+//    }
 
     fun getFlow(): StateFlow<InventoryViewState> {
         return mInventoryRepository.getLatestQueriedItems()

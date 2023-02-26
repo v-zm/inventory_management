@@ -66,8 +66,10 @@ class InventoryRepository @Inject constructor(
                     Item.getItemFromItemEntity(each)
                 }
             }
-        } catch (_: Exception) {
+        } catch (e: Exception) {
             // Download new data
+
+            throw e
         }
         return resultItems
     }
