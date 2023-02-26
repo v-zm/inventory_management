@@ -16,5 +16,8 @@ interface IInventoryRepository {
     fun getLatestQueriedItems(): StateFlow<InventoryViewState>
     fun getLatestQueriedItems1(): StateFlow<List<Item>>
 
-    fun inventorySearch(searchText: String?): Flow<InventoryViewState>
+    fun inventorySearch(
+            searchText: String, searchType: InventoryFilterOptionEnum,
+        searchOnlyWithImage: Boolean = false
+    ): Flow<InventoryViewState>
 }

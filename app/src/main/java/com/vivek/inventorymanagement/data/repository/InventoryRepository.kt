@@ -38,6 +38,7 @@ class InventoryRepository @Inject constructor(
      * */
     override suspend fun getInventoryItems(): List<Item>? {
         return withContext(mCoroutineDispatcher) {
+
             var resultItems: List<Item>? = getItemsFromDBInsertedInLastOneDay()
 
             if (resultItems == null || resultItems.isEmpty()) {
@@ -100,14 +101,16 @@ class InventoryRepository @Inject constructor(
                     }
                 }
             }
-        } catch (e: NetworkException) {
+        } catch (networkException: NetworkException) {
             /*
             Handle Network exception
              */
-        } catch (e: java.lang.Exception) {
+            throw networkException
+        } catch (exception: java.lang.Exception) {
             /*
            Handle Unknown exception
             */
+            throw exception
         }
         return resultItems
     }
@@ -150,19 +153,28 @@ class InventoryRepository @Inject constructor(
         return inventoryItemState
     }
 
-    override fun inventorySearch(searchText: String?): Flow<InventoryViewState> = flow {
-        var resultItems: List<Item>?
-        emit(InventoryViewState.Loading)
-        resultItems = getItemsFromDBInsertedInLastOneDay()
+    override fun inventorySearch(
+        searchText: String, searchType: InventoryFilterOptionEnum, searchOnlyWithImage: Boolean
+    ): Flow<InventoryViewState> = flow {
+        var resultItems: List<Item>? = listOf()
+        emit(InventoryViewState.Loading(true))
+        try {
+            if (searchText.isEmpty()) {
+                resultItems = getItemsFromDBInsertedInLastOneDay()
 
-        if (resultItems == null || (resultItems?.isEmpty() == true)) {
-            resultItems = getItemsFromApi()
+                if (resultItems == null || resultItems.isEmpty()) {
+                    resultItems = getItemsFromApi()
+                }
+            } else {
+                resultItems = getInventorySearchItems(searchText, searchType, searchOnlyWithImage)
+            }
+            updateCurrentQueriedItemFlow(resultItems)
+            emit(InventoryViewState.Success(resultItems ?: listOf()))
+        } catch (e: java.lang.Exception) {
+            emit(InventoryViewState.Error(e))
         }
-        updateCurrentQueriedItemFlow(resultItems)
-        emit(InventoryViewState.Success(resultItems ?: listOf(Item("", "", "", ""))))
-        print("e")
 
-
+        emit(InventoryViewState.Loading(false))
     }
 
     private fun updateCurrentQueriedItemFlow(items: List<Item>?) {

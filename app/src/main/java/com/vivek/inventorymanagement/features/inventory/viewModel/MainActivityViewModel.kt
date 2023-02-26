@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vivek.inventorymanagement.data.repository.IInventoryRepository
 import com.vivek.inventorymanagement.data.repository.InventoryRepository
+import com.vivek.inventorymanagement.features.inventory.enums.InventoryFilterOptionEnum
 import com.vivek.inventorymanagement.features.inventory.model.Item
 import com.vivek.inventorymanagement.features.inventory.view.helper.ItemSearchHelper
 import com.vivek.inventorymanagement.features.inventory.viewstate.InventoryEvent
@@ -73,19 +74,28 @@ class MainActivityViewModel @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     private val repo = loadEvent.flatMapLatest { event ->
         return@flatMapLatest when (event) {
-            is InventoryEvent.LoadItems -> mInventoryRepository.inventorySearch(event.searchText)
+            is InventoryEvent.LoadItems -> mInventoryRepository.inventorySearch(
+                event.searchText, event.selectedFilter, event.searchOnlyWithImage
+            )
         }
-    }.stateIn(viewModelScope, SharingStarted.Eagerly, InventoryViewState.Loading)
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, InventoryViewState.Loading(false))
 
     val loading = repo.map {
-        it.isLoading
+        _isError.value = null
+        if (it.isLoading) {
+            return@map (it as InventoryViewState.Loading)
+        }
+        false
     }
 
     val error = repo.map {
-        it.isError
+        if (it.isError) {
+            _isError.value = Unit
+        }
     }
 
     val success: Flow<List<Item>> = repo.map {
+        _isError.value = null
         if (it.isSuccess) {
             return@map (it as InventoryViewState.Success).items
         }
@@ -98,10 +108,15 @@ class MainActivityViewModel @Inject constructor(
      * */
     fun onSearch(searchText: String) {
         viewModelScope.launch {
+            val filterOption: InventoryFilterOptionEnum = inventoryFilterSelectedOption.value?.let {
+                InventoryFilterOptionEnum.getInvInventoryFilterOptionEnumByName(
+                    it
+                )
+            } ?: InventoryFilterOptionEnum.FILTER_BY_NAME
             loadEvent.emit(
                 InventoryEvent.LoadItems(
                     searchText,
-                    inventoryFilterSelectedOption.value,
+                    filterOption,
                     searchOnlyWithImage,
                 )
             )
@@ -121,9 +136,10 @@ class MainActivityViewModel @Inject constructor(
 
     /** [getInventoryProducts] is function which gets all available items from [IInventoryRepository] */
     fun getInventoryProducts() {
+        onSearch(searchText = "")
 
         viewModelScope.launch {
-            loadEvent.emit(InventoryEvent.LoadItems())
+//            loadEvent.emit(InventoryEvent.LoadItems())
             _isLoading.value = true
             val items: List<Item>? = mInventoryRepository.getInventoryItems()
             if (items != null) {

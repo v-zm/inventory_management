@@ -4,7 +4,7 @@ import com.vivek.inventorymanagement.features.inventory.model.Item
 
 
 sealed class InventoryViewState {
-    object Loading : InventoryViewState()
+    data class Loading(val status:Boolean) : InventoryViewState()
     data class Success(val items: List<Item>) : InventoryViewState()
     data class Error(val exception: Throwable) : InventoryViewState()
 
