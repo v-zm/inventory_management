@@ -15,6 +15,7 @@ import com.vivek.inventorymanagement.databinding.ActivityMainBinding
 import com.vivek.inventorymanagement.features.inventory.model.MenuInventorySearchOptionsOrderInCategory
 import com.vivek.inventorymanagement.features.inventory.viewModel.MainActivityViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.map
 
 // TODO:: Add page view
 // TODO:: Add accessibilty
@@ -64,10 +65,15 @@ class MainActivity : AppCompatActivity() {
 
     /** [observeLoadingState] is used to start observing @isLoading object from [MainActivityViewModel]*/
     private fun observeLoadingState() {
-        val loadingObserver = Observer<Boolean> { isLoading ->
-            mBinding.isInventoryLoading = isLoading
+//        val loadingObserver = Observer<Boolean> { isLoading ->
+//            mBinding.isInventoryLoading = isLoading
+//        }
+//        mActivityViewModel.isLoading.observe(this, loadingObserver)
+        mActivityViewModel.loading.map {
+            mBinding.isInventoryLoading?.let {
+                mBinding.isInventoryLoading = true
+            }
         }
-        mActivityViewModel.isLoading.observe(this, loadingObserver)
     }
 
     /** [observeErrorState] is used to start observing @isError object from [MainActivityViewModel]*/

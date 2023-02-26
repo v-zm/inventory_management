@@ -12,7 +12,9 @@ import com.vivek.inventorymanagement.data.database.inventory.entities.ItemEntity
 import com.vivek.inventorymanagement.data.util.DateTimeUtility
 import com.vivek.inventorymanagement.features.inventory.enums.InventoryFilterOptionEnum
 import com.vivek.inventorymanagement.features.inventory.model.Item
+import com.vivek.inventorymanagement.features.inventory.viewstate.InventoryViewState
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.withContext
 import retrofit2.Response
 import javax.inject.Inject
@@ -23,6 +25,14 @@ class InventoryRepository @Inject constructor(
     private val mHttpClient: IHttpClient,
 ) : IInventoryRepository {
 
+    private val _currentQueriedItems: MutableStateFlow<InventoryViewState> by lazy {
+        MutableStateFlow<InventoryViewState>(InventoryViewState.Success(listOf()))
+    }
+    private val _inventoryItems: MutableStateFlow<List<Item>> by lazy {
+        MutableStateFlow<List<Item>>(listOf())
+    }
+    val inventoryItemState: StateFlow<List<Item>> get() = _inventoryItems
+
     /**
      * [getInventoryItems] checks data in [IInventoryDatabase]
      * */
@@ -30,21 +40,21 @@ class InventoryRepository @Inject constructor(
         return withContext(mCoroutineDispatcher) {
             var resultItems: List<Item>? = getItemsFromDBInsertedInLastOneDay()
 
-            if (resultItems != null && resultItems.isNotEmpty()) {
-                return@withContext resultItems
-            } else {
+            if (resultItems == null || resultItems.isEmpty()) {
                 resultItems = getItemsFromApi()
             }
+            updateCurrentQueriedItemFlow(resultItems)
             resultItems
         }
     }
+
 
     /**
      * Get Items from DB
      * then check if they are not older than one day
      * If they are older than one day then discard result and return null
      * */
-    private fun getItemsFromDBInsertedInLastOneDay(): List<Item>? {
+    private suspend fun getItemsFromDBInsertedInLastOneDay(): List<Item>? {
         var resultItems: List<Item>? = null
         try {
             val itemEntities: List<ItemEntity> =
@@ -127,8 +137,37 @@ class InventoryRepository @Inject constructor(
                     Item.getItemFromItemEntity(each)
                 }
             }
+            updateCurrentQueriedItemFlow(resultItems)
             resultItems
         }
+    }
+
+    override fun getLatestQueriedItems(): StateFlow<InventoryViewState> {
+        return _currentQueriedItems.asStateFlow()
+    }
+
+    override fun getLatestQueriedItems1(): StateFlow<List<Item>> {
+        return inventoryItemState
+    }
+
+    override fun inventorySearch(searchText: String?): Flow<InventoryViewState> = flow {
+        var resultItems: List<Item>?
+        emit(InventoryViewState.Loading)
+        resultItems = getItemsFromDBInsertedInLastOneDay()
+
+        if (resultItems == null || (resultItems?.isEmpty() == true)) {
+            resultItems = getItemsFromApi()
+        }
+        updateCurrentQueriedItemFlow(resultItems)
+        emit(InventoryViewState.Success(resultItems ?: listOf(Item("", "", "", ""))))
+        print("e")
+
+
+    }
+
+    private fun updateCurrentQueriedItemFlow(items: List<Item>?) {
+        _currentQueriedItems.value = InventoryViewState.Success(items ?: listOf())
+        _inventoryItems.value = items ?: listOf()
     }
 
 

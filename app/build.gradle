@@ -140,6 +140,9 @@ dependencies {
 
     implementation "com.airbnb.android:lottie:$lottieVersion"
 
+    implementation "androidx.room:room-ktx:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+
 }
 kapt {
     correctErrorTypes true
