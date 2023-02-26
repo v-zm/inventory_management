@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity() {
 //        mActivityViewModel.isLoading.observe(this, loadingObserver)
         mActivityViewModel.loading.map {
             mBinding.isInventoryLoading?.let {
-                mBinding.isInventoryLoading = true
+                mBinding.isInventoryLoading = it
             }
         }
     }

@@ -78,10 +78,10 @@ class MainActivityViewModel @Inject constructor(
         }
     }.stateIn(viewModelScope, SharingStarted.Eagerly, InventoryViewState.Loading(false))
 
-    val loading = repo.map {
+    val loading: Flow<Boolean> = repo.map {
 //        _isError.value = null
         if (it.isLoading) {
-            return@map (it as InventoryViewState.Loading)
+            return@map (it as InventoryViewState.Loading).status
         }
         false
     }

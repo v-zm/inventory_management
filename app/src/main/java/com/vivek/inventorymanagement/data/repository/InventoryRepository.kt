@@ -172,7 +172,7 @@ class InventoryRepository @Inject constructor(
             }
             updateCurrentQueriedItemFlow(resultItems)
             emit(InventoryViewState.Success(resultItems ?: listOf()))
-        } catch (e: java.lang.Exception) {
+        } catch (e: Exception) {
             emit(InventoryViewState.Error(e))
         }
 
