@@ -2,7 +2,6 @@ package com.vivek.inventorymanagement.tests.viewData
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.vivek.inventorymanagement.data.repository.IInventoryRepository
-import com.vivek.inventorymanagement.features.inventory.view.helper.ItemSearchHelper
 import com.vivek.inventorymanagement.features.inventory.viewModel.MainActivityViewModel
 import com.vivek.inventorymanagement.setup.MainCoroutineRule
 import com.vivek.inventorymanagement.setup.repository.FakeRepository
@@ -15,7 +14,6 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert
-import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -42,15 +40,12 @@ internal class MainActivityViewModelTest {
     val testDispatcher = StandardTestDispatcher()
 
 
-    lateinit var mItemSearchHelper: ItemSearchHelper
-
     @OptIn(ExperimentalCoroutinesApi::class)
     @Before
     fun setup() {
         MockitoAnnotations.openMocks(this)
         Dispatchers.setMain(testDispatcher)
-        mItemSearchHelper = ItemSearchHelper(testRepository)
-        activityViewModel = MainActivityViewModel(testRepository, mItemSearchHelper)
+        activityViewModel = MainActivityViewModel(testRepository)
     }
 
 
