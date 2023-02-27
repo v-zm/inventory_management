@@ -7,6 +7,7 @@ import com.vivek.inventorymanagement.data.api.dtos.InventoryItemListDto
 import com.vivek.inventorymanagement.data.api.exception.NetworkException
 import com.vivek.inventorymanagement.data.api.services.InventoryApiService
 import com.vivek.inventorymanagement.data.database.inventory.InventoryDatabaseImp
+import com.vivek.inventorymanagement.data.database.inventory.dao.ItemDao
 import com.vivek.inventorymanagement.data.database.inventory.entities.ItemEntity
 import com.vivek.inventorymanagement.data.util.DateTimeUtility
 import com.vivek.inventorymanagement.features.inventory.enums.InventoryFilterOptionEnum
@@ -24,6 +25,7 @@ class InventoryRepository @Inject constructor(
     private val mCoroutineDispatcher: CoroutineDispatcher,
     private val mHttpClient: IHttpClient,
 ) : IInventoryRepository {
+    private val itemDao: ItemDao = mInventoryDb.getInventoryDatabase().itemDao()
 
     /**
      * Get Items from DB
@@ -35,7 +37,7 @@ class InventoryRepository @Inject constructor(
 
         try {
             val itemEntities: List<ItemEntity> =
-                mInventoryDb.getInventoryDatabase().itemDao().getAll()
+                itemDao.getAll()
 
             if (itemEntities.isNotEmpty() && !DateTimeUtility.hasOneDayPassed(itemEntities.first().createdAt)) {
                 resultItems = itemEntities.map { each ->
@@ -55,7 +57,7 @@ class InventoryRepository @Inject constructor(
      * Get Items from API
      * then insert Items in DB
      * */
-    private suspend fun updateInventoryItemsFromApi(){
+    private suspend fun updateInventoryItemsFromApi() {
         var resultItems: List<Item>? = null
         try {
             val service: InventoryApiService =
@@ -74,8 +76,8 @@ class InventoryRepository @Inject constructor(
                         val resultItemEntities: List<ItemEntity> = tempResultItems.map { each ->
                             ItemEntity.getItemEntity(each)
                         }
-                        mInventoryDb.getInventoryDatabase().itemDao().deleteAll()
-                        mInventoryDb.getInventoryDatabase().itemDao().insertAll(resultItemEntities)
+                        itemDao.deleteAll()
+                        itemDao.insertAll(resultItemEntities)
                     }
                 }
             }
@@ -121,9 +123,9 @@ class InventoryRepository @Inject constructor(
         }
     }
 
-/**
- * [getInventoryItems] is a flow function that returns flow with Single source as DB
- * */
+    /**
+     * [getInventoryItems] is a flow function that returns flow with Single source as DB
+     * */
     override fun getInventoryItems(
         searchText: String, searchType: InventoryFilterOptionEnum, searchOnlyWithImage: Boolean
     ): Flow<InventoryItemFetchState> = flow {

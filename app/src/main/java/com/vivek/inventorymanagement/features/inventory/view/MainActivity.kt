@@ -16,13 +16,7 @@ import com.vivek.inventorymanagement.features.inventory.view.adapter.ViewPagerSt
 import com.vivek.inventorymanagement.features.inventory.viewModel.MainActivityViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
-// TODO:: Add page view
-// TODO:: Add accessibilty
-// TODO:: Add pagination / refresh strategy
-// TODO:: Add flow for data from repo
 // TODO:: Add java doc
-// TODO:: Implement reviews for 1. ViewHolder 2. Dao 3. error in viewmodel
-// TODO:: ViewPager for swipe gesture
 // TODO:: Address all TODO
 
 @AndroidEntryPoint
