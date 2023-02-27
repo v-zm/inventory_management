@@ -4,12 +4,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vivek.inventorymanagement.data.repository.IInventoryRepository
-import com.vivek.inventorymanagement.data.repository.InventoryRepository
 import com.vivek.inventorymanagement.features.inventory.enums.InventoryFilterOptionEnum
 import com.vivek.inventorymanagement.features.inventory.model.Item
 import com.vivek.inventorymanagement.features.inventory.viewstate.InventoryEvent
-import com.vivek.inventorymanagement.features.inventory.viewstate.InventoryViewState
+import com.vivek.inventorymanagement.features.inventory.viewstate.InventoryItemFetchState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -21,7 +21,7 @@ import javax.inject.Inject
  * */
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
-    private val mInventoryRepository: InventoryRepository,
+    private val mInventoryRepository: IInventoryRepository,
 ) : ViewModel() {
 
     /** [_inventoryItemList] is LiveData to hold list of [Item] */
@@ -36,7 +36,6 @@ class MainActivityViewModel @Inject constructor(
     private val _inventoryItems: MutableStateFlow<List<Item>> by lazy {
         MutableStateFlow<List<Item>>(listOf())
     }
-    val inventoryItemState: StateFlow<List<Item>> get() = _inventoryItems
 
     // [_isLoading] is LiveData that is true when activity is waiting for inventory's item list data
     private val _isLoading: MutableLiveData<Boolean> by lazy {
@@ -65,45 +64,24 @@ class MainActivityViewModel @Inject constructor(
     /** [searchOnlyWithImage] is true when user enables enables filter with image only from filter menu*/
     var searchOnlyWithImage: Boolean = false
 
-
-    private val loadEvent = MutableSharedFlow<InventoryEvent>()
-
+    /**[inventoryEventFlow] is a flow to get events for fetching/searching items */
+    private val inventoryEventFlow:MutableSharedFlow<InventoryEvent> = MutableSharedFlow<InventoryEvent>()
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    private val repo = loadEvent.flatMapLatest { event ->
+    private val itemRepo = inventoryEventFlow.flatMapLatest { event ->
         return@flatMapLatest when (event) {
             is InventoryEvent.LoadItems -> mInventoryRepository.inventorySearch(
-                event.searchText, event.selectedFilter, event.searchOnlyWithImage
-            )
+                event.searchText, event.selectedFilter, event.searchOnlyWithImage,
+            ).flowOn(Dispatchers.IO)
         }
-    }.stateIn(viewModelScope, SharingStarted.Eagerly, InventoryViewState.Loading(false))
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, InventoryItemFetchState.Loading(false))
 
-    val loading: Flow<Boolean> = repo.map {
-//        _isError.value = null
-        if (it.isLoading) {
-            return@map (it as InventoryViewState.Loading).status
-        }
-        false
-    }
-
-    val error: Flow<Unit> = repo.map {
-        if (it.isError) {
-            _isError.value = Unit
-        }
-    }
-
-    val success: Flow<List<Item>> = repo.map {
-//        _isError.value = null
-        if (it.isSuccess) {
-            return@map (it as InventoryViewState.Success).items
-        }
-        listOf()
-    }
 
     fun initViewModel() {
-        onSearch()
-
-
+        viewModelScope.launch {
+            onSearch()
+            listenToItemUpdates()
+        }
     }
 
     /**
@@ -117,7 +95,7 @@ class MainActivityViewModel @Inject constructor(
                     it
                 )
             } ?: InventoryFilterOptionEnum.FILTER_BY_NAME
-            loadEvent.emit(
+            inventoryEventFlow.emit(
                 InventoryEvent.LoadItems(
                     searchText,
                     filterOption,
@@ -125,44 +103,27 @@ class MainActivityViewModel @Inject constructor(
                 )
             )
         }
-//        viewModelScope.launch {
-//            loadEvent.emit(InventoryEvent.LoadItems(searchText))
-//            _isLoading.value = true
-//            val items: List<Item> = mItemSearchHelper.search(
-//                searchText, inventoryFilterSelectedOption.value, searchOnlyWithImage,
-//            )
-//            inventoryItemList.value = items
-//            _inventoryItems.value = items
-//            _isLoading.value = false
-//        }
-
     }
 
     /** [getInventoryProducts] is function which gets all available items from [IInventoryRepository] */
-//    fun getInventoryProducts() {
-//        onSearch(searchText = "")
-//
-//        viewModelScope.launch {
-////            loadEvent.emit(InventoryEvent.LoadItems())
-//            _isLoading.value = true
-//            val items: List<Item>? = mInventoryRepository.getInventoryItems()
-//            if (items != null) {
-//                _inventoryItemList.value = items
-//                _inventoryItems.value = items
-//                _isError.value = null
-//            } else {
-//                _isError.value = Unit
-//            }
-//            _isLoading.value = false
-//        }
-//    }
-
-    fun getFlow(): StateFlow<InventoryViewState> {
-        return mInventoryRepository.getLatestQueriedItems()
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private suspend fun listenToItemUpdates() {
+        itemRepo.collect {
+            when (it) {
+                is InventoryItemFetchState.Error -> {
+                    if (it.exception != null) {
+                        _isError.value = Unit
+                    } else {
+                        _isError.value = null
+                    }
+                }
+                is InventoryItemFetchState.Loading -> {
+                    _isLoading.value = it.status
+                }
+                is InventoryItemFetchState.Success -> {
+                    _inventoryItemList.value = it.items
+                }
+            }
+        }
     }
-
-    fun get1(): StateFlow<List<Item>> {
-        return mInventoryRepository.getLatestQueriedItems1()
-    }
-
 }
