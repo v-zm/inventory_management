@@ -1,25 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/product_list"
+        android:id="@+id/menu_item_product_list"
         android:icon="@drawable/baseline_format_list_bulleted_24"
-        android:title="@string/bottom_nav_product_list"
-        />
+        android:title="@string/bottom_nav_product_list" />
     <item
-        android:id="@+id/product_grid"
+        android:id="@+id/menu_item_product_grid"
         android:icon="@drawable/baseline_grid_view_24"
         android:title="@string/bottom_nav_product_grid" />
     <item
-        android:id="@+id/upcoming_1"
-        android:icon="@drawable/coming_soon_icon"
-        android:title="@string/bottom_nav_upcoming"
-        />
-    <item
-        android:id="@+id/upcoming_2"
+        android:id="@+id/menu_item_upcoming_1"
         android:icon="@drawable/coming_soon_icon"
         android:title="@string/bottom_nav_upcoming" />
     <item
-        android:id="@+id/upcoming_3"
+        android:id="@+id/menu_item_upcoming_2"
+        android:icon="@drawable/coming_soon_icon"
+        android:title="@string/bottom_nav_upcoming" />
+    <item
+        android:id="@+id/menu_item_upcoming_3"
         android:icon="@drawable/coming_soon_icon"
         android:title="@string/bottom_nav_upcoming" />
 </menu>

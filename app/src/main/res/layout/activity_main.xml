@@ -58,20 +58,18 @@
             app:lottie_loop="true"
             app:lottie_rawRes="@raw/lost_connection" />
 
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/nav_host_fragment_container"
-            android:name="androidx.navigation.fragment.NavHostFragment"
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/view_pager"
             android:layout_width="@dimen/no_width"
             android:layout_height="@dimen/no_height"
             android:layout_marginHorizontal="32dp"
             android:visibility="@{isInventoryLoading &amp;&amp; (isError!=null) ? View.GONE:View.VISIBLE}"
-            app:defaultNavHost="true"
             app:layout_constraintBottom_toTopOf="@id/home_bottom_navigation_bar"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/inventory_search_bar"
-            app:navGraph="@navigation/nav_graph" />
 
+            />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/home_bottom_navigation_bar"

@@ -17,6 +17,11 @@ class InventoryProductListViewFragment : Fragment(R.layout.fragment_inventory_pr
     private lateinit var mAdapter: InventoryProductAdapter
     private val mActivityViewModel: MainActivityViewModel by activityViewModels()
 
+    companion object {
+        @JvmStatic
+        fun newInstance() = InventoryProductListViewFragment()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         inflateRecyclerView(view)

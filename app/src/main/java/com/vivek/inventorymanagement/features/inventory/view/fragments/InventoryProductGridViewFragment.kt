@@ -20,7 +20,12 @@ class InventoryProductGridViewFragment : Fragment(R.layout.fragment_inventory_pr
 
     companion object {
         private const val GRID_ITEM_COUNT: Int = 3
+
+        @JvmStatic
+        fun newInstance() =
+            InventoryProductGridViewFragment()
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

@@ -14,4 +14,19 @@
         android:name="com.vivek.inventorymanagement.features.inventory.view.fragments.InventoryProductGridViewFragment"
         android:label="@string/label_inventory_grid"
         tools:layout="@layout/fragment_inventory_product_grid_view" />
+    <fragment
+        android:id="@+id/upcoming_1"
+        android:name="com.vivek.inventorymanagement.features.inventory.view.fragments.InventoryProductGridViewFragment"
+        android:label="@string/bottom_nav_upcoming"
+        tools:layout="@layout/fragment_inventory_product_grid_view" />
+    <fragment
+        android:id="@+id/upcoming_2"
+        android:name="com.vivek.inventorymanagement.features.inventory.view.fragments.InventoryProductGridViewFragment"
+        android:label="@string/bottom_nav_upcoming"
+        tools:layout="@layout/fragment_inventory_product_grid_view" />
+    <fragment
+        android:id="@+id/upcoming_3"
+        android:name="com.vivek.inventorymanagement.features.inventory.view.fragments.InventoryProductGridViewFragment"
+        android:label="@string/bottom_nav_upcoming"
+        tools:layout="@layout/fragment_inventory_product_grid_view" />
 </navigation>
