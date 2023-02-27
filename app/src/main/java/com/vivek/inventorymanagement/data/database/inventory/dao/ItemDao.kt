@@ -24,17 +24,17 @@ interface ItemDao {
     suspend fun getItemsByPriceAndImage(price: String): List<ItemEntity>
 
     @Query("SELECT * FROM item where name LIKE '%' || :searchText || '%' OR  price LIKE '%' || :searchText || '%'")
-    fun getItemsByNameOrPrice(searchText: String): List<ItemEntity>
+    suspend fun getItemsByNameOrPrice(searchText: String): List<ItemEntity>
 
     @Query("SELECT * FROM item where (name LIKE '%' || :searchText || '%' OR  price LIKE '%' || :searchText || '%') AND image IS NOT NULL")
-    fun getItemsByNameOrPriceAndImage(searchText: String): List<ItemEntity>
+    suspend fun getItemsByNameOrPriceAndImage(searchText: String): List<ItemEntity>
 
     @Insert
-    fun insertAll(items: List<ItemEntity>)
+    suspend fun insertAll(items: List<ItemEntity>)
 
     @Query("DELETE FROM item")
-    fun deleteAll()
+    suspend fun deleteAll()
 
     @Delete
-    fun delete(item: ItemEntity)
+    suspend fun delete(item: ItemEntity)
 }
