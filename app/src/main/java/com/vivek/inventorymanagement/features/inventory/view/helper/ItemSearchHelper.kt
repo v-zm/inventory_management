@@ -10,25 +10,20 @@ class ItemSearchHelper @Inject constructor(
 ) {
     suspend fun search(
         searchText: String,
-        selectedFilter: String?,
+        filterOption: InventoryFilterOptionEnum,
         searchOnlyWithImage: Boolean,
         ): List<Item> {
-        val filterOption: InventoryFilterOptionEnum? = selectedFilter?.let { tempFilter ->
-            InventoryFilterOptionEnum.getInvInventoryFilterOptionEnumByName(
-                tempFilter
-            )
-        }
         return performDbSearch(searchText, filterOption, searchOnlyWithImage)
     }
 
     private suspend fun performDbSearch(
         searchText: String,
-        filterOption: InventoryFilterOptionEnum?,
+        filterOption: InventoryFilterOptionEnum,
         searchOnlyWithImage: Boolean,
     ): List<Item> {
         return mInventoryRepository.getInventorySearchItems(
             searchText,
-            filterOption ?: InventoryFilterOptionEnum.FILTER_BY_NAME,
+            filterOption,
             searchOnlyWithImage
         )
     }

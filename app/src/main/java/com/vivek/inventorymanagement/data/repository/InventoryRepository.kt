@@ -12,7 +12,10 @@ import com.vivek.inventorymanagement.data.database.inventory.entities.ItemEntity
 import com.vivek.inventorymanagement.data.util.DateTimeUtility
 import com.vivek.inventorymanagement.features.inventory.enums.InventoryFilterOptionEnum
 import com.vivek.inventorymanagement.features.inventory.model.Item
+import com.vivek.inventorymanagement.features.inventory.viewstate.InventoryItemFetchState
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 import retrofit2.Response
 import javax.inject.Inject
@@ -23,29 +26,33 @@ class InventoryRepository @Inject constructor(
     private val mHttpClient: IHttpClient,
 ) : IInventoryRepository {
 
+
     /**
      * [getInventoryItems] checks data in [IInventoryDatabase]
      * */
     override suspend fun getInventoryItems(): List<Item>? {
         return withContext(mCoroutineDispatcher) {
+
             var resultItems: List<Item>? = getItemsFromDBInsertedInLastOneDay()
 
-            if (resultItems != null && resultItems.isNotEmpty()) {
-                return@withContext resultItems
-            } else {
+            if (resultItems == null || resultItems.isEmpty()) {
                 resultItems = getItemsFromApi()
             }
+
             resultItems
         }
     }
+
 
     /**
      * Get Items from DB
      * then check if they are not older than one day
      * If they are older than one day then discard result and return null
      * */
-    private fun getItemsFromDBInsertedInLastOneDay(): List<Item>? {
+    private suspend fun getItemsFromDBInsertedInLastOneDay(): List<Item>? {
         var resultItems: List<Item>? = null
+
+
         try {
             val itemEntities: List<ItemEntity> =
                 mInventoryDb.getInventoryDatabase().itemDao().getAll()
@@ -55,9 +62,12 @@ class InventoryRepository @Inject constructor(
                     Item.getItemFromItemEntity(each)
                 }
             }
-        } catch (_: Exception) {
+        } catch (e: Exception) {
             // Download new data
+
+            throw e
         }
+
         return resultItems
     }
 
@@ -66,7 +76,7 @@ class InventoryRepository @Inject constructor(
      * then insert Items in DB
      * then return items
      * */
-    private fun getItemsFromApi(): List<Item>? {
+    private suspend fun getItemsFromApi(): List<Item>? {
         var resultItems: List<Item>? = null
         try {
             val service: InventoryApiService =
@@ -90,14 +100,16 @@ class InventoryRepository @Inject constructor(
                     }
                 }
             }
-        } catch (e: NetworkException) {
+        } catch (networkException: NetworkException) {
             /*
             Handle Network exception
              */
-        } catch (e: java.lang.Exception) {
+            throw networkException
+        } catch (exception: java.lang.Exception) {
             /*
            Handle Unknown exception
             */
+            throw exception
         }
         return resultItems
     }
@@ -128,6 +140,30 @@ class InventoryRepository @Inject constructor(
                 }
             }
             resultItems
+        }
+    }
+
+
+    override fun inventorySearch(
+        searchText: String, searchType: InventoryFilterOptionEnum, searchOnlyWithImage: Boolean
+    ): Flow<InventoryItemFetchState> = flow {
+        var resultItems: List<Item>? = listOf()
+        emit(InventoryItemFetchState.Loading(true))
+        try {
+            if (searchText.isEmpty()) {
+                resultItems = getItemsFromDBInsertedInLastOneDay()
+
+                if (resultItems == null || resultItems.isEmpty()) {
+                    resultItems = getItemsFromApi()
+                }
+            } else {
+                resultItems = getInventorySearchItems(searchText, searchType, searchOnlyWithImage)
+            }
+            emit(InventoryItemFetchState.Loading(false))
+            emit(InventoryItemFetchState.Success(resultItems ?: listOf()))
+        } catch (e: Exception) {
+            emit(InventoryItemFetchState.Loading(false))
+            emit(InventoryItemFetchState.Error(e))
         }
     }
 

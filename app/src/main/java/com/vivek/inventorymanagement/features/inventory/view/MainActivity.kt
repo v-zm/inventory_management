@@ -18,8 +18,13 @@ import dagger.hilt.android.AndroidEntryPoint
 
 // TODO:: Add page view
 // TODO:: Add accessibilty
-// TODO:: Add localization\
 // TODO:: Add pagination / refresh strategy
+// TODO:: Add flow for data from repo
+// TODO:: Add java doc
+// TODO:: Implement reviews for 1. ViewHolder 2. Dao 3. error in viewmodel
+// TODO:: ViewPager for swipe gesture
+// TODO:: Address all TODO
+
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var mBinding: ActivityMainBinding
@@ -36,9 +41,14 @@ class MainActivity : AppCompatActivity() {
     /** [onStart] is used to initiate functions that work with data */
     override fun onStart() {
         super.onStart()
-        fetchInventoryProducts()
+//        fetchInventoryProducts()
+    }
+
+    override fun onResume() {
+        super.onResume()
         observeLoadingState()
         initiateSearchListener()
+        fetchInventoryProducts()
         inflateFilterMenu()
         observerSelectedFilterMenuOption()
         observeErrorState()
@@ -54,7 +64,7 @@ class MainActivity : AppCompatActivity() {
 
     /** [fetchInventoryProducts] is used to get inventory item products from [MainActivityViewModel]*/
     private fun fetchInventoryProducts() {
-        mActivityViewModel.getInventoryProducts()
+        mActivityViewModel.initViewModel()
     }
 
     /** [observeLoadingState] is used to start observing @isLoading object from [MainActivityViewModel]*/
@@ -71,6 +81,7 @@ class MainActivity : AppCompatActivity() {
             mBinding.setIsError(value)
         }
         mActivityViewModel.isError.observe(this, errorObserver)
+
     }
 
     /** [initiateSearchListener] is used to start observing @inventorySearchTextField for search text from @inventorySearchBar */
