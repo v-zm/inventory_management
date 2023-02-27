@@ -18,7 +18,6 @@ import com.vivek.inventorymanagement.data.repository.IInventoryRepository
 import com.vivek.inventorymanagement.features.inventory.view.helper.ItemSearchHelper
 import com.vivek.inventorymanagement.features.inventory.viewModel.MainActivityViewModel
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.*
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers
@@ -47,7 +46,7 @@ class MainActivityTest {
     @Before
     fun setup() {
         mItemSearchHelper = ItemSearchHelper(fakeRepository)
-        activityViewModel = MainActivityViewModel(fakeRepository, mItemSearchHelper)
+        activityViewModel = MainActivityViewModel(fakeRepository)
     }
 
     /**

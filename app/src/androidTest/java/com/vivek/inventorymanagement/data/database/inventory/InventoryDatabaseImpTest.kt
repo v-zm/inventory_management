@@ -7,6 +7,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.vivek.inventorymanagement.data.database.inventory.dao.ItemDao
 import com.vivek.inventorymanagement.data.database.inventory.entities.ItemEntity
 import com.vivek.inventorymanagement.features.inventory.model.Item
+import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
@@ -45,7 +46,7 @@ class InventoryDatabaseImpTest {
      * Item(Item9,10000,https://hamcrest.org/images/logo.jpg,Extra 9)
      * */
     @Test
-    fun emptyDb_insert10Items_Pass() {
+    fun emptyDb_insert10Items_Pass() = runBlocking {
         val items: List<Item> = List(10) { index ->
             Item(
                 extra = "Extra $index",
@@ -67,17 +68,18 @@ class InventoryDatabaseImpTest {
      * Result = 1 Item
      * */
     @Test
-    fun getItemsByName_Pass_Item1_as_searchText_and_get_items_with_name_containing_values() {
-        emptyDb_insert10Items_Pass()
+    fun getItemsByName_Pass_Item1_as_searchText_and_get_items_with_name_containing_values() =
+        runBlocking {
+            emptyDb_insert10Items_Pass()
 
-        val searchText: String = "Item1"
-        val itemEntities: List<ItemEntity> = itemDao.getItemsByName(searchText)
-        val items = itemEntities.map { each -> Item.getItemFromItemEntity(each) }
-        assertEquals(1, items.size)
-        items.forEach { each ->
-            assert(each.name.contains(searchText))
+            val searchText: String = "Item1"
+            val itemEntities: List<ItemEntity> = itemDao.getItemsByName(searchText)
+            val items = itemEntities.map { each -> Item.getItemFromItemEntity(each) }
+            assertEquals(1, items.size)
+            items.forEach { each ->
+                assert(each.name.contains(searchText))
+            }
         }
-    }
 
     /**
      * search by name = Book
@@ -85,7 +87,7 @@ class InventoryDatabaseImpTest {
      * Result = 0 items
      * */
     @Test
-    fun getItemsByName_Pass_Book_as_searchText_and_get_zero_result() {
+    fun getItemsByName_Pass_Book_as_searchText_and_get_zero_result() = runBlocking {
         emptyDb_insert10Items_Pass()
         val searchText = "Book"
         val itemEntities = itemDao.getItemsByName(searchText)
@@ -100,7 +102,7 @@ class InventoryDatabaseImpTest {
      * Result=2 items
      * */
     @Test
-    fun getItemsByPrice_Pass_100_as_searchText_and_get_3_results() {
+    fun getItemsByPrice_Pass_100_as_searchText_and_get_3_results() = runBlocking {
         emptyDb_insert10Items_Pass()
         val searchText = "100"
         val itemEntities = itemDao.getItemsByPrice(searchText)
@@ -118,7 +120,7 @@ class InventoryDatabaseImpTest {
      * */
 
     @Test
-    fun getItemByPrice_Pass_440_as_searchText_and_get_zero_results() {
+    fun getItemByPrice_Pass_440_as_searchText_and_get_zero_results() = runBlocking {
         emptyDb_insert10Items_Pass()
         val searchText = "440"
         val itemEntities = itemDao.getItemsByPrice(searchText)
@@ -132,7 +134,7 @@ class InventoryDatabaseImpTest {
      * all items have name Item in them and it should have image
      * */
     @Test
-    fun getItemByNameAndImage_Pass_Item_as_searchText_and_get_4_results() {
+    fun getItemByNameAndImage_Pass_Item_as_searchText_and_get_4_results() = runBlocking {
         emptyDb_insert10Items_Pass()
         val searchText = "Item"
         val itemEntities = itemDao.getItemsByNameAndImage(searchText)
@@ -152,7 +154,7 @@ class InventoryDatabaseImpTest {
      * Result= 0 items
      * */
     @Test
-    fun getItemByNameAndImage_Pass_Item1_as_searchText_and_get_zero_result() {
+    fun getItemByNameAndImage_Pass_Item1_as_searchText_and_get_zero_result() = runBlocking {
         emptyDb_insert10Items_Pass()
         val searchText = "Item1"
         val itemEntities = itemDao.getItemsByNameAndImage(searchText)
@@ -165,7 +167,7 @@ class InventoryDatabaseImpTest {
      * Result= 0 items
      * */
     @Test
-    fun getItemByNameAndImage_Pass_Book_as_searchText_and_get_zero_results() {
+    fun getItemByNameAndImage_Pass_Book_as_searchText_and_get_zero_results() = runBlocking {
         emptyDb_insert10Items_Pass()
         val searchText = "Book"
         val itemEntities = itemDao.getItemsByNameAndImage(searchText)
@@ -180,7 +182,7 @@ class InventoryDatabaseImpTest {
      *
      * */
     @Test
-    fun getItemByPriceAndImage_Pass_0_as_searchText_And_get_result() {
+    fun getItemByPriceAndImage_Pass_0_as_searchText_And_get_result() = runBlocking {
         emptyDb_insert10Items_Pass()
         val searchText = "0"
         val itemEntities = itemDao.getItemsByPriceAndImage(searchText)
@@ -193,7 +195,7 @@ class InventoryDatabaseImpTest {
      * Result= 1 items
      * */
     @Test
-    fun getItemByPriceAndImage_Pass_100_as_searchText_And_get_zero_result() {
+    fun getItemByPriceAndImage_Pass_100_as_searchText_And_get_zero_result() = runBlocking {
         emptyDb_insert10Items_Pass()
         val searchText = "100"
         val itemEntities = itemDao.getItemsByPriceAndImage(searchText)
@@ -207,7 +209,7 @@ class InventoryDatabaseImpTest {
      * all items have name Item in them
      * */
     @Test
-    fun getItemByPriceAndImage_Pass_300_as_searchText_And_4_results() {
+    fun getItemByPriceAndImage_Pass_300_as_searchText_And_4_results() = runBlocking {
         emptyDb_insert10Items_Pass()
         val searchText = "300"
         val itemEntities = itemDao.getItemsByPriceAndImage(searchText)
@@ -220,7 +222,7 @@ class InventoryDatabaseImpTest {
      * Result = 0
      * */
     @Test
-    fun getItemsByNameAndImage_Pass_250_as_searchText_And_0_result() {
+    fun getItemsByNameAndImage_Pass_250_as_searchText_And_0_result() = runBlocking {
         emptyDb_insert10Items_Pass()
         val searchText = "250"
         val itemEntities = itemDao.getItemsByNameAndImage(searchText)
@@ -233,7 +235,7 @@ class InventoryDatabaseImpTest {
      * Result= 10 items
      * all items have name Item in them
      * */
-    fun getItemsByNameOrPrice_Pass_Item_as_searchText_and_get_10_results() {
+    fun getItemsByNameOrPrice_Pass_Item_as_searchText_and_get_10_results() = runBlocking {
         emptyDb_insert10Items_Pass()
         val searchText = "Item"
         val itemEntities = itemDao.getItemsByNameOrPrice(searchText)
@@ -249,7 +251,7 @@ class InventoryDatabaseImpTest {
      * Result= 1 items
      * all items have name Item in them
      * */
-    fun getItemsByNameOrPrice_Pass_300_as_searchText_And_get_3_results() {
+    fun getItemsByNameOrPrice_Pass_300_as_searchText_And_get_3_results() = runBlocking {
         emptyDb_insert10Items_Pass()
         val searchText = "300"
         val itemEntities = itemDao.getItemsByNameOrPrice(searchText)
@@ -265,7 +267,7 @@ class InventoryDatabaseImpTest {
      * Result= 0
      * */
     @Test
-    fun getItemByNameOrPrice_Pass_Book_as_searchText_And_get_zero_results() {
+    fun getItemByNameOrPrice_Pass_Book_as_searchText_And_get_zero_results() = runBlocking {
         emptyDb_insert10Items_Pass()
         val searchText = "Book"
         val itemEntities = itemDao.getItemsByNameOrPrice(searchText)
@@ -278,7 +280,7 @@ class InventoryDatabaseImpTest {
      * Result = 0
      * */
     @Test
-    fun getItemsByNameOrPrice_Pass_250_as_searchText_And_get_zero_results() {
+    fun getItemsByNameOrPrice_Pass_250_as_searchText_And_get_zero_results() = runBlocking {
         emptyDb_insert10Items_Pass()
         val searchText = "250"
         val itemEntities = itemDao.getItemsByNameOrPrice(searchText)
@@ -292,7 +294,7 @@ class InventoryDatabaseImpTest {
      * all items have name Item in them
      * */
     @Test
-    fun searchByNameOrPriceAndImage_Pass_Item_as_searchText_and_get_3_results() {
+    fun searchByNameOrPriceAndImage_Pass_Item_as_searchText_and_get_3_results() = runBlocking {
         emptyDb_insert10Items_Pass()
         val searchText = "Item"
         val itemEntities = itemDao.getItemsByNameOrPriceAndImage(searchText)
@@ -313,7 +315,7 @@ class InventoryDatabaseImpTest {
      * all items have name Item in them
      * */
     @Test
-    fun searchByNameOrPriceAndImage_Pass_300_as_searchText_and_get_3_results() {
+    fun searchByNameOrPriceAndImage_Pass_300_as_searchText_and_get_3_results() = runBlocking {
         emptyDb_insert10Items_Pass()
         val searchText = "300"
         val itemEntities = itemDao.getItemsByNameOrPriceAndImage(searchText)
@@ -327,7 +329,7 @@ class InventoryDatabaseImpTest {
      * all items have name Item in them
      * */
     @Test
-    fun searchByNameOrPriceAndImage_Pass_4000_as_searchText_and_get_1_results() {
+    fun searchByNameOrPriceAndImage_Pass_4000_as_searchText_and_get_1_results() = runBlocking {
         emptyDb_insert10Items_Pass()
         val searchText = "4000"
         val itemEntities = itemDao.getItemsByNameOrPriceAndImage(searchText)
@@ -348,7 +350,7 @@ class InventoryDatabaseImpTest {
      * all items have name Item in them
      * */
     @Test
-    fun searchByNameOrPriceAndImage_Pass_Item6_as_searchText_and_get_1_results() {
+    fun searchByNameOrPriceAndImage_Pass_Item6_as_searchText_and_get_1_results() = runBlocking {
         emptyDb_insert10Items_Pass()
         val searchText = "Item6"
         val itemEntities = itemDao.getItemsByNameOrPriceAndImage(searchText)
@@ -364,7 +366,7 @@ class InventoryDatabaseImpTest {
     }
 
     @Test
-    fun delete_Pass_one_Item_And_it_should_be_deleted() {
+    fun delete_Pass_one_Item_And_it_should_be_deleted() = runBlocking {
         emptyDb_insert10Items_Pass()
         var items: List<ItemEntity> = itemDao.getAll()
         val itemToDelete: ItemEntity = items.first()
@@ -377,7 +379,7 @@ class InventoryDatabaseImpTest {
     }
 
     @Test
-    fun deleteAll_Pass_every_Item_And_DB_should_be_empty() {
+    fun deleteAll_Pass_every_Item_And_DB_should_be_empty() = runBlocking {
         emptyDb_insert10Items_Pass()
         var items: List<ItemEntity> = itemDao.getAll()
         itemDao.deleteAll()
