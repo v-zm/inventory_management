@@ -4,19 +4,18 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.vivek.inventorymanagement.data.database.inventory.InventoryDatabaseImp
-import com.vivek.inventorymanagement.data.database.inventory.entities.ItemEntity
 import com.vivek.inventorymanagement.features.inventory.enums.InventoryFilterOptionEnum
-import com.vivek.inventorymanagement.features.inventory.model.Item
+import com.vivek.inventorymanagement.features.inventory.viewstate.InventoryItemFetchState
 import com.vivek.inventorymanagement.setup.MainCoroutineRule
 import com.vivek.inventorymanagement.setup.api.client.FakeApiClient
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.*
 import org.junit.runner.RunWith
-import java.io.IOException
 
 @RunWith(AndroidJUnit4::class)
 class InventoryRepositoryTest {
@@ -50,9 +49,15 @@ class InventoryRepositoryTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `getInventoryItems execute and return item list`() = runTest {
-        val items: List<Item>? = inventoryRepository.getInventoryItems()
+        val items: Flow<InventoryItemFetchState> = inventoryRepository.getInventoryItems("",InventoryFilterOptionEnum.NO_FILTER)
 
-        assert((items?.size ?: 0) > 0)
+        items.collect {
+            when (it) {
+                is InventoryItemFetchState.Error -> TODO()
+                is InventoryItemFetchState.Loading -> TODO()
+                is InventoryItemFetchState.Success -> assert(it.items.isNotEmpty())
+            }
+        }
     }
 
 }

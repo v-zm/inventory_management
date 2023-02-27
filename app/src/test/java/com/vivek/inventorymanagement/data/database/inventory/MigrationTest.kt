@@ -24,7 +24,7 @@ class MigrationTest {
     @Throws(IOException::class)
     fun migrate1To2() {
         var db = helper.createDatabase(TEST_DB, 1).apply { close() }
-
+        assert(db!=null)
         val inventoryDb: IInventoryDatabase = Room.databaseBuilder(
             InstrumentationRegistry.getInstrumentation().targetContext,
             IInventoryDatabase::class.java,
@@ -33,6 +33,7 @@ class MigrationTest {
             .addMigrations(ItemDaoMigration.MIGRATION_1_2).build().apply {
                 openHelper.writableDatabase.close()
             }
+        assert(inventoryDb!=null)
         helper.runMigrationsAndValidate(TEST_DB, 2, true, ItemDaoMigration.MIGRATION_1_2)
     }
 }

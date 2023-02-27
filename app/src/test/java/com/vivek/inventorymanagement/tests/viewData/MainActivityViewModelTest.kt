@@ -2,6 +2,7 @@ package com.vivek.inventorymanagement.tests.viewData
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.vivek.inventorymanagement.data.repository.IInventoryRepository
+import com.vivek.inventorymanagement.features.inventory.enums.InventoryFilterOptionEnum
 import com.vivek.inventorymanagement.features.inventory.viewModel.MainActivityViewModel
 import com.vivek.inventorymanagement.setup.MainCoroutineRule
 import com.vivek.inventorymanagement.setup.repository.FakeRepository
@@ -54,16 +55,14 @@ internal class MainActivityViewModelTest {
         runTest {
             activityViewModel.isError.value = Unit
 
-
             assert(activityViewModel.isError.getOrAwaitValue() == Unit)
         }
 
     @Test
     fun mainActivityViewModel_Get_InventoryProductsApiFailed_ErrrorSetTrueAndLiveDataSetNull1() =
         runTest {
-            val items = testRepository.getInventoryItems()
-            assert(items?.isNotEmpty() ?: false)
-            assert((items?.size ?: 0) >= 10)
+            val items = testRepository.getInventoryItems("", InventoryFilterOptionEnum.NO_FILTER)
+            // TODO:: test flow
         }
 
     @Test

@@ -29,7 +29,6 @@ class MainActivityViewModel @Inject constructor(
         MutableLiveData<List<Item>>()
     }
 
-
     /** [inventoryItemList] is used to observe value of [_inventoryItemList] */
     val inventoryItemList: MutableLiveData<List<Item>> get() = _inventoryItemList
 

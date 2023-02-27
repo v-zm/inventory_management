@@ -46,7 +46,6 @@ class InventoryRepository @Inject constructor(
             }
         } catch (e: Exception) {
             // Download new data
-
             throw e
         }
 
@@ -94,7 +93,9 @@ class InventoryRepository @Inject constructor(
         }
     }
 
-
+    /**
+     * [getInventorySearchItems] is search function helper for items in DB
+     * */
     override suspend fun getInventorySearchItems(
         searchText: String, searchType: InventoryFilterOptionEnum, searchOnlyWithImage: Boolean
     ): List<Item> {
@@ -102,16 +103,18 @@ class InventoryRepository @Inject constructor(
             var resultItems: List<Item> = ArrayList<Item>()
 
             val itemEntities: List<ItemEntity> = when (searchType) {
-                InventoryFilterOptionEnum.FILTER_BY_NAME -> if (searchOnlyWithImage) mInventoryDb.getInventoryDatabase()
-                    .itemDao().getItemsByName(searchText) else mInventoryDb.getInventoryDatabase()
-                    .itemDao().getItemsByNameAndImage(searchText)
-                InventoryFilterOptionEnum.FILTER_BY_PRICE -> if (searchOnlyWithImage) mInventoryDb.getInventoryDatabase()
-                    .itemDao().getItemsByPrice(searchText) else mInventoryDb.getInventoryDatabase()
-                    .itemDao().getItemsByPriceAndImage(searchText)
-                InventoryFilterOptionEnum.NO_FILTER -> if (searchOnlyWithImage) mInventoryDb.getInventoryDatabase()
-                    .itemDao()
-                    .getItemsByNameOrPrice(searchText) else mInventoryDb.getInventoryDatabase()
-                    .itemDao().getItemsByNameOrPriceAndImage(searchText)
+                InventoryFilterOptionEnum.FILTER_BY_NAME -> if (searchOnlyWithImage) itemDao.getItemsByName(
+                    searchText
+                ) else
+                    itemDao.getItemsByNameAndImage(searchText)
+                InventoryFilterOptionEnum.FILTER_BY_PRICE -> if (searchOnlyWithImage) itemDao.getItemsByPrice(
+                    searchText
+                ) else
+                    itemDao.getItemsByPriceAndImage(searchText)
+                InventoryFilterOptionEnum.NO_FILTER -> if (searchOnlyWithImage) itemDao
+                    .getItemsByNameOrPrice(searchText) else itemDao.getItemsByNameOrPriceAndImage(
+                    searchText
+                )
             }
 
             itemEntities.let { tempItemEntities ->

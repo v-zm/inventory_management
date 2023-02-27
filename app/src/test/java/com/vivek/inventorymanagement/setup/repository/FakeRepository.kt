@@ -3,6 +3,9 @@ package com.vivek.inventorymanagement.setup.repository
 import com.vivek.inventorymanagement.data.repository.IInventoryRepository
 import com.vivek.inventorymanagement.features.inventory.enums.InventoryFilterOptionEnum
 import com.vivek.inventorymanagement.features.inventory.model.Item
+import com.vivek.inventorymanagement.features.inventory.viewstate.InventoryItemFetchState
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class FakeRepository(val itemCount: Int) : IInventoryRepository {
     /**
@@ -31,10 +34,7 @@ class FakeRepository(val itemCount: Int) : IInventoryRepository {
         )
     }
 
-    override suspend fun getInventoryItems(): List<Item> {
-        for (item in items) {
-            println(item.toString())
-        }
+    fun getInventoryItems(): List<Item> {
         return items
     }
 
@@ -71,5 +71,15 @@ class FakeRepository(val itemCount: Int) : IInventoryRepository {
         }
 
 
+    }
+
+    override fun getInventoryItems(
+        searchText: String,
+        searchType: InventoryFilterOptionEnum,
+        searchOnlyWithImage: Boolean
+    ): Flow<InventoryItemFetchState> = flow {
+        emit(InventoryItemFetchState.Loading(true))
+        emit(InventoryItemFetchState.Success(items = items))
+        emit(InventoryItemFetchState.Loading(false))
     }
 }
