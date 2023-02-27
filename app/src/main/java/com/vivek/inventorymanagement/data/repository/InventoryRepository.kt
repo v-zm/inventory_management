@@ -6,7 +6,6 @@ import com.vivek.inventorymanagement.data.api.dtos.InventoryItemDto
 import com.vivek.inventorymanagement.data.api.dtos.InventoryItemListDto
 import com.vivek.inventorymanagement.data.api.exception.NetworkException
 import com.vivek.inventorymanagement.data.api.services.InventoryApiService
-import com.vivek.inventorymanagement.data.database.inventory.IInventoryDatabase
 import com.vivek.inventorymanagement.data.database.inventory.InventoryDatabaseImp
 import com.vivek.inventorymanagement.data.database.inventory.entities.ItemEntity
 import com.vivek.inventorymanagement.data.util.DateTimeUtility
@@ -123,9 +122,9 @@ class InventoryRepository @Inject constructor(
     }
 
 /**
- * [inventorySearch] is a flow function that returns flow with Single source as DB
+ * [getInventoryItems] is a flow function that returns flow with Single source as DB
  * */
-    override fun inventorySearch(
+    override fun getInventoryItems(
         searchText: String, searchType: InventoryFilterOptionEnum, searchOnlyWithImage: Boolean
     ): Flow<InventoryItemFetchState> = flow {
         var resultItems: List<Item>? = listOf()

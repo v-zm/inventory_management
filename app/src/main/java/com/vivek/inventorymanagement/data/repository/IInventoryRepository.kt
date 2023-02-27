@@ -11,7 +11,7 @@ interface IInventoryRepository {
         searchOnlyWithImage: Boolean = false
     ): List<Item>
 
-    fun inventorySearch(
+    fun getInventoryItems(
         searchText: String, searchType: InventoryFilterOptionEnum,
         searchOnlyWithImage: Boolean = false,
     ): Flow<InventoryItemFetchState>
