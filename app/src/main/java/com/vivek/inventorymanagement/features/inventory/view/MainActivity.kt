@@ -15,7 +15,6 @@ import com.vivek.inventorymanagement.databinding.ActivityMainBinding
 import com.vivek.inventorymanagement.features.inventory.model.MenuInventorySearchOptionsOrderInCategory
 import com.vivek.inventorymanagement.features.inventory.viewModel.MainActivityViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.map
 
 // TODO:: Add page view
 // TODO:: Add accessibilty
@@ -42,9 +41,14 @@ class MainActivity : AppCompatActivity() {
     /** [onStart] is used to initiate functions that work with data */
     override fun onStart() {
         super.onStart()
-        fetchInventoryProducts()
+//        fetchInventoryProducts()
+    }
+
+    override fun onResume() {
+        super.onResume()
         observeLoadingState()
         initiateSearchListener()
+        fetchInventoryProducts()
         inflateFilterMenu()
         observerSelectedFilterMenuOption()
         observeErrorState()
@@ -60,33 +64,24 @@ class MainActivity : AppCompatActivity() {
 
     /** [fetchInventoryProducts] is used to get inventory item products from [MainActivityViewModel]*/
     private fun fetchInventoryProducts() {
-//        mActivityViewModel.getInventoryProducts()
         mActivityViewModel.initViewModel()
     }
 
     /** [observeLoadingState] is used to start observing @isLoading object from [MainActivityViewModel]*/
     private fun observeLoadingState() {
-//        val loadingObserver = Observer<Boolean> { isLoading ->
-//            mBinding.isInventoryLoading = isLoading
-//        }
-//        mActivityViewModel.isLoading.observe(this, loadingObserver)
-        mActivityViewModel.loading.map {
-            mBinding.isInventoryLoading?.let {
-                mBinding.isInventoryLoading = it
-            }
+        val loadingObserver = Observer<Boolean> { isLoading ->
+            mBinding.isInventoryLoading = isLoading
         }
+        mActivityViewModel.isLoading.observe(this, loadingObserver)
     }
 
     /** [observeErrorState] is used to start observing @isError object from [MainActivityViewModel]*/
     private fun observeErrorState() {
-//        val errorObserver = Observer<Unit> { value ->
-//            mBinding.setIsError(value)
-//        }
-//        mActivityViewModel.isError.observe(this, errorObserver)
-
-        mActivityViewModel.error.map {
-            mBinding.setIsError(it)
+        val errorObserver = Observer<Unit> { value ->
+            mBinding.setIsError(value)
         }
+        mActivityViewModel.isError.observe(this, errorObserver)
+
     }
 
     /** [initiateSearchListener] is used to start observing @inventorySearchTextField for search text from @inventorySearchBar */
