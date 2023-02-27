@@ -26,24 +26,6 @@ class InventoryRepository @Inject constructor(
     private val mHttpClient: IHttpClient,
 ) : IInventoryRepository {
 
-
-    /**
-     * [getInventoryItems] checks data in [IInventoryDatabase]
-     * */
-    override suspend fun getInventoryItems(): List<Item>? {
-        return withContext(mCoroutineDispatcher) {
-
-            var resultItems: List<Item>? = getItemsFromDBInsertedInLastOneDay()
-
-            if (resultItems == null || resultItems.isEmpty()) {
-                resultItems = getItemsFromApi()
-            }
-
-            resultItems
-        }
-    }
-
-
     /**
      * Get Items from DB
      * then check if they are not older than one day
@@ -51,7 +33,6 @@ class InventoryRepository @Inject constructor(
      * */
     private suspend fun getItemsFromDBInsertedInLastOneDay(): List<Item>? {
         var resultItems: List<Item>? = null
-
 
         try {
             val itemEntities: List<ItemEntity> =
@@ -74,9 +55,8 @@ class InventoryRepository @Inject constructor(
     /**
      * Get Items from API
      * then insert Items in DB
-     * then return items
      * */
-    private suspend fun getItemsFromApi(): List<Item>? {
+    private suspend fun updateInventoryItemsFromApi(){
         var resultItems: List<Item>? = null
         try {
             val service: InventoryApiService =
@@ -111,7 +91,6 @@ class InventoryRepository @Inject constructor(
             */
             throw exception
         }
-        return resultItems
     }
 
 
@@ -143,7 +122,9 @@ class InventoryRepository @Inject constructor(
         }
     }
 
-
+/**
+ * [inventorySearch] is a flow function that returns flow with Single source as DB
+ * */
     override fun inventorySearch(
         searchText: String, searchType: InventoryFilterOptionEnum, searchOnlyWithImage: Boolean
     ): Flow<InventoryItemFetchState> = flow {
@@ -154,7 +135,10 @@ class InventoryRepository @Inject constructor(
                 resultItems = getItemsFromDBInsertedInLastOneDay()
 
                 if (resultItems == null || resultItems.isEmpty()) {
-                    resultItems = getItemsFromApi()
+                    //
+                    updateInventoryItemsFromApi()
+                    // after update, check and get data from DB
+                    resultItems = getItemsFromDBInsertedInLastOneDay()
                 }
             } else {
                 resultItems = getInventorySearchItems(searchText, searchType, searchOnlyWithImage)
