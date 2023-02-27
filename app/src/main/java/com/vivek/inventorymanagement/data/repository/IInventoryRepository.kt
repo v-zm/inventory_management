@@ -6,13 +6,12 @@ import com.vivek.inventorymanagement.features.inventory.viewstate.InventoryItemF
 import kotlinx.coroutines.flow.Flow
 
 interface IInventoryRepository {
-    suspend fun getInventoryItems(): List<Item>?
     suspend fun getInventorySearchItems(
         searchText: String, searchType: InventoryFilterOptionEnum,
         searchOnlyWithImage: Boolean = false
     ): List<Item>
 
-    fun inventorySearch(
+    fun getInventoryItems(
         searchText: String, searchType: InventoryFilterOptionEnum,
         searchOnlyWithImage: Boolean = false,
     ): Flow<InventoryItemFetchState>

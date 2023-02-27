@@ -70,7 +70,7 @@ class MainActivityViewModel @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     private val itemRepo = inventoryEventFlow.flatMapLatest { event ->
         return@flatMapLatest when (event) {
-            is InventoryEvent.LoadItems -> mInventoryRepository.inventorySearch(
+            is InventoryEvent.LoadItems -> mInventoryRepository.getInventoryItems(
                 event.searchText, event.selectedFilter, event.searchOnlyWithImage,
             ).flowOn(Dispatchers.IO)
         }
