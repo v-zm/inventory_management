@@ -8,11 +8,11 @@ import android.widget.PopupMenu
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.NavigationUI.setupWithNavController
+import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.vivek.inventorymanagement.R
 import com.vivek.inventorymanagement.databinding.ActivityMainBinding
 import com.vivek.inventorymanagement.features.inventory.model.MenuInventorySearchOptionsOrderInCategory
+import com.vivek.inventorymanagement.features.inventory.view.adapter.ViewPagerStateAdapter
 import com.vivek.inventorymanagement.features.inventory.viewModel.MainActivityViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -29,20 +29,18 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var mBinding: ActivityMainBinding
     private val mActivityViewModel: MainActivityViewModel by viewModels()
+    private lateinit var viewPagerAdapter: ViewPagerStateAdapter
 
     /** [onCreate] is used to initiate [MainActivity] and UI setup including Navigation setup */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
-        setUpNavigation()
+        setUpPagerNavigation()
+
     }
 
-    /** [onStart] is used to initiate functions that work with data */
-    override fun onStart() {
-        super.onStart()
-//        fetchInventoryProducts()
-    }
+    /** [onResume] is used to initiate functions that work with data */
 
     override fun onResume() {
         super.onResume()
@@ -54,13 +52,35 @@ class MainActivity : AppCompatActivity() {
         observeErrorState()
     }
 
-    /** [setUpNavigation] is used to setup Navigation for [MainActivity] using Navigation Graph*/
-    private fun setUpNavigation() {
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.nav_host_fragment_container) as NavHostFragment
-        val navController = navHostFragment.navController
-        setupWithNavController(mBinding.homeBottomNavigationBar, navController = navController)
+    /** [setUpNavigation] is used to setup Navigation listeners for [MainActivity] using ViewPager and Bottom Nav */
+    private fun setUpPagerNavigation() {
+        viewPagerAdapter = ViewPagerStateAdapter(this@MainActivity)
+        mBinding.viewPager.adapter = viewPagerAdapter
+
+        mBinding.viewPager.registerOnPageChangeCallback(object : OnPageChangeCallback() {
+
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                mBinding.homeBottomNavigationBar.selectedItemId =
+                    mBinding.homeBottomNavigationBar.menu.getItem(position).itemId
+            }
+        })
+        mBinding.homeBottomNavigationBar.setOnItemSelectedListener { menuItem ->
+
+            when (menuItem.itemId) {
+                R.id.menu_item_product_list -> {
+                    mBinding.viewPager.currentItem = 0
+                    return@setOnItemSelectedListener true
+                }
+                R.id.menu_item_product_grid -> {
+                    mBinding.viewPager.currentItem = 1
+                    return@setOnItemSelectedListener true
+                }
+            }
+            return@setOnItemSelectedListener false
+        }
     }
+
 
     /** [fetchInventoryProducts] is used to get inventory item products from [MainActivityViewModel]*/
     private fun fetchInventoryProducts() {
