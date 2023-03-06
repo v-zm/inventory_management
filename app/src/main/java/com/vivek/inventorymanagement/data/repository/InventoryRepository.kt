@@ -61,7 +61,7 @@ class InventoryRepository @Inject constructor(
         try {
             val service: InventoryApiService =
                 mHttpClient.getHttpClient().create(InventoryApiService::class.java)
-            val data: Response<InventoryItemListDto>? = service.getInventoryList().execute()
+            val data: Response<InventoryItemListDto>? = service.getInventoryList()
 
             if (data?.isSuccessful == true) {
                 val itemList: List<InventoryItemDto>? = data.body()?.data?.items
