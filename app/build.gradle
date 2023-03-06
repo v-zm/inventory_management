@@ -142,6 +142,7 @@ dependencies {
 
     implementation "androidx.room:room-ktx:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
+    testImplementation("com.squareup.okhttp3:mockwebserver:4.7.2")
 
 }
 kapt {
