@@ -2,7 +2,9 @@ package com.vivek.inventorymanagement.data.api.clients
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.core.app.ApplicationProvider
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.vivek.inventorymanagement.data.api.ConnectivityAwareClient
+import com.vivek.inventorymanagement.data.api.dtos.ItemsDto
 import com.vivek.inventorymanagement.data.api.services.InventoryApiService
 import com.vivek.inventorymanagement.data.util.MockResponseFileReader
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -53,16 +55,16 @@ class InventoryHttpClientTest {
 
         val mockResponse = response.getBody()?.readUtf8()
 
-//        val actualResponse = apiService.getInventoryList()
-//
-//        assertEquals(
-//            mockResponse?.let {
-//                val a = parseMockedJson(it)
-//                val mapper: ObjectMapper = ObjectMapper()
-//                val item: ItemsDto = mapper.readValue(a, ItemsDto::class.java)
-//                item
-//            }, actualResponse.body()?.data
-//        )
+        val actualResponse = apiService.getInventoryList()
+        assert(actualResponse.body().toString().isNotEmpty())
+        assertEquals(
+            mockResponse?.let {
+                val a = parseMockedJson(it)
+                val mapper: ObjectMapper = ObjectMapper()
+                val item: ItemsDto = mapper.readValue(a, ItemsDto::class.java)
+                item
+            }, actualResponse.body()?.data
+        )
     }
 
     private fun parseMockedJson(mockResponse: String): String {
